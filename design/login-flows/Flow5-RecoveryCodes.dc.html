@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Accept invite: save recovery codes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@500&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600&amp;family=Noto+Sans+JP:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+.ak-root[data-theme="dark"]{color-scheme:dark;--bg:#030712;--fg:#f9fafb;--muted:#9ca3af;--divider:#1f2937;--ctrl-border:#374151;--seg-on:#1f2937;--input-bg:#030712;--input:#737b8a;--primary:#1e6fe8;--on-primary:#ffffff;--link:#6aa8ff;--link-hover:#8fbcff;--ring:#4d94ff;--accent-bg:#13233d;--accent-fg:#8fbcff;--ok-bg:#11291b;--ok-fg:#6fd896;--track:#374151;--well:#030712;--readonly-bg:#1f2937}
+.ak-root[data-theme="light"]{color-scheme:light;--bg:#ffffff;--fg:#000000;--muted:#4b5563;--divider:#e5e7eb;--ctrl-border:#d1d5db;--seg-on:#f3f4f6;--input-bg:#ffffff;--input:#868c98;--primary:#1565d8;--on-primary:#ffffff;--link:#0f5bc4;--link-hover:#0b4aa0;--ring:#1565d8;--accent-bg:#eaf2fd;--accent-fg:#0f5bc4;--ok-bg:#e8f6ed;--ok-fg:#126b34;--track:#d1d5db;--well:#f9fafb;--readonly-bg:#f3f4f6}
+.ak-root[data-theme="dark"]{--err-bg:#3a1417;--err-fg:#ff8b8f;--err-border:#c9434a}
+.ak-root[data-theme="light"]{--err-bg:#fdecec;--err-fg:#b4161f;--err-border:#d9545b}
+.ak-root a{color:var(--link)}.ak-root a:hover{color:var(--link-hover)}
+.ak-root :is(button,input,select,a):focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+.ak-root:is(:lang(ar),:lang(ja)) main :is(p,label,a,button,span){line-height:24px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.ak-root[data-theme="dark"]{--tip-bg:#f9fafb;--tip-fg:#030712}
+.ak-root[data-theme="light"]{--tip-bg:#111827;--tip-fg:#f9fafb}
+.has-tip{position:relative}
+.has-tip::after{content:attr(data-tip);position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);white-space:nowrap;padding:4px 8px;border-radius:4px;background:var(--tip-bg);color:var(--tip-fg);font-size:12px;line-height:16px;font-weight:500;font-family:inherit;pointer-events:none;opacity:0;transition:opacity 120ms;z-index:20}
+.has-tip:hover::after,.has-tip:focus-visible::after{opacity:1}
+@media (prefers-reduced-motion: reduce){.has-tip::after{transition:none}}
+.stack-card{position:absolute;inset:0;transition:transform 320ms cubic-bezier(.2,0,0,1),opacity 320ms cubic-bezier(.2,0,0,1)}
+@media (prefers-reduced-motion: reduce){.stack-card{transition:none}}
+</style>
+</helmet>
+<div class="ak-root" data-theme="{{theme}}" lang="{{lang}}" dir="{{dir}}" style="min-height: 800px; display: flex; flex-wrap: wrap; background: var(--bg); color: var(--fg); font-family: {{font}}">
+  <div style="flex: 1 1 560px; min-width: 0; display: flex">
+    <dc-import name="MarketingPane" theme="{{theme}}" lang="{{lang}}" hint-size="100%,800px" style="width: 100%"></dc-import>
+  </div>
+
+  <main style="flex: 1 1 560px; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px; padding: 24px 24px 32px">
+    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; flex-wrap: wrap">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--muted)"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+        <label for="f5-lang" class="sr-only">{{t.language}}</label>
+        <select id="f5-lang" value="{{lang}}" onChange="{{setLang}}" style="height: 32px; box-sizing: border-box; padding: 0 8px; background: var(--bg); color: var(--fg); border: 1px solid var(--ctrl-border); border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500; font-family: inherit; cursor: pointer">
+          <option value="en" lang="en">English</option>
+          <option value="ar" lang="ar">العربية</option>
+          <option value="ja" lang="ja">日本語</option>
+        </select>
+      </div>
+      <div role="radiogroup" aria-label="{{t.theme}}" style="display: flex; gap: 4px; padding: 4px; border: 1px solid var(--ctrl-border); border-radius: 8px">
+        <sc-for list="{{themes}}" as="opt" hint-placeholder-count="3">
+          <button type="button" role="radio" aria-checked="{{opt.checked}}" aria-label="{{opt.label}}" class="has-tip" data-tip="{{opt.label}}" onClick="{{opt.pick}}" style="{{opt.style}}">
+            <sc-if value="{{opt.isLight}}" hint-placeholder-val="{{false}}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+            </sc-if>
+            <sc-if value="{{opt.isDark}}" hint-placeholder-val="{{true}}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+            </sc-if>
+            <sc-if value="{{opt.isSystem}}" hint-placeholder-val="{{false}}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
+            </sc-if>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center">
+      <div style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 24px">
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <p style="margin: 0; font-size: 12px; line-height: 16px; font-weight: 500; color: var(--muted)">{{t.step}}</p>
+          <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px">
+            <div style="height: 4px; background: var(--primary); border-radius: 9999px"></div>
+            <div style="height: 4px; background: var(--primary); border-radius: 9999px"></div>
+            <div style="height: 4px; background: var(--primary); border-radius: 9999px"></div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <h1 style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 600">{{t.title}}</h1>
+          <p style="margin: 0; font-size: 14px; line-height: 20px; color: var(--muted)">{{t.body}}</p>
+        </div>
+
+        <ul aria-label="{{t.list}}" dir="ltr" style="margin: 0; padding: 16px; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; background: var(--well); border: 1px solid var(--ctrl-border); border-radius: 8px; font: 500 14px/20px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.04em">
+          <li>[code 1]</li><li>[code 2]</li><li>[code 3]</li><li>[code 4]</li><li>[code 5]</li>
+          <li>[code 6]</li><li>[code 7]</li><li>[code 8]</li><li>[code 9]</li><li>[code 10]</li>
+        </ul>
+
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <button type="button" style="height: 32px; display: flex; align-items: center; justify-content: center; gap: 8px; background: transparent; color: var(--fg); border: 1px solid var(--ctrl-border); border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500; font-family: inherit; cursor: pointer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+            {{t.download}}
+          </button>
+          <button type="button" style="height: 32px; display: flex; align-items: center; justify-content: center; gap: 8px; background: transparent; color: var(--fg); border: 1px solid var(--ctrl-border); border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500; font-family: inherit; cursor: pointer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+            {{t.copy}}
+          </button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; cursor: pointer">
+            <input type="checkbox" aria-invalid="{{savedErr}}" aria-describedby="saved-err" style="width: 16px; height: 16px; margin: 0; accent-color: var(--primary)">
+            {{t.saved}}
+          </label>
+          <sc-if value="{{savedErr}}" hint-placeholder-val="{{false}}">
+            <p id="saved-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 14px; line-height: 20px; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.savedErr}}</p>
+          </sc-if>
+        </div>
+        <a href="#" style="height: 32px; display: flex; align-items: center; justify-content: center; background: var(--primary); color: var(--on-primary); text-decoration: none; border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500">{{t.finish}}</a>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"scenario":{"editor":"enum","options":["none","notConfirmed"],"default":"none"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { themePref: 'dark', lang: 'en' }; }
+  renderVals() {
+    const C = {
+      en: { language: 'Language', theme: 'Theme', light: 'Light', dark: 'Dark', system: 'System' },
+      ar: { language: 'اللغة', theme: 'المظهر', light: 'فاتح', dark: 'داكن', system: 'حسب النظام' },
+      ja: { language: '言語', theme: 'テーマ', light: 'ライト', dark: 'ダーク', system: 'システム設定' }
+    };
+    const P = {
+      en: { step: 'Step 3 of 3 · Recovery codes', title: 'Save your recovery codes', body: "If you lose your phone, each code lets you sign in once. Store them somewhere safe, like a password manager. You won't see them again.", list: 'Recovery codes', download: 'Download codes', copy: 'Copy codes', saved: "I've saved my recovery codes", finish: 'Finish and sign in' },
+      ar: { step: 'الخطوة 3 من 3 · رموز الاسترداد', title: 'احفظ رموز الاسترداد', body: 'إذا فقدت هاتفك، يتيح لك كل رمز تسجيل الدخول مرة واحدة. احفظها في مكان آمن، مثل مدير كلمات المرور. لن تظهر لك مرة أخرى.', list: 'رموز الاسترداد', download: 'تنزيل الرموز', copy: 'نسخ الرموز', saved: 'لقد حفظت رموز الاسترداد', finish: 'إنهاء وتسجيل الدخول' },
+      ja: { step: 'ステップ 3/3 · リカバリーコード', title: 'リカバリーコードを保存', body: 'スマートフォンを紛失した場合、各コードで 1 回サインインできます。パスワードマネージャーなど安全な場所に保管してください。このコードは再表示されません。', list: 'リカバリーコード', download: 'コードをダウンロード', copy: 'コードをコピー', saved: 'リカバリーコードを保存しました', finish: '完了してサインイン' }
+    };
+    const E = {
+      en: { savedErr: "Confirm that you've saved your recovery codes to continue." },
+      ar: { savedErr: 'أكّد أنك حفظت رموز الاسترداد للمتابعة.' },
+      ja: { savedErr: '続行するには、リカバリーコードを保存したことを確認してください。' }
+    };
+    const lang = this.state.lang;
+    const t = Object.assign({}, C[lang], P[lang], E[lang]);
+    const savedErr = (this.props.scenario || 'none') === 'notConfirmed';
+    const pref = this.state.themePref;
+    const osDark = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : true;
+    const theme = pref === 'system' ? (osDark ? 'dark' : 'light') : pref;
+    const themes = ['light', 'dark', 'system'].map((k) => ({
+      label: t[k], checked: pref === k ? 'true' : 'false',
+      isLight: k === 'light', isDark: k === 'dark', isSystem: k === 'system',
+      pick: () => this.setState({ themePref: k }),
+      style: 'width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 4px; cursor: pointer; color: ' + (pref === k ? 'var(--fg)' : 'var(--muted)') + '; background: ' + (pref === k ? 'var(--seg-on)' : 'transparent') + ';'
+    }));
+    const font = { en: "'Geist', ui-sans-serif, system-ui, sans-serif", ar: "'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Geist', sans-serif", ja: "'Noto Sans JP', 'Hiragino Sans', 'Geist', sans-serif" }[lang];
+    return {
+      t, lang, theme, themes, font,
+      dir: lang === 'ar' ? 'rtl' : 'ltr',
+      setLang: (e) => this.setState({ lang: e.target.value }),
+      savedErr
+    };
+  }
+}
+</script>
+</body>
+</html>

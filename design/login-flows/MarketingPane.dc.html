@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Feature carousel</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600&amp;family=Noto+Sans+JP:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+.ak-pane[data-theme="dark"]{--p-bg:#111827;--p-card:#1f2937;--p-card-border:#374151;--p-fg:#f9fafb;--p-muted:#9ca3af;--p-ctrl-border:#374151;--p-dot:#6b7280;--p-dot-on:#4d94ff;--p-ring:#4d94ff;--p-active:#1f2937;--p-accent:#4d94ff;--p-shadow:0 16px 40px rgb(0 0 0 / 0.45);--p-tip-bg:#f9fafb;--p-tip-fg:#030712}
+.ak-pane[data-theme="light"]{--p-bg:#f9fafb;--p-card:#ffffff;--p-card-border:#e5e7eb;--p-fg:#000000;--p-muted:#4b5563;--p-ctrl-border:#d1d5db;--p-dot:#6b7280;--p-dot-on:#1565d8;--p-ring:#1565d8;--p-active:#ffffff;--p-accent:#1565d8;--p-shadow:0 16px 40px rgb(3 7 18 / 0.12);--p-tip-bg:#111827;--p-tip-fg:#f9fafb}
+.ak-pane button:focus-visible{outline:2px solid var(--p-ring);outline-offset:2px}
+.ak-pane:is(:lang(ar),:lang(ja)) :is(p,span){line-height:24px}
+.ak-pane .p-tip{position:relative}
+.ak-pane .p-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);white-space:nowrap;padding:4px 8px;border-radius:4px;background:var(--p-tip-bg);color:var(--p-tip-fg);font-size:12px;line-height:16px;font-weight:500;font-family:inherit;pointer-events:none;opacity:0;transition:opacity 120ms;z-index:20}
+.ak-pane .p-tip:hover::after,.ak-pane .p-tip:focus-visible::after{opacity:1}
+.ak-pane .shot{display:block;width:100%;height:100%;object-fit:cover;object-position:top left}
+.stack-card{position:absolute;inset:0;transition:transform 320ms cubic-bezier(.2,0,0,1),opacity 320ms cubic-bezier(.2,0,0,1)}
+@media (prefers-reduced-motion: reduce){.stack-card,.ak-pane .p-tip::after{transition:none}}
+</style>
+</helmet>
+<section class="ak-pane" data-theme="{{theme}}" lang="{{lang}}" dir="{{dir}}" aria-roledescription="carousel" aria-label="{{t.region}}" style="width: 100%; min-height: 800px; height: 100%; box-sizing: border-box; background: var(--p-bg); color: var(--p-fg); font-family: {{font}}; display: flex; flex-direction: column; gap: 32px; padding: 48px; overflow: hidden">
+  <img src="{{logo}}" alt="AccuKnox" style="height: 44px; width: auto; margin-block: -8px; margin-inline-start: -8px; align-self: flex-start">
+
+  <sc-if value="{{isStack}}" hint-placeholder-val="{{true}}">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px">
+      <h2 style="width: 100%; max-width: 480px; margin: 0; font-size: 24px; line-height: 32px; font-weight: 600; text-align: start">{{t.headline}}</h2>
+      <div style="position: relative; width: 100%; max-width: 480px; height: 432px">
+        <sc-for list="{{cards}}" as="card" hint-placeholder-count="4">
+          <div class="stack-card" style="{{card.pos}}" aria-hidden="{{card.hidden}}">
+            <figure role="group" aria-roledescription="slide" aria-label="{{card.label}}" style="margin: 0; height: 384px; box-sizing: border-box; background: var(--p-card); border: 1px solid var(--p-card-border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 16px; box-shadow: var(--p-shadow)">
+              <div style="width: 100%; aspect-ratio: 16 / 9; flex-shrink: 0; overflow: hidden; border-radius: 8px; border: 1px solid var(--p-card-border)">
+                <img class="shot" src="{{card.img}}" alt="{{card.alt}}">
+              </div>
+              <figcaption style="display: flex; flex-direction: column; gap: 4px">
+                <h3 style="margin: 0; font-size: 18px; line-height: 28px; font-weight: 600">{{card.title}}</h3>
+                <p style="margin: 0; font-size: 14px; line-height: 20px; color: var(--p-muted)">{{card.caption}}</p>
+              </figcaption>
+            </figure>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isFrame}}" hint-placeholder-val="{{false}}">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px">
+      <h2 style="width: 100%; max-width: 544px; margin: 0; font-size: 24px; line-height: 32px; font-weight: 600; text-align: start">{{t.headline}}</h2>
+      <figure role="group" aria-roledescription="slide" aria-label="{{cur.label}}" style="width: 100%; max-width: 544px; margin: 0; display: flex; flex-direction: column; gap: 16px">
+        <div style="background: var(--p-card); border: 1px solid var(--p-card-border); border-radius: 12px; overflow: hidden; box-shadow: var(--p-shadow)">
+          <div aria-hidden="true" style="height: 28px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid var(--p-card-border)">
+            <span style="width: 8px; height: 8px; border-radius: 9999px; background: var(--p-dot)"></span>
+            <span style="width: 8px; height: 8px; border-radius: 9999px; background: var(--p-dot)"></span>
+            <span style="width: 8px; height: 8px; border-radius: 9999px; background: var(--p-dot)"></span>
+          </div>
+          <div style="aspect-ratio: 16 / 9"><img class="shot" src="{{cur.img}}" alt="{{cur.alt}}"></div>
+        </div>
+        <figcaption style="display: flex; flex-direction: column; gap: 4px">
+          <h3 style="margin: 0; font-size: 18px; line-height: 28px; font-weight: 600">{{cur.title}}</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 20px; color: var(--p-muted)">{{cur.caption}}</p>
+        </figcaption>
+      </figure>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isCollage}}" hint-placeholder-val="{{false}}">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px">
+      <h2 style="width: 100%; max-width: 480px; margin: 0; font-size: 24px; line-height: 32px; font-weight: 600; text-align: start">{{t.headline}}</h2>
+      <figure role="group" aria-roledescription="slide" aria-label="{{cur.label}}" style="width: 100%; max-width: 480px; margin: 0; display: flex; flex-direction: column; gap: 24px">
+        <div style="position: relative; height: 340px">
+          <div style="position: absolute; top: 0; inset-inline-start: 0; width: 440px; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; border: 1px solid var(--p-card-border); box-shadow: var(--p-shadow)">
+            <img class="shot" src="{{cur.img}}" alt="{{cur.alt}}">
+          </div>
+          <div aria-hidden="true" style="position: absolute; bottom: 0; inset-inline-end: 0; width: 240px; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; border: 1px solid var(--p-card-border); box-shadow: var(--p-shadow)">
+            <img class="shot" src="{{nxt.img}}" alt="">
+          </div>
+        </div>
+        <figcaption style="display: flex; flex-direction: column; gap: 4px">
+          <h3 style="margin: 0; font-size: 18px; line-height: 28px; font-weight: 600">{{cur.title}}</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 20px; color: var(--p-muted)">{{cur.caption}}</p>
+        </figcaption>
+      </figure>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isSpotlight}}" hint-placeholder-val="{{false}}">
+    <div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; gap: 24px">
+      <h2 style="margin: 0; max-width: 480px; font-size: 24px; line-height: 32px; font-weight: 600">{{t.headline}}</h2>
+      <div role="tablist" aria-label="{{t.region}}" style="display: flex; flex-direction: column; gap: 4px">
+        <sc-for list="{{tabs}}" as="tab" hint-placeholder-count="4">
+          <button type="button" role="tab" aria-selected="{{tab.selected}}" onClick="{{tab.go}}" style="{{tab.style}}">
+            <span style="font-size: 14px; line-height: 20px; font-weight: 600; color: var(--p-fg)">{{tab.title}}</span>
+            <sc-if value="{{tab.selected}}" hint-placeholder-val="{{false}}">
+              <span style="font-size: 14px; line-height: 20px; color: var(--p-muted)">{{tab.caption}}</span>
+            </sc-if>
+          </button>
+        </sc-for>
+      </div>
+      <div role="tabpanel" style="flex-grow: 1; min-height: 160px; margin-inline-end: -48px; margin-bottom: -48px; border-start-start-radius: 12px; overflow: hidden; border: 1px solid var(--p-card-border); border-inline-end: 0; border-bottom: 0; box-shadow: var(--p-shadow)">
+        <img class="shot" src="{{cur.img}}" alt="{{cur.alt}}">
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{showControls}}" hint-placeholder-val="{{true}}">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 16px">
+      <button type="button" class="p-tip" data-tip="{{t.prev}}" aria-label="{{t.prev}}" onClick="{{prev}}" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: transparent; color: var(--p-fg); border: 1px solid var(--p-ctrl-border); border-radius: 9999px; cursor: pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="{{flip}}"><path d="m15 18-6-6 6-6"></path></svg>
+      </button>
+      <div style="display: flex; gap: 8px">
+        <sc-for list="{{dots}}" as="dot" hint-placeholder-count="4">
+          <button type="button" class="p-tip" data-tip="{{dot.tip}}" aria-label="{{dot.label}}" aria-current="{{dot.current}}" onClick="{{dot.go}}" style="{{dot.style}}"></button>
+        </sc-for>
+      </div>
+      <button type="button" class="p-tip" data-tip="{{t.next}}" aria-label="{{t.next}}" onClick="{{next}}" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: transparent; color: var(--p-fg); border: 1px solid var(--p-ctrl-border); border-radius: 9999px; cursor: pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="{{flip}}"><path d="m9 18 6-6-6-6"></path></svg>
+      </button>
+      <span aria-live="polite" style="font-size: 14px; line-height: 20px; color: var(--p-muted)">{{position}}</span>
+    </div>
+  </sc-if>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"layout":{"editor":"enum","options":["stack","frame","collage","spotlight"],"default":"frame"},"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"lang":{"editor":"enum","options":["en","ar","ja"],"default":"en"},"$preview":{"width":640,"height":800}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { idx: 0 }; }
+  renderVals() {
+    const theme = this.props.theme === 'light' ? 'light' : 'dark';
+    const lang = ['en', 'ar', 'ja'].includes(this.props.lang) ? this.props.lang : 'en';
+    const layout = ['stack', 'frame', 'collage', 'spotlight'].includes(this.props.layout) ? this.props.layout : 'frame';
+    const T = {
+      en: { region: 'What AccuKnox does', headline: 'Cloud security that tells you what to fix first.', prev: 'Previous feature', next: 'Next feature', show: 'Show feature', of: ' of ', shot: 'Screenshot',
+        cards: [
+          ['Find sensitive data at risk', 'See where card, ID and health data lives across your cloud, ranked by severity.'],
+          ['Map your AI agents', 'See how agents, models, datasets and tools connect, with red-team findings by severity.'],
+          ['Stop risky prompts', 'Block prompts that leak secrets or personal data, and see which policy caught them.'],
+          ['Understand cluster cost', 'Track CPU, memory, disk and network cost for every Kubernetes cluster.']
+        ] },
+      ar: { region: 'ما يقدمه AccuKnox', headline: 'أمان سحابي يخبرك بما يجب إصلاحه أولاً.', prev: 'الميزة السابقة', next: 'الميزة التالية', show: 'عرض الميزة', of: ' من ', shot: 'لقطة شاشة',
+        cards: [
+          ['اعثر على البيانات الحساسة المعرّضة للخطر', 'اعرف أين توجد بيانات البطاقات والهويات والبيانات الصحية في سحابتك، مرتبة حسب الخطورة.'],
+          ['ارسم خريطة وكلاء الذكاء الاصطناعي', 'شاهد كيف ترتبط الوكلاء والنماذج ومجموعات البيانات والأدوات، مع نتائج اختبار الاختراق حسب الخطورة.'],
+          ['أوقف الطلبات الخطرة', 'احظر الطلبات التي تسرّب الأسرار أو البيانات الشخصية، واعرف السياسة التي اكتشفتها.'],
+          ['افهم تكلفة المجموعات', 'تابع تكلفة المعالج والذاكرة والقرص والشبكة لكل مجموعة Kubernetes.']
+        ] },
+      ja: { region: 'AccuKnox の機能', headline: 'まず何を修正すべきかを教えてくれるクラウドセキュリティ。', prev: '前の機能', next: '次の機能', show: '機能を表示', of: ' / ', shot: 'スクリーンショット',
+        cards: [
+          ['リスクのある機密データを発見', 'カード、身分証、医療データがクラウドのどこにあるかを重大度順に確認できます。'],
+          ['AI エージェントを可視化', 'エージェント、モデル、データセット、ツールのつながりと、レッドチームの検出結果を重大度別に確認できます。'],
+          ['危険なプロンプトを阻止', 'シークレットや個人情報を漏らすプロンプトをブロックし、検出したポリシーを確認できます。'],
+          ['クラスターのコストを把握', 'Kubernetes クラスターごとに CPU、メモリ、ディスク、ネットワークのコストを追跡できます。']
+        ] }
+    }[lang];
+    const IMG = ['assets/shot-data-security.png', 'assets/shot-ai-agent-graph.png', 'assets/shot-prompt-firewall.png', 'assets/shot-k8s-cost.png'];
+    const n = T.cards.length;
+    const idx = this.state.idx;
+    const go = (i) => () => this.setState({ idx: (i + n) % n });
+    const item = (i) => ({ title: T.cards[i][0], caption: T.cards[i][1], img: IMG[i], alt: T.shot + ': ' + T.cards[i][0], label: (i + 1) + T.of + n });
+    const cards = T.cards.map((c, i) => {
+      const off = (i - idx + n) % n;
+      const ty = [0, 35, 70, 70][off];
+      const sc = [1, 0.94, 0.88, 0.88][off];
+      const op = [1, 0.6, 0.3, 0][off];
+      return Object.assign(item(i), {
+        hidden: off !== 0,
+        pos: 'transform: translateY(' + ty + 'px) scale(' + sc + '); transform-origin: top center; opacity: ' + op + '; z-index: ' + (n - off) + ';'
+      });
+    });
+    const dots = T.cards.map((c, i) => ({
+      label: T.show + ' ' + (i + 1) + ': ' + c[0],
+      tip: c[0],
+      current: i === idx ? 'true' : 'false',
+      go: go(i),
+      style: 'width: ' + (i === idx ? 24 : 8) + 'px; height: 8px; padding: 0; border: 0; border-radius: 9999px; cursor: pointer; background: ' + (i === idx ? 'var(--p-dot-on)' : 'var(--p-dot)') + '; transition: width 200ms;'
+    }));
+    const tabs = T.cards.map((c, i) => ({
+      title: c[0], caption: c[1], selected: i === idx, go: go(i),
+      style: 'display: flex; flex-direction: column; gap: 4px; padding: 8px 12px; text-align: start; font-family: inherit; cursor: pointer; border-radius: 8px; border: 1px solid ' + (i === idx ? 'var(--p-card-border)' : 'transparent') + '; background: ' + (i === idx ? 'var(--p-active)' : 'transparent') + ';'
+    }));
+    const font = { en: "'Geist', ui-sans-serif, system-ui, sans-serif", ar: "'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Geist', sans-serif", ja: "'Noto Sans JP', 'Hiragino Sans', 'Geist', sans-serif" }[lang];
+    return {
+      t: T, cards, dots, tabs, theme, lang, font,
+      cur: item(idx), nxt: item((idx + 1) % n),
+      isStack: layout === 'stack', isFrame: layout === 'frame', isCollage: layout === 'collage', isSpotlight: layout === 'spotlight',
+      showControls: layout !== 'spotlight',
+      dir: lang === 'ar' ? 'rtl' : 'ltr',
+      flip: lang === 'ar' ? 'transform: scaleX(-1)' : '',
+      logo: theme === 'light' ? 'assets/accuknox-logo-on-light.webp' : 'assets/accuknox-logo-on-dark.webp',
+      prev: go(idx - 1), next: go(idx + 1),
+      position: (idx + 1) + T.of + n
+    };
+  }
+}
+</script>
+</body>
+</html>
