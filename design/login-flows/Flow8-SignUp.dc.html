@@ -8,12 +8,12 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600&amp;family=Noto+Sans+JP:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600&amp;family=Noto+Sans+JP:wght@400;500;600&amp;display=swap">
 <style>
 body{margin:0}
 .ak-root[data-theme="dark"]{color-scheme:dark;--bg:#030712;--fg:#f9fafb;--muted:#9ca3af;--divider:#1f2937;--ctrl-border:#374151;--seg-on:#1f2937;--input-bg:#030712;--input:#737b8a;--primary:#1e6fe8;--on-primary:#ffffff;--link:#6aa8ff;--link-hover:#8fbcff;--ring:#4d94ff;--ok-fg:#6fd896;--err-bg:#3a1417;--err-fg:#ff8b8f;--err-border:#c9434a;--tip-bg:#f9fafb;--tip-fg:#030712}
 .ak-root[data-theme="light"]{color-scheme:light;--bg:#ffffff;--fg:#000000;--muted:#4b5563;--divider:#e5e7eb;--ctrl-border:#d1d5db;--seg-on:#f3f4f6;--input-bg:#ffffff;--input:#868c98;--primary:#1565d8;--on-primary:#ffffff;--link:#0f5bc4;--link-hover:#0b4aa0;--ring:#1565d8;--ok-fg:#126b34;--err-bg:#fdecec;--err-fg:#b4161f;--err-border:#d9545b;--tip-bg:#111827;--tip-fg:#f9fafb}
-.ak-root a{color:var(--link)}.ak-root a:hover{color:var(--link-hover)}
+.ak-root a{color:var(--link);text-decoration:underline}.ak-root a:hover{color:var(--link-hover)}
 .ak-root :is(button,input,select,a):focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ak-root input::placeholder{color:var(--muted)}
 .ak-root:is(:lang(ar),:lang(ja)) main :is(p,label,a,button,span,li){line-height:24px}
@@ -37,7 +37,7 @@ body{margin:0}
       <div style="display: flex; align-items: center; gap: 8px">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--muted)"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
         <label for="f8-lang" class="sr-only">{{t.language}}</label>
-        <select id="f8-lang" value="{{lang}}" onChange="{{setLang}}" style="height: 32px; box-sizing: border-box; padding: 0 8px; background: var(--bg); color: var(--fg); border: 1px solid var(--ctrl-border); border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500; font-family: inherit; cursor: pointer">
+        <select id="f8-lang" value="{{lang}}" onChange="{{setLang}}" style="height: 32px; box-sizing: border-box; padding: 0 8px; background: var(--bg); color: var(--fg); border: 1px solid var(--input); border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500; font-family: inherit; cursor: pointer">
           <option value="en" lang="en">English</option>
           <option value="ar" lang="ar">العربية</option>
           <option value="ja" lang="ja">日本語</option>
@@ -189,7 +189,7 @@ class Component extends DCLogic {
       pick: () => this.setState({ themePref: k }),
       style: 'width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 4px; cursor: pointer; color: ' + (pref === k ? 'var(--fg)' : 'var(--muted)') + '; background: ' + (pref === k ? 'var(--seg-on)' : 'transparent') + ';'
     }));
-    const font = { en: "'Geist', ui-sans-serif, system-ui, sans-serif", ar: "'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Geist', sans-serif", ja: "'Noto Sans JP', 'Hiragino Sans', 'Geist', sans-serif" }[lang];
+    const font = { en: "'Archivo', ui-sans-serif, system-ui, sans-serif", ar: "'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Archivo', sans-serif", ja: "'Noto Sans JP', 'Hiragino Sans', 'Archivo', sans-serif" }[lang];
     const eye = (k) => { const s = !!this.state[k]; return { type: s ? 'text' : 'password', tip: s ? t.hide : t.show, shown: s, hidden: !s, toggle: () => this.setState({ [k]: !s }) }; };
     const taken = sc === 'emailTaken';
     const loading = sc === 'loading';
