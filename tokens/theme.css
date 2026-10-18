@@ -1,0 +1,203 @@
+/*
+ * Tailwind v4 theme for AccuKnox. Import order in the app's entry CSS:
+ *   @import "tailwindcss";
+ *   @import "../tokens/tokens.css";
+ *   @import "../tokens/theme.css";
+ *
+ * - Colors: only semantic tokens exist. The default Tailwind palette (red-500 …) is
+ *   removed, so off-system colors fail at build time.
+ * - Spacing: 4px multiplier (p-1 = 4px). Fractional steps (the .5 sizes) still compile because
+ *   stock shadcn components use them; our code must not (D-029, scripts/check-spacing.mjs).
+ * - `dark:` variant matches the default (dark) theme so stock shadcn classes keep working;
+ *   our own components never need it (tokens switch per theme).
+ */
+
+@custom-variant dark (&:where(:not(.light, .light *, [data-theme="light"], [data-theme="light"] *)));
+@custom-variant light (&:where(.light, .light *, [data-theme="light"], [data-theme="light"] *));
+
+/* ---------- Scales (theme-independent; emitted as CSS variables by Tailwind) ---------- */
+@theme {
+  --spacing: 4px;
+
+  --breakpoint-*: initial;
+  --breakpoint-lg: 1280px;   /* minimum supported width */
+  --breakpoint-xl: 1440px;
+  --breakpoint-2xl: 1920px;
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --font-sans-ar: "IBM Plex Sans Arabic", "Noto Sans Arabic", "Geist", "Segoe UI", Tahoma, sans-serif;
+  --font-sans-ja: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", "Meiryo", "Geist", sans-serif;
+
+  /* size / line-height — line-heights are multiples of 4; sizes 14 and 18 are D-016 exceptions */
+  --text-*: initial;
+  --text-xs: 12px;   --text-xs--line-height: 16px;
+  --text-sm: 14px;   --text-sm--line-height: 20px;
+  --text-base: 16px; --text-base--line-height: 24px;
+  --text-lg: 18px;   --text-lg--line-height: 28px;
+  --text-xl: 20px;   --text-xl--line-height: 28px;
+  --text-2xl: 24px;  --text-2xl--line-height: 32px;
+  --text-3xl: 32px;  --text-3xl--line-height: 40px;
+
+  --font-weight-*: initial;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --radius-*: initial;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  --shadow-*: initial;
+  --shadow-1: var(--elevation-1);
+  --shadow-2: var(--elevation-2);
+  --shadow-3: var(--elevation-3);
+
+  --ease-*: initial;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ---------- Semantic colors (switch per theme via tokens.css) ---------- */
+@theme inline {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-black: #000000;   /* overlays only (shadcn Dialog scrim) */
+  --color-white: #ffffff;   /* text on primary/destructive only */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-link: var(--link);
+  --color-surface-0: var(--surface-0);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-severity-critical: var(--severity-critical);
+  --color-severity-critical-foreground: var(--severity-critical-foreground);
+  --color-severity-critical-muted: var(--severity-critical-muted);
+  --color-severity-critical-border: var(--severity-critical-border);
+  --color-severity-high: var(--severity-high);
+  --color-severity-high-foreground: var(--severity-high-foreground);
+  --color-severity-high-muted: var(--severity-high-muted);
+  --color-severity-high-border: var(--severity-high-border);
+  --color-severity-medium: var(--severity-medium);
+  --color-severity-medium-foreground: var(--severity-medium-foreground);
+  --color-severity-medium-muted: var(--severity-medium-muted);
+  --color-severity-medium-border: var(--severity-medium-border);
+  --color-severity-low: var(--severity-low);
+  --color-severity-low-foreground: var(--severity-low-foreground);
+  --color-severity-low-muted: var(--severity-low-muted);
+  --color-severity-low-border: var(--severity-low-border);
+  --color-severity-info: var(--severity-info);
+  --color-severity-info-foreground: var(--severity-info-foreground);
+  --color-severity-info-muted: var(--severity-info-muted);
+  --color-severity-info-border: var(--severity-info-border);
+  --color-status-open: var(--status-open);
+  --color-status-open-foreground: var(--status-open-foreground);
+  --color-status-open-muted: var(--status-open-muted);
+  --color-status-open-border: var(--status-open-border);
+  --color-status-in-progress: var(--status-in-progress);
+  --color-status-in-progress-foreground: var(--status-in-progress-foreground);
+  --color-status-in-progress-muted: var(--status-in-progress-muted);
+  --color-status-in-progress-border: var(--status-in-progress-border);
+  --color-status-resolved: var(--status-resolved);
+  --color-status-resolved-foreground: var(--status-resolved-foreground);
+  --color-status-resolved-muted: var(--status-resolved-muted);
+  --color-status-resolved-border: var(--status-resolved-border);
+  --color-status-ignored: var(--status-ignored);
+  --color-status-ignored-foreground: var(--status-ignored-foreground);
+  --color-status-ignored-muted: var(--status-ignored-muted);
+  --color-status-ignored-border: var(--status-ignored-border);
+  --color-health-healthy: var(--health-healthy);
+  --color-health-healthy-foreground: var(--health-healthy-foreground);
+  --color-health-healthy-muted: var(--health-healthy-muted);
+  --color-health-healthy-border: var(--health-healthy-border);
+  --color-health-at-risk: var(--health-at-risk);
+  --color-health-at-risk-foreground: var(--health-at-risk-foreground);
+  --color-health-at-risk-muted: var(--health-at-risk-muted);
+  --color-health-at-risk-border: var(--health-at-risk-border);
+  --color-health-failing: var(--health-failing);
+  --color-health-failing-foreground: var(--health-failing-foreground);
+  --color-health-failing-muted: var(--health-failing-muted);
+  --color-health-failing-border: var(--health-failing-border);
+  --color-chart-surface: var(--chart-surface);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+  --color-chart-label: var(--chart-label);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+  --color-chart-seq-1: var(--chart-seq-1);
+  --color-chart-seq-2: var(--chart-seq-2);
+  --color-chart-seq-3: var(--chart-seq-3);
+  --color-chart-seq-4: var(--chart-seq-4);
+  --color-chart-seq-5: var(--chart-seq-5);
+  --color-chart-seq-6: var(--chart-seq-6);
+  --color-chart-div-better: var(--chart-div-better);
+  --color-chart-div-mid: var(--chart-div-mid);
+  --color-chart-div-worse: var(--chart-div-worse);
+  --color-graph-canvas: var(--graph-canvas);
+  --color-graph-node: var(--graph-node);
+  --color-graph-node-border: var(--graph-node-border);
+  --color-graph-node-foreground: var(--graph-node-foreground);
+  --color-graph-node-selected: var(--graph-node-selected);
+  --color-graph-edge: var(--graph-edge);
+  --color-graph-edge-attack: var(--graph-edge-attack);
+  --color-graph-cluster: var(--graph-cluster);
+}
+
+/* ---------- Per-language type (07-i18n-and-rtl.md) ---------- */
+:lang(ar) {
+  --font-sans: var(--font-sans-ar);
+  --text-sm--line-height: 24px;
+  --text-base--line-height: 28px;
+  letter-spacing: 0;
+}
+:lang(ja) {
+  --font-sans: var(--font-sans-ja);
+  --text-sm--line-height: 24px;
+  --text-base--line-height: 28px;
+  letter-spacing: 0;
+  word-break: auto-phrase;
+  line-break: strict;
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html { font-family: var(--font-sans); }
+  body { background: var(--background); color: var(--foreground); font-size: var(--text-sm); line-height: var(--text-sm--line-height); }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  td, th, .tabular-nums { font-variant-numeric: tabular-nums; }
+}

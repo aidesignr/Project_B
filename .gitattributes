@@ -1,0 +1,3 @@
+# Keep LF everywhere: scripts parse tokens.css with LF-based markers
+* text=auto eol=lf
+*.svg text eol=lf

@@ -1,0 +1,334 @@
+/*
+ * AccuKnox design tokens — single source of truth (plain CSS variables).
+ * Dark is the default theme; light via `class="light"` or `data-theme="light"` on <html>.
+ * Type, radius, spacing and easing scales live in tokens/theme.css (Tailwind @theme). JSON export: `node scripts/build-tokens-json.mjs`.
+ *
+ * Base: Obra shadcn/ui kit 2.0 (Nova). shadcn variable names are kept so stock
+ * components work unchanged. Everything under "EXTENSION" is ours — see
+ * docs/design/02-design-principles.md (extension log) and decision-log.md.
+ *
+ * Verify after any change: `node scripts/check-contrast.mjs` (must exit 0).
+ * Neutrals follow the Obra kit (Tailwind gray scale). Deviations from the kit are logged in decision-log.md (D-017, D-042–D-045).
+ *
+ * Semantic color sets (severity / status / health) each have 4 tokens:
+ *   --x             solid: chart marks, dots, icons, ≤4px accent bars — never put text on it
+ *   --x-foreground  text + icons on background / card / popover / its muted tint (≥4.5:1)
+ *   --x-muted       tint background for badges and chips
+ *   --x-border      outline for outlined badges/chips (≥3:1 on surfaces)
+ */
+
+/* ============================================================
+ * Theme-independent tokens
+ * ============================================================ */
+:root {
+  /* ---------- Layout ---------- */
+  --layout-columns: 12;
+  --layout-gutter: 16px;          /* ≥1440: 24px */
+  --layout-margin: 24px;          /* ≥1440: 32px */
+  --layout-max-width: 1920px;
+  --layout-reading-width: 768px;  /* forms, docs, AI answers */
+  --layout-sidebar: 240px;
+  --layout-sidebar-collapsed: 56px;
+  --layout-header: 56px;
+  --layout-detail-panel: 480px;   /* ≥1440: 560px */
+
+  /* ---------- Density (dense is default) ---------- */
+  --control-h-sm: 28px;
+  --control-h: 32px;
+  --control-h-lg: 40px;
+  --table-row-h: 36px;
+  --table-row-h-compact: 28px;
+
+  /* ---------- Motion ---------- */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --layout-gutter: 24px;
+    --layout-margin: 32px;
+    --layout-detail-panel: 560px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
+
+/* ============================================================
+ * DARK THEME (default)
+ * ============================================================ */
+:root,
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* ---------- shadcn base (Obra kit, gray scale; verified 2026-10-18, D-028) ---------- */
+  --background: #030712;
+  --foreground: #f9fafb;
+  --card: #111827;
+  --card-foreground: #f9fafb;
+  --popover: #1f2937;
+  --popover-foreground: #f9fafb;
+  --primary: #1e6fe8;            /* AccuKnox blue, dark variant: white text 4.67, ≥3:1 on popover (D-043) */
+  --primary-foreground: #ffffff;
+  --secondary: #1f2937;
+  --secondary-foreground: #f9fafb;
+  --muted: #1f2937;
+  --muted-foreground: #9ca3af;
+  --accent: #1f2937;
+  --accent-foreground: #f9fafb;
+  --destructive: #c81e28;        /* destructive buttons only; not severity */
+  --destructive-foreground: #ffffff;
+  --border: #1f2937;             /* decorative dividers only — not for input outlines */
+  --input: #737b8a;              /* EXTENSION-adjusted (D-017): ≥3:1 */
+  --ring: #4d94ff;               /* focus ring ≥3:1 on all surfaces */
+
+  --sidebar: #111827;
+  --sidebar-foreground: #f9fafb;
+  --sidebar-primary: #1e6fe8;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1f2937;
+  --sidebar-accent-foreground: #f9fafb;
+  --sidebar-border: #1f2937;
+  --sidebar-ring: #4d94ff;
+
+  /* ---------- EXTENSION: links, logo ---------- */
+  --link: #6aa8ff;
+  --logo: url("/brand/accuknox-logo-on-dark.svg");
+
+  /* ---------- EXTENSION: elevation (dark = lighter surface + border) ---------- */
+  --surface-0: #030712;   /* page */
+  --surface-1: #111827;   /* card, table */
+  --surface-2: #1f2937;   /* popover, menu, detail panel */
+  --surface-3: #1f2937;   /* dialog, command palette */
+  --elevation-1: 0 0 0 1px #1f2937;
+  --elevation-2: 0 0 0 1px #374151, 0 4px 12px rgb(0 0 0 / 0.5);
+  --elevation-3: 0 0 0 1px #4b5563, 0 16px 40px rgb(0 0 0 / 0.6);
+
+  /* ---------- EXTENSION: severity ---------- */
+  --severity-critical: #e5343f;
+  --severity-critical-foreground: #ff8b8f;
+  --severity-critical-muted: #3a1417;
+  --severity-critical-border: #c9434a;
+  --severity-high: #ff8a3d;
+  --severity-high-foreground: #ffa463;
+  --severity-high-muted: #361d0c;
+  --severity-high-border: #c46a2c;
+  --severity-medium: #ffd04d;
+  --severity-medium-foreground: #f7c95c;
+  --severity-medium-muted: #33270b;
+  --severity-medium-border: #b8891f;
+  --severity-low: #7894e0;
+  --severity-low-foreground: #b3bfd4;
+  --severity-low-muted: #1d222c;
+  --severity-low-border: #5f78bd;
+  --severity-info: #6b7280;
+  --severity-info-foreground: #9ca3af;
+  --severity-info-muted: #1f2937;
+  --severity-info-border: #737b8a;
+
+  /* ---------- EXTENSION: status (workflow state) ---------- */
+  --status-open: #d1d5db;
+  --status-open-foreground: #e5e7eb;
+  --status-open-muted: #1f2937;
+  --status-open-border: #737b8a;
+  --status-in-progress: #5b9dff;
+  --status-in-progress-foreground: #8fbcff;
+  --status-in-progress-muted: #13233d;
+  --status-in-progress-border: #3d7fe0;
+  --status-resolved: #3fbf6f;
+  --status-resolved-foreground: #6fd896;
+  --status-resolved-muted: #11291b;
+  --status-resolved-border: #2f9e5a;
+  --status-ignored: #9ca3af;
+  --status-ignored-foreground: #9ca3af;
+  --status-ignored-muted: #1f2937;
+  --status-ignored-border: #737b8a;
+
+  /* ---------- EXTENSION: health ---------- */
+  --health-healthy: #3fbf6f;
+  --health-healthy-foreground: #6fd896;
+  --health-healthy-muted: #11291b;
+  --health-healthy-border: #2f9e5a;
+  --health-at-risk: #f0b429;
+  --health-at-risk-foreground: #f7c95c;
+  --health-at-risk-muted: #33270b;
+  --health-at-risk-border: #b8891f;
+  --health-failing: #f2555a;
+  --health-failing-foreground: #ff8b8f;
+  --health-failing-muted: #3a1417;
+  --health-failing-border: #c9434a;
+
+  /* ---------- EXTENSION: charts ---------- */
+  --chart-surface: #111827;
+  --chart-grid: #1f2937;
+  --chart-axis: #374151;
+  --chart-label: #9ca3af;
+  /* categorical — fixed order, never cycled (D-023) */
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-6: #008300;
+  --chart-7: #9085e9;
+  --chart-8: #e66767;
+  /* sequential (magnitude), low → high; dark mode: high values are brighter */
+  --chart-seq-1: #184f95;
+  --chart-seq-2: #1c5cab;
+  --chart-seq-3: #256abf;
+  --chart-seq-4: #3987e5;
+  --chart-seq-5: #6da7ec;
+  --chart-seq-6: #9ec5f4;
+  /* diverging (better ↔ worse), gray midpoint */
+  --chart-div-better: #3987e5;
+  --chart-div-mid: #374151;
+  --chart-div-worse: #e66767;
+
+  /* ---------- EXTENSION: risk graph ---------- */
+  --graph-canvas: #030712;
+  --graph-node: #1f2937;
+  --graph-node-border: #737b8a;
+  --graph-node-foreground: #f9fafb;
+  --graph-node-selected: #4d94ff;
+  --graph-edge: #6b7280;
+  --graph-edge-attack: #e5343f;
+  --graph-cluster: #111827;
+}
+
+/* ============================================================
+ * LIGHT THEME
+ * ============================================================ */
+.light,
+[data-theme="light"] {
+  color-scheme: light;
+
+  --background: #ffffff;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #1565d8;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #111827;
+  --muted: #f3f4f6;
+  --muted-foreground: #4b5563;   /* shadcn #737373 = 4.35:1 on muted; darkened (D-017) */
+  --accent: #f3f4f6;
+  --accent-foreground: #111827;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e5e7eb;
+  --input: #868c98;
+  --ring: #1565d8;
+
+  --sidebar: #f9fafb;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #1565d8;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f3f4f6;
+  --sidebar-accent-foreground: #111827;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #1565d8;
+
+  --link: #0f5bc4;
+  --logo: url("/brand/accuknox-logo-on-light.svg");
+
+  --surface-0: #f9fafb;
+  --surface-1: #ffffff;
+  --surface-2: #ffffff;
+  --surface-3: #ffffff;
+  --elevation-1: 0 1px 2px rgb(3 7 18 / 0.06), 0 0 0 1px #e5e7eb;
+  --elevation-2: 0 4px 12px rgb(3 7 18 / 0.08), 0 0 0 1px #e5e7eb;
+  --elevation-3: 0 16px 40px rgb(3 7 18 / 0.16), 0 0 0 1px #e5e7eb;
+
+  --severity-critical: #a8131a;
+  --severity-critical-foreground: #b4161f;
+  --severity-critical-muted: #fdecec;
+  --severity-critical-border: #d9545b;
+  --severity-high: #e8590c;
+  --severity-high-foreground: #a84200;
+  --severity-high-muted: #fff0e4;
+  --severity-high-border: #d0661f;
+  --severity-medium: #f4b400;
+  --severity-medium-foreground: #875900;
+  --severity-medium-muted: #fff6d9;
+  --severity-medium-border: #b7862a;
+  --severity-low: #5b7bd5;
+  --severity-low-foreground: #475672;
+  --severity-low-muted: #eef1f6;
+  --severity-low-border: #7489c4;
+  --severity-info: #9ca3af;
+  --severity-info-foreground: #4b5563;
+  --severity-info-muted: #f3f4f6;
+  --severity-info-border: #868c98;
+
+  --status-open: #374151;
+  --status-open-foreground: #374151;
+  --status-open-muted: #f3f4f6;
+  --status-open-border: #868c98;
+  --status-in-progress: #1565d8;
+  --status-in-progress-foreground: #0f5bc4;
+  --status-in-progress-muted: #eaf2fd;
+  --status-in-progress-border: #5b8fe0;
+  --status-resolved: #16833f;
+  --status-resolved-foreground: #126b34;
+  --status-resolved-muted: #e8f6ed;
+  --status-resolved-border: #3f9a62;
+  --status-ignored: #6b7280;
+  --status-ignored-foreground: #4b5563;
+  --status-ignored-muted: #f3f4f6;
+  --status-ignored-border: #868c98;
+
+  --health-healthy: #16833f;
+  --health-healthy-foreground: #126b34;
+  --health-healthy-muted: #e8f6ed;
+  --health-healthy-border: #3f9a62;
+  --health-at-risk: #b97a00;
+  --health-at-risk-foreground: #875900;
+  --health-at-risk-muted: #fff6d9;
+  --health-at-risk-border: #b7862a;
+  --health-failing: #d92d36;
+  --health-failing-foreground: #b4161f;
+  --health-failing-muted: #fdecec;
+  --health-failing-border: #d9545b;
+
+  --chart-surface: #ffffff;
+  --chart-grid: #e5e7eb;
+  --chart-axis: #d1d5db;
+  --chart-label: #4b5563;
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-6: #008300;
+  --chart-7: #6250d6;
+  --chart-8: #e34948;
+  --chart-seq-1: #b7d3f6;
+  --chart-seq-2: #86b6ef;
+  --chart-seq-3: #5598e7;
+  --chart-seq-4: #2a78d6;
+  --chart-seq-5: #1c5cab;
+  --chart-seq-6: #104281;
+  --chart-div-better: #2a78d6;
+  --chart-div-mid: #f3f4f6;
+  --chart-div-worse: #e34948;
+
+  --graph-canvas: #f9fafb;
+  --graph-node: #ffffff;
+  --graph-node-border: #6b7280;
+  --graph-node-foreground: #000000;
+  --graph-node-selected: #1565d8;
+  --graph-edge: #9ca3af;
+  --graph-edge-attack: #c4161c;
+  --graph-cluster: #f3f4f6;
+}
