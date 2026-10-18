@@ -8,7 +8,7 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@500&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600&amp;family=Noto+Sans+JP:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&amp;family=Geist+Mono:wght@500&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600&amp;family=Noto+Sans+JP:wght@400;500;600&amp;display=swap">
 <style>
 body{margin:0}
 .ak-root[data-theme="dark"]{color-scheme:dark;--bg:#030712;--fg:#f9fafb;--muted:#9ca3af;--divider:#1f2937;--ctrl-border:#374151;--seg-on:#1f2937;--input-bg:#030712;--input:#737b8a;--primary:#1e6fe8;--on-primary:#ffffff;--link:#6aa8ff;--link-hover:#8fbcff;--ring:#4d94ff;--accent-bg:#13233d;--accent-fg:#8fbcff;--ok-bg:#11291b;--ok-fg:#6fd896;--track:#374151;--well:#030712;--readonly-bg:#1f2937}
@@ -147,7 +147,7 @@ class Component extends DCLogic {
       pick: () => this.setState({ themePref: k }),
       style: 'width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 4px; cursor: pointer; color: ' + (pref === k ? 'var(--fg)' : 'var(--muted)') + '; background: ' + (pref === k ? 'var(--seg-on)' : 'transparent') + ';'
     }));
-    const font = { en: "'Geist', ui-sans-serif, system-ui, sans-serif", ar: "'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Geist', sans-serif", ja: "'Noto Sans JP', 'Hiragino Sans', 'Geist', sans-serif" }[lang];
+    const font = { en: "'Archivo', ui-sans-serif, system-ui, sans-serif", ar: "'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Archivo', sans-serif", ja: "'Noto Sans JP', 'Hiragino Sans', 'Archivo', sans-serif" }[lang];
     return {
       t, lang, theme, themes, font,
       dir: lang === 'ar' ? 'rtl' : 'ltr',

@@ -104,6 +104,19 @@
   --link: #6aa8ff;
   --logo: url("/brand/accuknox-logo-on-dark.svg");
 
+  /* ---------- EXTENSION: form feedback + auth screens (login canvas, D-049) ---------- */
+  --error-muted: #3a1417;        /* error banner tint */
+  --error-foreground: #ff8b8f;   /* error banner text, field errors */
+  --error-border: #c9434a;       /* error banner + invalid input border */
+  --success-muted: #11291b;      /* success icon chip */
+  --success-foreground: #6fd896; /* success icon, met password rule */
+  --info-muted: #13233d;         /* info icon chip */
+  --info-foreground: #8fbcff;
+  --control-border: #374151;     /* outline buttons, toggle groups (text-labelled); never input outlines */
+  --track: #374151;              /* unfilled progress bars (decorative) */
+  --pane: #111827;               /* auth feature pane */
+  --dot: #6b7280;                /* inactive carousel dot */
+
   /* ---------- EXTENSION: elevation (dark = lighter surface + border) ---------- */
   --surface-0: #030712;   /* page */
   --surface-1: #111827;   /* card, table */
@@ -243,6 +256,19 @@
 
   --link: #0f5bc4;
   --logo: url("/brand/accuknox-logo-on-light.svg");
+
+  /* ---------- EXTENSION: form feedback + auth screens (login canvas, D-049) ---------- */
+  --error-muted: #fdecec;
+  --error-foreground: #b4161f;
+  --error-border: #d9545b;
+  --success-muted: #e8f6ed;
+  --success-foreground: #126b34;
+  --info-muted: #eaf2fd;
+  --info-foreground: #0f5bc4;
+  --control-border: #d1d5db;
+  --track: #d1d5db;
+  --pane: #f9fafb;
+  --dot: #6b7280;
 
   --surface-0: #f9fafb;
   --surface-1: #ffffff;
