@@ -138,3 +138,17 @@ The obra-ds Figma library takes its `shadcn colors` values from our tokens, neve
 2. Run `node scripts/sync-figma-colors.mjs`, then run `tokens/figma/sync-shadcn-colors.js` in the obra-ds file (Figma MCP `use_figma`, or the plugin console).
 3. Publish the library in Figma and accept the update in files that use it.
 4. Export the live values (`node scripts/check-figma-drift.mjs --print-export`), save them to `tokens/figma/shadcn-colors.export.json`, and run `node scripts/check-figma-drift.mjs`. It must exit 0.
+
+## Form feedback and auth tokens (login app)
+
+Added for the login screens so the app matches the validated canvas without raw colors. All text pairs are in `check-contrast.mjs`.
+
+| Token | Dark | Light | Use |
+|---|---|---|---|
+| `error-muted` / `error-foreground` / `error-border` | `#3A1417` / `#FF8B8F` / `#C9434A` | `#FDECEC` / `#B4161F` / `#D9545B` | Error banner, field errors, invalid input border |
+| `success-muted` / `success-foreground` | `#11291B` / `#6FD896` | `#E8F6ED` / `#126B34` | Success icon chip, met password rule |
+| `info-muted` / `info-foreground` | `#13233D` / `#8FBCFF` | `#EAF2FD` / `#0F5BC4` | Info icon chip |
+| `control-border` | `#374151` | `#D1D5DB` | Outline buttons and toggle groups only (text identifies them). Below 3:1, so never an input outline (D-049). |
+| `track` | `#374151` | `#D1D5DB` | Unfilled progress bars (decorative; the step label carries the meaning) |
+| `pane` | `#111827` | `#F9FAFB` | Auth feature pane background |
+| `dot` | `#6B7280` | `#6B7280` | Inactive carousel dot (≥3:1 on `pane`) |

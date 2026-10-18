@@ -1,0 +1,44 @@
+// Messages the app needs beyond the canvas copy (extracted into messages/*.json by
+// scripts/extract-login-messages.mjs). These replace sentences the canvas built by
+// concatenation, so translators see whole sentences (ICU, rich-text tags).
+import type { Locale } from "./locales";
+
+export const extraMessages: Record<Locale, Record<string, string>> = {
+  en: {
+    "signUp.agree": "I agree to the <terms>Terms</terms> and the <eval>Evaluation Agreement</eval>",
+    "features.position": "{current} of {total}",
+    "features.showSlide": "Show feature {n}: {title}",
+    "features.shotAlt": "Screenshot: {title}",
+    "common.copied": "Copied",
+    "welcome.title": "You're signed in",
+    "welcome.body": "This page stands in for the AccuKnox console.",
+    "welcome.signOut": "Sign out",
+    "signUp.requiredErr": "This field is required.",
+  },
+  ar: {
+    "signUp.agree": "أوافق على <terms>الشروط</terms> و<eval>اتفاقية التقييم</eval>",
+    "features.position": "{current} من {total}",
+    "features.showSlide": "عرض الميزة {n}: {title}",
+    "features.shotAlt": "لقطة شاشة: {title}",
+    "common.copied": "تم النسخ",
+    "welcome.title": "تم تسجيل دخولك",
+    "welcome.body": "تحل هذه الصفحة محل وحدة تحكم AccuKnox.",
+    "welcome.signOut": "تسجيل الخروج",
+    "signUp.requiredErr": "هذا الحقل مطلوب.",
+    // Isolate the numeric range so RTL layout doesn't reorder it to "64–8" (D-007: technical values stay LTR).
+    "signUp.rLength": "⁦8–64⁩ حرفًا",
+    "invitePassword.rLength": "⁦8–64⁩ حرفًا",
+    "resetPassword.rLength": "⁦8–64⁩ حرفًا",
+  },
+  ja: {
+    "signUp.agree": "<terms>利用規約</terms>と<eval>評価契約</eval>に同意します",
+    "features.position": "{current} / {total}",
+    "features.showSlide": "機能を表示 {n}: {title}",
+    "features.shotAlt": "スクリーンショット: {title}",
+    "common.copied": "コピーしました",
+    "welcome.title": "サインインしました",
+    "welcome.body": "このページは AccuKnox コンソールの代わりです。",
+    "welcome.signOut": "サインアウト",
+    "signUp.requiredErr": "この項目は必須です。",
+  },
+};

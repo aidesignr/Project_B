@@ -23,7 +23,7 @@ On a conflict: flag it → state the trade-off → propose a fix → add an entr
 - Colors come only from semantic tokens (`tokens/tokens.css` → utilities via `tokens/theme.css`). The Tailwind palette (`red-500`) is removed.
 - No raw hex/rgb, no arbitrary colors (`bg-[#…]`), no `dark:`/`light:` color utilities in our components.
 - Never hand-edit `tokens/tokens.json`. Regenerate it with `node scripts/build-tokens-json.mjs`.
-- Icons: Lucide, 16px dense / 20px nav. Fonts: Geist (+ Geist Mono) · IBM Plex Sans Arabic · Noto Sans JP.
+- Icons: Lucide, 16px dense / 20px nav. Fonts: Archivo (+ Geist Mono for code, D-051) · IBM Plex Sans Arabic · Noto Sans JP.
 - Logo: `public/brand/accuknox-logo-on-dark.svg` / `-on-light.svg` per theme. Logo colors are never UI colors.
 
 ### Grid and spacing

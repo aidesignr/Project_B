@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@import "../tokens/tokens.css";
+@import "../tokens/theme.css";
+@import "@fontsource/archivo/400.css";
+@import "@fontsource/archivo/500.css";
+@import "@fontsource/archivo/600.css";
+@import "@fontsource/ibm-plex-sans-arabic/400.css";
+@import "@fontsource/ibm-plex-sans-arabic/500.css";
+@import "@fontsource/ibm-plex-sans-arabic/600.css";
+@import "@fontsource/noto-sans-jp/400.css";
+@import "@fontsource/noto-sans-jp/500.css";
+@import "@fontsource/noto-sans-jp/600.css";
+
+/* UI font is Archivo (D-051); Geist Mono stays for codes, keys and IDs. */
+@font-face { font-family: "Geist Mono"; font-weight: 500; font-display: swap; src: url("@fontsource/geist-mono/files/geist-mono-latin-500-normal.woff2") format("woff2"); }
+
+@layer base {
+  html, body, #root { min-height: 100%; }
+}

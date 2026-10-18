@@ -65,7 +65,7 @@ Color is used heavily but deliberately. The strongest colors (Critical, High) ar
 | Base kit | Obra shadcn/ui kit 2.0, **Nova** style (compact), Figma: [obra-ds](https://www.figma.com/design/CFxxYv6TbuUzDW910DNv6v/obra-ds) (Button set: node `1953-30021`). Kit components first; a new component needs an entry in the extension log below. Neutrals, font and destructive follow the kit; deviations are logged (D-042 to D-046). |
 | Stack | React + TypeScript + Vite · Tailwind v4 · shadcn/ui (Radix). See [decision-log.md](decision-log.md). |
 | Icons | Lucide (shadcn default). 16px dense, 20px nav. Default stroke. No custom icon styles. |
-| Type | Geist (Obra kit font, D-042); Geist Mono for code and IDs. Arabic: IBM Plex Sans Arabic. Japanese: Noto Sans JP. |
+| Type | Archivo (D-051; replaces the Obra kit's Geist, D-042); Geist Mono for code and IDs. Arabic: IBM Plex Sans Arabic. Japanese: Noto Sans JP. |
 | Brand color | `--primary`: `#1565D8` light / `#1E6FE8` dark (D-012, D-043). Used for primary actions, selection and links. Never decoration. |
 | Logo | Theme-specific SVGs in `/public/brand/`: white wordmark on dark, `#0000C8` wordmark on light. Logo colors are never UI colors. |
 | Surfaces | Neutral grays. Elevation in dark = lighter surface + 1px border. In light = shadow + border. |

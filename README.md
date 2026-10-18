@@ -20,6 +20,8 @@ It helps security engineers, cloud/DevOps engineers and security leaders see ris
 | [`tokens/tokens.json`](tokens/tokens.json) | W3C Design Tokens export for Figma sync. Generated: don't edit by hand. |
 | [`scripts/`](scripts/) | Contrast check, spacing/RTL/color lint, JSON builder |
 | [`public/brand/`](public/brand/) | AccuKnox logos for dark and light backgrounds |
+| [`src/`](src/) | Login app: the validated login canvas as working React screens (see below) |
+| [`design/login-flows/`](design/login-flows/) | Login canvas source boards (design reference) |
 
 ## Design docs
 
@@ -35,6 +37,43 @@ It helps security engineers, cloud/DevOps engineers and security leaders see ris
 | [08 · Accessibility](docs/design/08-accessibility.md) | Contrast, keyboard, ARIA patterns, chart alternatives, motion, reflow |
 | [Decision log](docs/design/decision-log.md) | Every decision with its reason, alternatives and date |
 | [Review checklist](docs/design/review-checklist.md) | Pass/fail checks for any new screen or component |
+
+## Login app
+
+The login and sign-up flows from the design canvas, built as a working React app. It runs on mock auth (no backend yet).
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+Open http://localhost:5173. The language (en, ar, ja) and the theme (Light / Dark / System) switch from the top toolbar on every screen.
+
+| Route | Screen |
+|---|---|
+| `/sign-in` → `/sign-in/code` | Sign in, then the authenticator code |
+| `/forgot-password` · `/reset-password` | Request a reset link; set a new password |
+| `/invite/:token` → `/authenticator` → `/recovery-codes` | Invite setup in 3 steps |
+| `/sso` | Sign in with SSO (OpenID) |
+| `/sign-up` → `/verify-email` | Self sign-up |
+
+**Demo inputs that trigger each error state** (rules in [`src/lib/auth.ts`](src/lib/auth.ts)):
+
+| Screen | Input | Result |
+|---|---|---|
+| Sign in | email `locked@…` | Sign-in paused |
+| Sign in | password `incorrect` | Wrong email or password |
+| Sign in | Continue with Google | Google account not linked |
+| Authenticator codes | `000000` | Code didn't work (any other 6 digits works) |
+| Reset password | `/reset-password?token=expired` | Reset link expired |
+| Invite | `/invite/expired` | Invite expired |
+| SSO | email at `nosso.com` / `idp-error.com` | No SSO for domain / identity provider error |
+| Sign up | email `taken@…` | Account already exists |
+
+Copy comes from the canvas boards: `node scripts/extract-login-messages.mjs` regenerates `src/i18n/messages/*.json` and fails if a locale is missing a key. Strings the canvas built by joining fragments are whole ICU messages in [`src/i18n/extra.ts`](src/i18n/extra.ts).
 
 ## Using the tokens
 

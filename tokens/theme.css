@@ -24,10 +24,10 @@
   --breakpoint-xl: 1440px;
   --breakpoint-2xl: 1920px;
 
-  --font-sans: "Geist", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, "Segoe UI", sans-serif;   /* D-051 (was Geist, D-042) */
   --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
-  --font-sans-ar: "IBM Plex Sans Arabic", "Noto Sans Arabic", "Geist", "Segoe UI", Tahoma, sans-serif;
-  --font-sans-ja: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", "Meiryo", "Geist", sans-serif;
+  --font-sans-ar: "IBM Plex Sans Arabic", "Noto Sans Arabic", "Archivo", "Segoe UI", Tahoma, sans-serif;
+  --font-sans-ja: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", "Meiryo", "Archivo", sans-serif;
 
   /* size / line-height — line-heights are multiples of 4; sizes 14 and 18 are D-016 exceptions */
   --text-*: initial;
@@ -84,6 +84,17 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-destructive-text: var(--destructive-text);
+  --color-error-muted: var(--error-muted);
+  --color-error-foreground: var(--error-foreground);
+  --color-error-border: var(--error-border);
+  --color-success-muted: var(--success-muted);
+  --color-success-foreground: var(--success-foreground);
+  --color-info-muted: var(--info-muted);
+  --color-info-foreground: var(--info-foreground);
+  --color-control-border: var(--control-border);
+  --color-track: var(--track);
+  --color-pane: var(--pane);
+  --color-dot: var(--dot);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
