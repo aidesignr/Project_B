@@ -111,7 +111,7 @@ body{margin:0}
       <button type="button" class="p-tip" data-tip="{{t.prev}}" aria-label="{{t.prev}}" onClick="{{prev}}" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: transparent; color: var(--p-fg); border: 1px solid var(--p-ctrl-border); border-radius: 9999px; cursor: pointer">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="{{flip}}"><path d="m15 18-6-6 6-6"></path></svg>
       </button>
-      <div style="display: flex; gap: 8px">
+      <div style="display: flex">
         <sc-for list="{{dots}}" as="dot" hint-placeholder-count="4">
           <button type="button" class="p-tip" data-tip="{{dot.tip}}" aria-label="{{dot.label}}" aria-current="{{dot.current}}" onClick="{{dot.go}}" style="{{dot.style}}"></button>
         </sc-for>
@@ -174,7 +174,7 @@ class Component extends DCLogic {
       tip: c[0],
       current: i === idx ? 'true' : 'false',
       go: go(i),
-      style: 'width: ' + (i === idx ? 24 : 8) + 'px; height: 8px; padding: 0; border: 0; border-radius: 9999px; cursor: pointer; background: ' + (i === idx ? 'var(--p-dot-on)' : 'var(--p-dot)') + '; transition: width 200ms;'
+      style: 'width: ' + (i === idx ? 24 : 8) + 'px; height: 8px; box-sizing: content-box; padding: 8px; border: 0; border-radius: 9999px; cursor: pointer; background: ' + (i === idx ? 'var(--p-dot-on)' : 'var(--p-dot)') + '; background-clip: content-box; transition: width 200ms;'
     }));
     const tabs = T.cards.map((c, i) => ({
       title: c[0], caption: c[1], selected: i === idx, go: go(i),
