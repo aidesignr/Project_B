@@ -1,0 +1,110 @@
+{
+  "shadcn colors/general/background": {
+    "light": "#ffffff",
+    "dark": "#030712"
+  },
+  "shadcn colors/general/foreground": {
+    "light": "#000000",
+    "dark": "#f9fafb"
+  },
+  "shadcn colors/general/card": {
+    "light": "#ffffff",
+    "dark": "#111827"
+  },
+  "shadcn colors/general/card foreground": {
+    "light": "#000000",
+    "dark": "#f9fafb"
+  },
+  "shadcn colors/general/popover": {
+    "light": "#ffffff",
+    "dark": "#1f2937"
+  },
+  "shadcn colors/general/popover foreground": {
+    "light": "#000000",
+    "dark": "#f9fafb"
+  },
+  "shadcn colors/general/primary": {
+    "light": "#1565d8",
+    "dark": "#1e6fe8"
+  },
+  "shadcn colors/general/primary foreground": {
+    "light": "#ffffff",
+    "dark": "#ffffff"
+  },
+  "shadcn colors/general/secondary": {
+    "light": "#f3f4f6",
+    "dark": "#1f2937"
+  },
+  "shadcn colors/general/secondary foreground": {
+    "light": "#111827",
+    "dark": "#f9fafb"
+  },
+  "shadcn colors/general/muted": {
+    "light": "#f3f4f6",
+    "dark": "#1f2937"
+  },
+  "shadcn colors/general/muted foreground": {
+    "light": "#4b5563",
+    "dark": "#9ca3af"
+  },
+  "shadcn colors/general/accent": {
+    "light": "#f3f4f6",
+    "dark": "#1f2937"
+  },
+  "shadcn colors/general/accent foreground": {
+    "light": "#111827",
+    "dark": "#f9fafb"
+  },
+  "shadcn colors/general/destructive": {
+    "light": "#b91c1c",
+    "dark": "#f87171"
+  },
+  "shadcn colors/general/border": {
+    "light": "#e5e7eb",
+    "dark": "#1f2937"
+  },
+  "shadcn colors/general/input": {
+    "light": "#868c98",
+    "dark": "#737b8a"
+  },
+  "shadcn colors/focus/ring": {
+    "light": "#1565d8",
+    "dark": "#4d94ff"
+  },
+  "shadcn colors/focus/ring error": {
+    "light": "#b91c1c",
+    "dark": "#f87171"
+  },
+  "shadcn colors/sidebar/sidebar": {
+    "light": "#f9fafb",
+    "dark": "#111827"
+  },
+  "shadcn colors/sidebar/sidebar foreground": {
+    "light": "#000000",
+    "dark": "#f9fafb"
+  },
+  "shadcn colors/sidebar/sidebar primary": {
+    "light": "#1565d8",
+    "dark": "#1e6fe8"
+  },
+  "shadcn colors/sidebar/sidebar primary foreground": {
+    "light": "#ffffff",
+    "dark": "#ffffff"
+  },
+  "shadcn colors/sidebar/sidebar accent": {
+    "light": "#f3f4f6",
+    "dark": "#1f2937"
+  },
+  "shadcn colors/sidebar/sidebar accent foreground": {
+    "light": "#111827",
+    "dark": "#f9fafb"
+  },
+  "shadcn colors/sidebar/sidebar border": {
+    "light": "#e5e7eb",
+    "dark": "#1f2937"
+  },
+  "shadcn colors/sidebar/sidebar ring": {
+    "light": "#1565d8",
+    "dark": "#4d94ff"
+  }
+}

@@ -36,6 +36,7 @@ const rules = [
   ["muted-foreground", [...SURFACES, "muted", "accent"], TEXT, "text"],
   ["primary-foreground", ["primary"], TEXT, "text"],
   ["destructive-foreground", ["destructive"], TEXT, "text"],
+  ["destructive-text", [...SURFACES, "muted"], TEXT, "text"],
   ["secondary-foreground", ["secondary"], TEXT, "text"],
   ["accent-foreground", ["accent"], TEXT, "text"],
   ["sidebar-foreground", ["sidebar", "sidebar-accent"], TEXT, "text"],

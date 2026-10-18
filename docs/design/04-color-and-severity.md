@@ -12,6 +12,9 @@ All colors are **semantic CSS variables** in `tokens/tokens.css`, exposed as Tai
 | `tokens/theme.css` | Tailwind v4 `@theme`: spacing, breakpoints, type, radius, shadows, easing; color → utility mapping; per-language type |
 | `tokens/tokens.json` | W3C Design Tokens export for Figma sync. **Generated:** `node scripts/build-tokens-json.mjs`. Never edit by hand. |
 | `public/brand/accuknox-logo-on-dark.svg` · `-on-light.svg` | Theme logos; `--logo` points to the right one per theme |
+| `scripts/figma-color-map.mjs` | Maps the obra-ds Figma library's `shadcn colors` variables to our tokens (D-048) |
+| `tokens/figma/sync-shadcn-colors.js` | **Generated:** `node scripts/sync-figma-colors.mjs`. Plugin script that writes our values into the library. |
+| `tokens/figma/shadcn-colors.export.json` | Last exported library values. `node scripts/check-figma-drift.mjs` fails if they differ from `tokens.json`. |
 
 ## Neutrals and brand
 
@@ -32,6 +35,7 @@ Neutrals follow the **Obra kit's Tailwind gray scale** (read from Figma 2026-10-
 | `ring` | `#4D94FF` | `#1565D8` | `#D1D5DB` ✗ 1.47 | focus ring |
 | `link` | `#6AA8FF` | `#0F5BC4` | — | inline links (always underlined) |
 | `destructive` | `#C81E28` | `#DC2626` | `#DC2626` | destructive buttons. **Not** severity. |
+| `destructive-text` | `#F87171` | `#B91C1C` | `#F87171` / `#DC2626` ✗ 4.39 on muted | red text and strokes on surfaces: error labels, field errors (D-048). Figma's `destructive` maps here. |
 
 ✗ = kit value fails WCAG AA; ours wins under priority 1 (D-045).
 
@@ -126,3 +130,11 @@ Chart marks below 3:1 (light only: severity Medium/Info, chart 3/4/5) are allowe
 | No `dark:`/`light:` color utilities in our components | `grep -rE "(dark|light):(bg|text|border|fill|stroke)-" src --exclude-dir=ui` returns nothing |
 | First visit follows the OS (`prefers-color-scheme`); the user's choice persists after that | |
 | Logo via `--logo` or the theme-matching SVG; never recolor the logo | |
+
+## Figma sync (D-048)
+
+The obra-ds Figma library takes its `shadcn colors` values from our tokens, never the other way round.
+1. Change `tokens/tokens.css`, then run `node scripts/build-tokens-json.mjs` and `node scripts/check-contrast.mjs`.
+2. Run `node scripts/sync-figma-colors.mjs`, then run `tokens/figma/sync-shadcn-colors.js` in the obra-ds file (Figma MCP `use_figma`, or the plugin console).
+3. Publish the library in Figma and accept the update in files that use it.
+4. Export the live values (`node scripts/check-figma-drift.mjs --print-export`), save them to `tokens/figma/shadcn-colors.export.json`, and run `node scripts/check-figma-drift.mjs`. It must exit 0.
