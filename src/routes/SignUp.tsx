@@ -23,7 +23,11 @@ export function SignUp() {
   const [submitted, setSubmitted] = useState(false);
   const [taken, setTaken] = useState(false);
   const [busy, setBusy] = useState(false);
-  const set = (k: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement>) => setF((s) => ({ ...s, [k]: e.target.value }));
+  // Read the value now: a lazy read inside the updater can see the controlled input already reset.
+  const set = (k: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setF((s) => ({ ...s, [k]: value }));
+  };
 
   const emailBad = submitted && !EMAIL_RE.test(f.email);
   const pwWeak = submitted && !passwordMeetsRules(f.pw);

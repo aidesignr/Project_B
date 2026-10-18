@@ -30,10 +30,18 @@ function initialTheme(): ThemePref {
 
 const prefersDark = () => typeof window === "undefined" || !window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-export function PreferencesProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(initialLocale);
-  const [themePref, setThemePrefState] = useState<ThemePref>(initialTheme);
+/**
+ * `locale` / `themePref` props drive the preferences from outside (Storybook toolbar) and are
+ * followed when they change, without remounting children; otherwise values come from storage.
+ */
+export function PreferencesProvider({ children, locale: fixedLocale, themePref: fixedTheme }: { children: ReactNode; locale?: Locale; themePref?: ThemePref }) {
+  const [locale, setLocaleState] = useState<Locale>(() => fixedLocale ?? initialLocale());
+  const [themePref, setThemePrefState] = useState<ThemePref>(() => fixedTheme ?? initialTheme());
   const [osDark, setOsDark] = useState(prefersDark);
+
+  useEffect(() => { if (fixedLocale) setLocaleState(fixedLocale); }, [fixedLocale]);
+  useEffect(() => { if (fixedTheme) setThemePrefState(fixedTheme); }, [fixedTheme]);
+
 
   useEffect(() => {
     const mq = window.matchMedia?.("(prefers-color-scheme: dark)");

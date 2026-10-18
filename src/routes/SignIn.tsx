@@ -55,7 +55,7 @@ export function SignIn() {
       {banner === "googleNotLinked" && <ErrorBanner title={t("signIn.googleTitle")}>{t("signIn.googleBody")}</ErrorBanner>}
 
       <div className="flex flex-col gap-3">
-        <Button variant="outline" onClick={onGoogle}><GoogleMark />{t("signIn.google")}</Button>
+        <Button id="google-sign-in" variant="outline" onClick={onGoogle}><GoogleMark />{t("signIn.google")}</Button>
         <Button variant="outline" asChild><Link to="/sso"><Building2Icon aria-hidden />{t("signIn.sso")}</Link></Button>
       </div>
 
