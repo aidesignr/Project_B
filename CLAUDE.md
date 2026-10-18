@@ -92,6 +92,10 @@ node scripts/check-contrast.mjs
 ```
 Must exit 0 after any token change.
 ```bash
+node scripts/check-figma-drift.mjs
+```
+Must exit 0: the obra-ds Figma library matches tokens.json (sync steps in 04, D-048).
+```bash
 node scripts/check-spacing.mjs src
 ```
 Checks the 4px grid, logical properties and colors.

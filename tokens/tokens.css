@@ -86,6 +86,7 @@
   --accent-foreground: #f9fafb;
   --destructive: #c81e28;        /* destructive buttons only; not severity */
   --destructive-foreground: #ffffff;
+  --destructive-text: #f87171;   /* red text/strokes on surfaces: error labels, error messages, Obra destructive (D-048) */
   --border: #1f2937;             /* decorative dividers only — not for input outlines */
   --input: #737b8a;              /* EXTENSION-adjusted (D-017): ≥3:1 */
   --ring: #4d94ff;               /* focus ring ≥3:1 on all surfaces */
@@ -226,6 +227,7 @@
   --accent-foreground: #111827;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
+  --destructive-text: #b91c1c;   /* red text/strokes on surfaces (D-048) */
   --border: #e5e7eb;
   --input: #868c98;
   --ring: #1565d8;
