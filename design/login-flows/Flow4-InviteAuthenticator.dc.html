@@ -15,7 +15,7 @@ body{margin:0}
 .ak-root[data-theme="light"]{color-scheme:light;--bg:#ffffff;--fg:#000000;--muted:#4b5563;--divider:#e5e7eb;--ctrl-border:#d1d5db;--seg-on:#f3f4f6;--input-bg:#ffffff;--input:#868c98;--primary:#1565d8;--on-primary:#ffffff;--link:#0f5bc4;--link-hover:#0b4aa0;--ring:#1565d8;--accent-bg:#eaf2fd;--accent-fg:#0f5bc4;--ok-bg:#e8f6ed;--ok-fg:#126b34;--track:#d1d5db;--well:#f9fafb;--readonly-bg:#f3f4f6}
 .ak-root[data-theme="dark"]{--err-bg:#3a1417;--err-fg:#ff8b8f;--err-border:#c9434a}
 .ak-root[data-theme="light"]{--err-bg:#fdecec;--err-fg:#b4161f;--err-border:#d9545b}
-.ak-root a{color:var(--link)}.ak-root a:hover{color:var(--link-hover)}
+.ak-root a{color:var(--link);text-decoration:underline}.ak-root a:hover{color:var(--link-hover)}
 .ak-root :is(button,input,select,a):focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .ak-root input::placeholder{color:var(--muted)}
 .ak-root:is(:lang(ar),:lang(ja)) main :is(p,label,a,button,span,li){line-height:24px}
@@ -40,7 +40,7 @@ body{margin:0}
       <div style="display: flex; align-items: center; gap: 8px">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--muted)"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
         <label for="f4-lang" class="sr-only">{{t.language}}</label>
-        <select id="f4-lang" value="{{lang}}" onChange="{{setLang}}" style="height: 32px; box-sizing: border-box; padding: 0 8px; background: var(--bg); color: var(--fg); border: 1px solid var(--ctrl-border); border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500; font-family: inherit; cursor: pointer">
+        <select id="f4-lang" value="{{lang}}" onChange="{{setLang}}" style="height: 32px; box-sizing: border-box; padding: 0 8px; background: var(--bg); color: var(--fg); border: 1px solid var(--input); border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500; font-family: inherit; cursor: pointer">
           <option value="en" lang="en">English</option>
           <option value="ar" lang="ar">العربية</option>
           <option value="ja" lang="ja">日本語</option>
