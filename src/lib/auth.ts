@@ -53,5 +53,8 @@ export async function signUp(email: string): Promise<SignUpResult> {
 
 export const isExpiredToken = (token: string | null | undefined) => token === "expired";
 
-/** Demo recovery codes (placeholders, like the canvas). */
-export const RECOVERY_CODES = Array.from({ length: 10 }, (_, i) => `[code ${i + 1}]`);
+/** Demo recovery codes (mock auth, the same for every account). */
+export const RECOVERY_CODES = [
+  "7HQK-2M9P", "XW4D-8RTN", "3FJC-6ZLB", "Q9VE-4NKS", "M2TG-7YHD",
+  "B6PX-1WQR", "K8NZ-5CFJ", "R3LD-9VMT", "E5YS-2GKW", "T1CB-6HXN",
+];

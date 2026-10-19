@@ -85,7 +85,7 @@ export function SignIn() {
             <Label htmlFor="password">{t("signIn.password")}</Label>
             <TextLink to="/forgot-password" className="text-sm">{t("signIn.forgot")}</TextLink>
           </div>
-          <PasswordInput ns="signIn" id="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <PasswordInput ns="signIn" id="password" placeholder={t("placeholder.password")} autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
         <Button type="submit" disabled={busy || banner === "locked"}>{t("signIn.signIn")}</Button>
       </form>
