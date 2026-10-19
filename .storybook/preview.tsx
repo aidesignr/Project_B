@@ -54,8 +54,8 @@ const preview: Preview = {
     layout: "centered",
     backgrounds: { disable: true },
     controls: { expanded: true },
-    // WCAG 2.2 AA (D-041). Violations show in the Accessibility panel.
-    a11y: { config: { rules: [] }, options: { runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] } },
+    // WCAG 2.2 AA (D-041). Violations show in the Accessibility panel and fail the Vitest run.
+    a11y: { test: "error", config: { rules: [] }, options: { runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] } },
   },
 };
 

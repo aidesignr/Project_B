@@ -12,7 +12,8 @@
     "check:spacing": "node scripts/check-spacing.mjs src",
     "check:figma": "node scripts/check-figma-drift.mjs",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o storybook-static"
+    "build-storybook": "storybook build -o storybook-static",
+    "test-storybook": "vitest run --project=storybook:*"
   },
   "dependencies": {
     "@fontsource/archivo": "^5.3.0",
@@ -33,15 +34,20 @@
     "@storybook/addon-a11y": "^10.6.2",
     "@storybook/addon-designs": "^11.1.4",
     "@storybook/addon-docs": "^10.6.2",
+    "@storybook/addon-vitest": "^10.6.2",
     "@storybook/react-vite": "^10.6.2",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/browser": "^5.0.5",
+    "@vitest/browser-playwright": "^5.0.5",
+    "playwright": "^1.64.1",
     "storybook": "^10.6.2",
     "tailwindcss": "^4.3.3",
     "typescript": "~5.9",
-    "vite": "^8.3.4"
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
   }
 }
