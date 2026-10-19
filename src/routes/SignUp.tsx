@@ -88,9 +88,8 @@ export function SignUp() {
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="new-password">{t("signUp.pw")}</Label>
-          <PasswordInput ns="signUp" id="new-password" placeholder={t("placeholder.newPassword")} autoComplete="new-password" required aria-required value={f.pw} onChange={set("pw")} aria-invalid={pwWeak} aria-describedby="pw-rules pw-breach" />
+          <PasswordInput ns="signUp" id="new-password" placeholder={t("placeholder.newPassword")} autoComplete="new-password" required aria-required value={f.pw} onChange={set("pw")} aria-invalid={pwWeak} aria-describedby="pw-rules" />
           <PasswordRules ns="signUp" id="pw-rules" password={f.pw} submitted={submitted} />
-          <p id="pw-breach" className="text-sm text-muted-foreground">{t("signUp.breach")}</p>
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="confirm-password">{t("signUp.confirm")}</Label>
