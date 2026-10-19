@@ -20,6 +20,7 @@ It helps security engineers, cloud/DevOps engineers and security leaders see ris
 | [`tokens/tokens.json`](tokens/tokens.json) | W3C Design Tokens export for Figma sync. Generated: don't edit by hand. |
 | [`scripts/`](scripts/) | Contrast check, spacing/RTL/color lint, JSON builder |
 | [`public/brand/`](public/brand/) | AccuKnox logos for dark and light backgrounds |
+| [`.storybook/`](.storybook/) | Storybook config: providers, theme/language toolbar, accessibility and Figma add-ons |
 | [`src/`](src/) | Login app: the validated login canvas as working React screens (see below) |
 | [`design/login-flows/`](design/login-flows/) | Login canvas source boards (design reference) |
 
@@ -74,6 +75,22 @@ Open http://localhost:5173. The language (en, ar, ja) and the theme (Light / Dar
 | Sign up | email `taken@…` | Account already exists |
 
 Copy comes from the canvas boards: `node scripts/extract-login-messages.mjs` regenerates `src/i18n/messages/*.json` and fails if a locale is missing a key. Strings the canvas built by joining fragments are whole ICU messages in [`src/i18n/extra.ts`](src/i18n/extra.ts).
+
+## Storybook
+
+Every UI primitive, auth building block and login screen (45 stories) with the app's tokens, fonts and providers.
+
+```bash
+npm run storybook
+```
+
+Opens http://localhost:6006. In Windows PowerShell, use `npm.cmd run storybook`.
+
+- **Theme and Language** in the toolbar switch dark/light and en/ar (RTL)/ja in place.
+- **Screens/J1–J5** match the Figma journeys. Error states are reached through the form by play functions (they double as interaction tests); see the **Interactions** panel.
+- **Accessibility** panel: axe checks every story against WCAG 2.2 AA (D-041).
+- **Design** panel: the matching frame in the Project_B Figma file.
+- `npm run build-storybook` builds a static copy to `storybook-static/` (ignored by git).
 
 ## Using the tokens
 
