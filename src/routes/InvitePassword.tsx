@@ -53,6 +53,7 @@ export function InvitePassword() {
           <PasswordInput
             ns="invitePassword"
             id="new-password"
+            placeholder={t("placeholder.newPassword")}
             autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -68,6 +69,7 @@ export function InvitePassword() {
           <PasswordInput
             ns="invitePassword"
             id="confirm-password"
+            placeholder={t("placeholder.confirmPassword")}
             autoComplete="new-password"
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}

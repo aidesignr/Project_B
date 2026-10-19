@@ -10,7 +10,9 @@ import { Label } from "@/components/ui/label";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import qrCode from "@/assets/qr-code.png";
 
-const SETUP_KEY = "[SETUP KEY]";
+// Demo key (mock auth). Shown in groups of 4 for reading; copied without spaces.
+const SETUP_KEY = "JBSWY3DPEHPK3PXPMFRGGZDF";
+const SETUP_KEY_GROUPS = SETUP_KEY.match(/.{1,4}/g)!.join(" ");
 
 export function InviteAuthenticator() {
   const t = useT();
@@ -44,7 +46,7 @@ export function InviteAuthenticator() {
       <Heading title={t("inviteAuthenticator.title")}>{t("inviteAuthenticator.body")}</Heading>
       <div className="flex items-start gap-6">
         <img src={qrCode} alt={t("inviteAuthenticator.qr")} className="size-32 shrink-0 rounded-md border border-control-border" />
-        <ol className="m-0 flex flex-col gap-2 ps-5 text-sm">
+        <ol className="m-0 flex list-decimal flex-col gap-2 ps-5 text-sm marker:text-muted-foreground">
           <li>{t("inviteAuthenticator.s1")}</li>
           <li>{t("inviteAuthenticator.s2")}</li>
           <li>{t("inviteAuthenticator.s3")}</li>
@@ -53,7 +55,7 @@ export function InviteAuthenticator() {
       <div className="flex flex-col gap-2">
         <span id="key-label" className="text-sm font-medium">{t("inviteAuthenticator.keyLabel")}</span>
         <div dir="ltr" className="flex h-8 items-center gap-2 rounded-md border border-control-border bg-surface-0 ps-3 pe-1">
-          <code aria-labelledby="key-label" className="grow font-mono text-sm font-medium tracking-[0.08em]">{SETUP_KEY}</code>
+          <code aria-labelledby="key-label" className="grow font-mono text-sm font-medium tracking-[0.08em]">{SETUP_KEY_GROUPS}</code>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button type="button" variant="ghost" size="icon-sm" aria-label={copyLabel} onClick={copyKey}>

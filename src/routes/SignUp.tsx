@@ -51,7 +51,7 @@ export function SignUp() {
   const nameField = (k: "first" | "last", auto: string) => (
     <div key={k} className="flex min-w-0 flex-col gap-2">
       <Label htmlFor={k}>{t(`signUp.${k}`)}</Label>
-      <Input id={k} autoComplete={auto} required aria-required value={f[k]} onChange={set(k)} aria-invalid={missing(k)} aria-describedby={missing(k) ? `${k}-error` : undefined} />
+      <Input id={k} autoComplete={auto} placeholder={t(`placeholder.${k}`)} required aria-required value={f[k]} onChange={set(k)} aria-invalid={missing(k)} aria-describedby={missing(k) ? `${k}-error` : undefined} />
       {requiredError(k)}
     </div>
   );
@@ -83,18 +83,18 @@ export function SignUp() {
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="org">{t("signUp.org")}</Label>
-          <Input id="org" autoComplete="organization" required aria-required value={f.org} onChange={set("org")} aria-invalid={missing("org")} aria-describedby={missing("org") ? "org-error" : undefined} />
+          <Input id="org" autoComplete="organization" placeholder={t("placeholder.org")} required aria-required value={f.org} onChange={set("org")} aria-invalid={missing("org")} aria-describedby={missing("org") ? "org-error" : undefined} />
           {requiredError("org")}
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="new-password">{t("signUp.pw")}</Label>
-          <PasswordInput ns="signUp" id="new-password" autoComplete="new-password" required aria-required value={f.pw} onChange={set("pw")} aria-invalid={pwWeak} aria-describedby="pw-rules pw-breach" />
+          <PasswordInput ns="signUp" id="new-password" placeholder={t("placeholder.newPassword")} autoComplete="new-password" required aria-required value={f.pw} onChange={set("pw")} aria-invalid={pwWeak} aria-describedby="pw-rules pw-breach" />
           <PasswordRules ns="signUp" id="pw-rules" password={f.pw} submitted={submitted} />
           <p id="pw-breach" className="text-sm text-muted-foreground">{t("signUp.breach")}</p>
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="confirm-password">{t("signUp.confirm")}</Label>
-          <PasswordInput ns="signUp" id="confirm-password" autoComplete="new-password" required aria-required value={f.confirm} onChange={set("confirm")} aria-invalid={mismatch} aria-describedby={mismatch ? "confirm-error" : undefined} />
+          <PasswordInput ns="signUp" id="confirm-password" placeholder={t("placeholder.confirmPassword")} autoComplete="new-password" required aria-required value={f.confirm} onChange={set("confirm")} aria-invalid={mismatch} aria-describedby={mismatch ? "confirm-error" : undefined} />
           {mismatch && <FieldError id="confirm-error">{t("resetPassword.mismatch")}</FieldError>}
         </div>
         <div className="flex flex-col gap-2">

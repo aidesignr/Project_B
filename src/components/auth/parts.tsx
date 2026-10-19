@@ -44,8 +44,8 @@ export function BackLink({ to, children }: { to: string; children: ReactNode }) 
 /** Field-level error: icon + text, linked to the input with aria-describedby. */
 export function FieldError({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <p id={id} className="flex items-start gap-1 text-sm text-error-foreground">
-      <CircleAlertIcon className="mt-[2px] size-4 shrink-0" aria-hidden />
+    <p id={id} className="flex items-start gap-1 text-xs text-error-foreground">
+      <CircleAlertIcon className="size-4 shrink-0" aria-hidden />
       <span>{children}</span>
     </p>
   );
