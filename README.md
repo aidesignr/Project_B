@@ -92,6 +92,26 @@ Opens http://localhost:6006. In Windows PowerShell, use `npm.cmd run storybook`.
 - **Design** panel: the matching frame in the Project_B Figma file.
 - `npm run build-storybook` builds a static copy to `storybook-static/` (ignored by git).
 
+### Storybook tests
+
+Every story renders in headless Chromium (Vitest browser mode, `@storybook/addon-vitest`), its play function runs, and axe fails the test on any WCAG 2.2 AA violation (`parameters.a11y.test = "error"`). Each story runs twice: **dark + en** and **light + ar (RTL)** (the projects in [`vitest.config.ts`](vitest.config.ts)).
+
+Once, to download the browser:
+
+```bash
+npx playwright install chromium
+```
+
+Then:
+
+```bash
+npm run test-storybook
+```
+
+In Windows PowerShell, use `npm.cmd run test-storybook`. To run one combination, add `-- --project=storybook:light-ar` (or `storybook:dark-en`). The **Testing** widget in the Storybook sidebar runs the same tests.
+
+CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs on every pull request: `npm run build`, the contrast, Figma drift and spacing checks, then these tests.
+
 ## Using the tokens
 
 In the app's entry CSS:
