@@ -103,11 +103,11 @@ export const PASSWORD_RULES = [
 
 export const passwordMeetsRules = (p: string) => PASSWORD_RULES.every((r) => r.test(p));
 
-/** Live checklist, 2 columns, one line per rule. Unmet rules turn red only after submit. */
+/** Live checklist, 2 columns, one line per rule, at field-error size. Unmet rules turn red only after submit. */
 export function PasswordRules({ ns, password, submitted, id }: { ns: string; password: string; submitted: boolean; id: string }) {
   const t = useT();
   return (
-    <ul id={id} className="m-0 grid list-none grid-cols-2 gap-x-4 gap-y-2 p-0 text-sm">
+    <ul id={id} className="m-0 grid list-none grid-cols-2 gap-x-4 gap-y-2 p-0 text-xs">
       {PASSWORD_RULES.map(({ key, test }) => {
         const met = test(password);
         const failed = !met && submitted;
