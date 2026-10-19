@@ -15,11 +15,15 @@ const combos = [
   { name: "light-ar", globals: { theme: "light", locale: "ar" } },
 ];
 
+// The Storybook UI's test runner (VITEST_STORYBOOK) renames every project to
+// "storybook:<configDir>", so it can only take one; the CLI and CI run all combos.
+const projects = process.env.VITEST_STORYBOOK === "true" ? combos.slice(0, 1) : combos;
+
 export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
-      projects: combos.map(({ name, globals }) => ({
+      projects: projects.map(({ name, globals }) => ({
         extends: true,
         plugins: [storybookTest({ configDir, storybookScript: "npm run storybook -- --ci" })],
         test: {
