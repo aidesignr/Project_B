@@ -21,23 +21,28 @@ Below 1280px: no mobile layout. The page scrolls horizontally inside the main re
 
 ## App shell
 
+Approved layout **A2** (D-052 to D-059). Design source: the "AccuKnox app shell" canvas, page "A2 · Approved" (annotated spec and responsive notes there). Code: `src/components/shell/`.
+
 ```
-┌──────────┬───────────────────────────────────────────────┐
-│ Sidebar  │ Header 56 — breadcrumb · scope/filter · search│
-│ 240      ├───────────────────────────────────────────────┤
-│ (56      │ Page title row (title · freshness · actions)  │
-│ collapsed│ KPI tiles row                                 │
-│ )        │ Content (12-col grid)          │ Detail panel │
-│          │                                 │ 480/560     │
-└──────────┴───────────────────────────────────────────────┘
+┌──────────┬───────────────────────────────────────────────────────────┐
+│ Sidebar  │ Header 48 — pin · Module › Page (H1) · search · tenant ·  │
+│ 56 rail  │             Help · AskAI · notifications                  │
+│ (240 on  ├───────────────────────────────────────────────────────────┤
+│ hover,   │ Toolbar — filters and tabs · freshness · one action       │
+│ overlay; │ Module slot (12-col grid)               │ AskAI 480/560   │
+│ pinned   │                                          │ (overlay)       │
+│ pushes)  │                                          │                 │
+└──────────┴───────────────────────────────────────────────────────────┘
 ```
 
 | Region | Spec |
 |---|---|
-| Sidebar | 240 expanded, 56 collapsed. Item height 32, icon 20, padding-inline 12. |
-| Header | 56 high. Holds the global scope (account/cluster/project) and time range on the inline-end side. |
-| Page title row | H1 `text-xl/28`. Freshness ("Updated 2 min ago") is always visible. One primary action max. |
-| Detail panel | Opens on the inline-end side and **pushes** content (doesn't overlay) at ≥1440. At 1280 it overlays with a scrim. Close with Esc; focus returns to the trigger row. |
+| Sidebar | 56 rail / 240 expanded. Unpinned: expands over content on hover intent (120 / 160 ms) or focus. Pinned: 240, content pushed. Logo row 48. Level 1 rows 32, level 2 rows 28, gap 4, icon 20 in a 24 box. Level 2 groups collapsed by default (D-055). |
+| Header | 48 high (`--layout-header`), padding-inline 16. Fix-sidebar button first; breadcrumb ending in the page H1 (14/20 semibold); search icon; tenant/group 36; Help, AskAI, notifications. Below the sidebar in z order. |
+| Toolbar | First row of every page, 32 high: filters and tabs, then freshness ("Updated 4 min ago") and at most one primary action. Replaces the old title row (D-057). |
+| Content | Padding 12 top, 24 sides and bottom; gap 12; gutter 16 at every width (D-054). Fills the window; only `main` scrolls. |
+| Detail / AskAI panel | Opens on the inline-end side below the header. AskAI overlays; detail panels push at ≥1440 and overlay at 1280. Close with Esc; focus returns to the trigger. |
+| Widths | Works down to 1024; below 1280 the sidebar is forced unpinned (D-053). |
 
 ## Dashboards
 
