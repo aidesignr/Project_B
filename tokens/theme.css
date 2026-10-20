@@ -55,6 +55,7 @@
   --shadow-1: var(--elevation-1);
   --shadow-2: var(--elevation-2);
   --shadow-3: var(--elevation-3);
+  --shadow-sidebar: var(--elevation-sidebar);
 
   --ease-*: initial;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);

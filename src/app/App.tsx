@@ -14,6 +14,8 @@ import { Sso } from "@/routes/Sso";
 import { SignUp } from "@/routes/SignUp";
 import { VerifyEmail } from "@/routes/VerifyEmail";
 import { Welcome } from "@/routes/Welcome";
+import { ModulePage } from "@/routes/ModulePage";
+import { AppShell } from "@/components/shell/AppShell";
 
 function LocalizedApp() {
   const { locale } = usePreferences();
@@ -34,6 +36,10 @@ function LocalizedApp() {
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/welcome" element={<Welcome />} />
+            <Route element={<AppShell />}>
+              <Route path="/:module" element={<ModulePage />} />
+              <Route path="/:module/:sub" element={<ModulePage />} />
+            </Route>
             <Route path="*" element={<Navigate to="/sign-in" replace />} />
           </Routes>
         </BrowserRouter>
