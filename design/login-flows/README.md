@@ -11,7 +11,10 @@ These files are design source, not production code. Each `.dc.html` board loads 
 - The left pane uses the approved **browser frame** layout (`MarketingPane.dc.html`, `layout="frame"`). It cycles 4 product screenshots, starting on data security.
 - Every screen has a language switch (en, ar with RTL, ja) and a theme switch (Light, Dark, System).
 - Controls are compact: 32px inputs and buttons, 24px icon buttons, 40px code inputs.
-- Password rules show in 2 columns, one line each: 8–64 characters, plus 1 lowercase, 1 uppercase, 1 number and 1 special character. A note says we also check for breached passwords (D-047).
+- Every empty input shows a placeholder (for example "Enter your first name", "Create a password").
+- Field error messages and the password rules use 12/16 text, the smallest step in the type scale.
+- Password rules show in 2 columns, one line each: 8–64 characters, plus 1 lowercase, 1 uppercase, 1 number and 1 special character. Reset and invite add a note that we also check for breached passwords (D-047); sign-up leaves it out (D-052).
+- The invite authenticator step numbers its instructions and shows a demo setup key; the recovery-codes step shows 10 demo codes. Code (`src/lib/auth.ts`) uses the same values.
 
 ## Journeys
 
