@@ -106,7 +106,8 @@ export function HeaderBreadcrumb() {
 export function HelpMenu({ defaultOpen }: { defaultOpen?: boolean }) {
   const t = useT();
   return (
-    <DropdownMenu defaultOpen={defaultOpen}>
+    // Non-modal: a modal menu aria-hides the page while its controls stay focusable (axe aria-hidden-focus).
+    <DropdownMenu defaultOpen={defaultOpen} modal={false}>
       <Tooltip>
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>

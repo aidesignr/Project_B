@@ -249,7 +249,8 @@ export function ProfileMenu({ defaultOpen = false }: { defaultOpen?: boolean }) 
   useHoldSidebarOpen(open);
   const role = t(CURRENT_USER.roleKey);
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    // Non-modal: a modal menu aria-hides the page while its controls stay focusable (axe aria-hidden-focus).
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
       <DropdownMenuTrigger asChild>
         <button
           type="button"
