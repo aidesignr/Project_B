@@ -11,7 +11,7 @@ import { useIsPinned, useSidebar } from "./shell-context";
 /** Forces a visual state in the component-states sheet (Storybook); never set in the app. */
 export type PreviewState = "hover" | "focus";
 
-// Level 1 row: 32 high, 24 icon box holding a 20 px icon, 12 gap (compact, D-054).
+// Level 1 row: 32 high, 24 icon box holding a 20 px icon, 12 gap (compact, D-055).
 const rowBase =
   "relative flex h-8 w-full items-center gap-3 rounded-md px-2 text-start text-sm text-muted-foreground outline-none transition-colors duration-(--duration-fast) hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sidebar-ring";
 const rowHover = "bg-sidebar-accent text-sidebar-accent-foreground";

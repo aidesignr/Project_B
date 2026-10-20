@@ -8,7 +8,7 @@ import { Sidebar } from "./Sidebar";
 import { ShellProvider, useShell, type ShellOptions } from "./shell-context";
 
 /**
- * Master layout for every module (D-052): full-height sidebar on the inline-start side, a
+ * Master layout for every module (D-053): full-height sidebar on the inline-start side, a
  * 48px header and an independently scrolling main region beside it. The spacer reserves 56
  * (unpinned rail; the expanded sidebar floats over content) or 240 (pinned; content pushed).
  */

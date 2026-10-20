@@ -21,7 +21,7 @@ Below 1280px: no mobile layout. The page scrolls horizontally inside the main re
 
 ## App shell
 
-Approved layout **A2** (D-052 to D-059). Design source: the "AccuKnox app shell" canvas, page "A2 · Approved" (annotated spec and responsive notes there). Code: `src/components/shell/`.
+Approved layout **A2** (D-053 to D-060). Design source: the "AccuKnox app shell" canvas, page "A2 · Approved" (annotated spec and responsive notes there). Code: `src/components/shell/`.
 
 ```
 ┌──────────┬───────────────────────────────────────────────────────────┐
@@ -37,12 +37,12 @@ Approved layout **A2** (D-052 to D-059). Design source: the "AccuKnox app shell"
 
 | Region | Spec |
 |---|---|
-| Sidebar | 56 rail / 240 expanded. Unpinned: expands over content on hover intent (120 / 160 ms) or focus. Pinned: 240, content pushed. Logo row 48. Level 1 rows 32, level 2 rows 28, gap 4, icon 20 in a 24 box. Level 2 groups collapsed by default (D-055). |
+| Sidebar | 56 rail / 240 expanded. Unpinned: expands over content on hover intent (120 / 160 ms) or focus. Pinned: 240, content pushed. Logo row 48. Level 1 rows 32, level 2 rows 28, gap 4, icon 20 in a 24 box. Level 2 groups collapsed by default (D-056). |
 | Header | 48 high (`--layout-header`), padding-inline 16. Fix-sidebar button first; breadcrumb ending in the page H1 (14/20 semibold); search icon; tenant/group 36; Help, AskAI, notifications. Below the sidebar in z order. |
-| Toolbar | First row of every page, 32 high: filters and tabs, then freshness ("Updated 4 min ago") and at most one primary action. Replaces the old title row (D-057). |
-| Content | Padding 12 top, 24 sides and bottom; gap 12; gutter 16 at every width (D-054). Fills the window; only `main` scrolls. |
+| Toolbar | First row of every page, 32 high: filters and tabs, then freshness ("Updated 4 min ago") and at most one primary action. Replaces the old title row (D-058). |
+| Content | Padding 12 top, 24 sides and bottom; gap 12; gutter 16 at every width (D-055). Fills the window; only `main` scrolls. |
 | Detail / AskAI panel | Opens on the inline-end side below the header. AskAI overlays; detail panels push at ≥1440 and overlay at 1280. Close with Esc; focus returns to the trigger. |
-| Widths | Works down to 1024; below 1280 the sidebar is forced unpinned (D-053). |
+| Widths | Works down to 1024; below 1280 the sidebar is forced unpinned (D-054). |
 
 ## Dashboards
 

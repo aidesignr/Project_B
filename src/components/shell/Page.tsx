@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-/** Page container: 12 top, 24 sides/bottom, 12 between sections, max 1920 (A2, D-054). */
+/** Page container: 12 top, 24 sides/bottom, 12 between sections, max 1920 (A2, D-055). */
 export function PageContainer({ width = "default", children }: { width?: "default" | "reading"; children: ReactNode }) {
   return (
     <div className={cn("mx-auto flex w-full flex-col gap-3 px-6 pt-3 pb-6", width === "reading" ? "max-w-(--layout-reading-width)" : "max-w-(--layout-max-width)")}>

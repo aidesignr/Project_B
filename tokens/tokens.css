@@ -29,10 +29,10 @@
   --layout-reading-width: 768px;  /* forms, docs, AI answers */
   --layout-sidebar: 240px;
   --layout-sidebar-collapsed: 56px;
-  --layout-header: 48px;           /* compact (D-054) */
+  --layout-header: 48px;           /* compact (D-055) */
   --layout-detail-panel: 480px;   /* ≥1440: 560px */
-  --layout-min-width: 1024px;     /* app shell works down to here (D-053) */
-  --layout-pin-min-width: 1280px; /* below this the sidebar is forced unpinned (D-053) */
+  --layout-min-width: 1024px;     /* app shell works down to here (D-054) */
+  --layout-pin-min-width: 1280px; /* below this the sidebar is forced unpinned (D-054) */
 
   /* ---------- Density (dense is default) ---------- */
   --control-h-sm: 28px;
@@ -45,7 +45,7 @@
   --duration-fast: 120ms;
   --duration-base: 200ms;
   --duration-slow: 320ms;
-  /* hover intent for the unpinned sidebar (D-052); not animations, so reduced motion keeps them */
+  /* hover intent for the unpinned sidebar (D-053); not animations, so reduced motion keeps them */
   --delay-sidebar-open: 120ms;    /* cursor must rest this long before the rail expands */
   --delay-sidebar-close: 160ms;   /* grace period after the cursor leaves, prevents flicker */
 }
@@ -130,7 +130,7 @@
   --elevation-1: 0 0 0 1px #1f2937;
   --elevation-2: 0 0 0 1px #374151, 0 4px 12px rgb(0 0 0 / 0.5);
   --elevation-3: 0 0 0 1px #4b5563, 0 16px 40px rgb(0 0 0 / 0.6);
-  --elevation-sidebar: 0 0 0 1px #374151, 0 8px 32px rgb(0 0 0 / 0.6);   /* unpinned sidebar floating over content (D-052) */
+  --elevation-sidebar: 0 0 0 1px #374151, 0 8px 32px rgb(0 0 0 / 0.6);   /* unpinned sidebar floating over content (D-053) */
 
   /* ---------- EXTENSION: severity ---------- */
   --severity-critical: #e5343f;

@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 const PIN_KEY = "ak.sidebarPinned";
-/** Matches --layout-pin-min-width: below this the sidebar is forced unpinned (D-053). */
+/** Matches --layout-pin-min-width: below this the sidebar is forced unpinned (D-054). */
 export const PIN_MIN_WIDTH = 1280;
 
 const read = (key: string) => { try { return localStorage.getItem(key); } catch { return null; } };

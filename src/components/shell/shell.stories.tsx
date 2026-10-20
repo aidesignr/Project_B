@@ -12,7 +12,7 @@ import { SidebarContext, ShellProvider } from "./shell-context";
 import { OPEN_CRITICAL_FINDINGS } from "./demo";
 
 /**
- * App shell, approved layout A2 (canvas "AccuKnox app shell", page "A2 · Approved"; D-052–D-058).
+ * App shell, approved layout A2 (canvas "AccuKnox app shell", page "A2 · Approved"; D-053–D-059).
  * Every module screen renders inside it.
  * Stories pass `pinnable` so pinning works in narrow Storybook frames.
  */

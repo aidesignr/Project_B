@@ -13,7 +13,7 @@ import { MODULES } from "./nav";
 import { useShell } from "./shell-context";
 
 /**
- * Fix-sidebar button, first in the header (D-056): pins the sidebar open (content pushed) or
+ * Fix-sidebar button, first in the header (D-057): pins the sidebar open (content pushed) or
  * unpins it back to the hover rail. Below 1280px it is aria-disabled and explains why.
  */
 export function PinButton() {
@@ -143,9 +143,9 @@ export function HelpMenu({ defaultOpen }: { defaultOpen?: boolean }) {
 }
 
 /**
- * Top of the content column, 48 high (D-054), A2 layout: fix-sidebar button · breadcrumb + H1 ·
+ * Top of the content column, 48 high (D-055), A2 layout: fix-sidebar button · breadcrumb + H1 ·
  * search icon · tenant and group · Help · AskAI · notifications. Stacked below the sidebar (z 20
- * vs 30) so the floating sidebar's logo row is never covered (D-056). Narrow containers
+ * vs 30) so the floating sidebar's logo row is never covered (D-057). Narrow containers
  * (zoom/reflow) turn the tenant and AskAI labels into icons; names stay in aria-label.
  */
 export function Header() {

@@ -36,7 +36,7 @@ export type ModuleDef = { id: ModuleId; path: string; icon: LucideIcon; group: "
 const subs = (module: ModuleId, ids: string[]): SubDef[] => ids.map((id) => ({ id, path: `/${module}/${id}` }));
 
 /**
- * Product IA (supplied by the product owner on 2026-10-20, D-059; replaces the brief's nine
+ * Product IA (supplied by the product owner on 2026-10-20, D-060; replaces the brief's nine
  * modules). A module with level 2 pages has no page of its own: its row only groups them, and a
  * link to it lands on its first level 2 page.
  */
