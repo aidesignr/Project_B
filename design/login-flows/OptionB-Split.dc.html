@@ -105,7 +105,7 @@ body{margin:0}
             <label for="b-email" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.email}}</label>
             <input id="b-email" type="email" dir="ltr" autocomplete="username" placeholder="name@company.com" value="{{emailVal}}" onChange="{{noop}}" aria-invalid="{{emailErr}}" aria-describedby="b-email-err" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{emailBorder}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit; text-align: start">
             <sc-if value="{{emailErr}}" hint-placeholder-val="{{false}}">
-              <p id="b-email-err" style="margin: 0; display: flex; align-items: center; gap: 4px; font-size: 14px; line-height: 20px; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.emailErr}}</p>
+              <p id="b-email-err" style="margin: 0; display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.emailErr}}</p>
             </sc-if>
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px">
@@ -114,7 +114,7 @@ body{margin:0}
               <a href="Flow2-ForgotPassword.dc.html" style="font-size: 14px; line-height: 20px">{{t.forgot}}</a>
             </div>
             <div style="position: relative">
-              <input id="b-password" type="{{eye1.type}}" autocomplete="current-password" style="width: 100%; height: 32px; box-sizing: border-box; padding-block: 0; padding-inline: 12px 36px; background: var(--input-bg); color: var(--fg); border: 1px solid var(--input); border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
+              <input id="b-password" placeholder="{{t.phPassword}}" type="{{eye1.type}}" autocomplete="current-password" style="width: 100%; height: 32px; box-sizing: border-box; padding-block: 0; padding-inline: 12px 36px; background: var(--input-bg); color: var(--fg); border: 1px solid var(--input); border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
               <button type="button" class="has-tip" data-tip="{{eye1.tip}}" aria-label="{{eye1.tip}}" aria-pressed="{{eye1.shown}}" onClick="{{eye1.toggle}}" style="position: absolute; inset-inline-end: 4px; top: 4px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: transparent; color: var(--muted); border: 0; border-radius: 4px; cursor: pointer">
                 <sc-if value="{{eye1.hidden}}" hint-placeholder-val="{{true}}">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -157,8 +157,13 @@ class Component extends DCLogic {
       ar: { emailErr: 'أدخل عنوان بريد إلكتروني مثل name@company.com.', wrongTitle: 'البريد الإلكتروني أو كلمة المرور غير صحيحة', wrongBody: 'تحقّق منهما وحاول مرة أخرى. بعد 5 محاولات فاشلة، يتوقف تسجيل الدخول مؤقتًا لمدة 15 دقيقة.', lockedTitle: 'تم إيقاف تسجيل الدخول مؤقتًا لمدة 15 دقيقة', lockedBody: 'حدثت محاولات فاشلة كثيرة على هذا الحساب. انتظر 15 دقيقة، أو أعِد تعيين كلمة المرور الآن.', lockedLink: 'إعادة تعيين كلمة المرور', googleTitle: 'حساب Google هذا غير مرتبط بـ AccuKnox', googleBody: '[name@gmail.com] ليس جزءًا من مؤسسة على AccuKnox. سجّل الدخول بحساب العمل، أو اطلب دعوة من المسؤول.' },
       ja: { emailErr: 'name@company.com のような形式でメールアドレスを入力してください。', wrongTitle: 'メールアドレスまたはパスワードが正しくありません', wrongBody: '両方を確認して、もう一度お試しください。5 回失敗すると、サインインは 15 分間停止されます。', lockedTitle: 'サインインは 15 分間停止されています', lockedBody: 'このアカウントで失敗した試行が多すぎます。15 分待つか、今すぐパスワードをリセットしてください。', lockedLink: 'パスワードをリセット', googleTitle: 'この Google アカウントは AccuKnox に連携されていません', googleBody: '[name@gmail.com] は AccuKnox の組織に属していません。仕事用アカウントでサインインするか、管理者に招待を依頼してください。' }
     };
+    const PH = {
+      en: { phFirst: 'Enter your first name', phLast: 'Enter your last name', phOrg: 'Enter your organization name', phPassword: 'Enter your password', phNewPw: 'Create a password', phConfirm: 'Re-enter your password' },
+      ar: { phFirst: 'أدخل اسمك الأول', phLast: 'أدخل اسم العائلة', phOrg: 'أدخل اسم مؤسستك', phPassword: 'أدخل كلمة المرور', phNewPw: 'أنشئ كلمة مرور', phConfirm: 'أعد إدخال كلمة المرور' },
+      ja: { phFirst: '名を入力', phLast: '姓を入力', phOrg: '組織名を入力', phPassword: 'パスワードを入力', phNewPw: 'パスワードを作成', phConfirm: 'パスワードを再入力' }
+    };
     const lang = this.state.lang;
-    const t = Object.assign({}, S[lang], E[lang]);
+    const t = Object.assign({}, S[lang], E[lang], PH[lang]);
     const sc = this.props.scenario || 'none';
     const B = { wrongCredentials: [t.wrongTitle, t.wrongBody], locked: [t.lockedTitle, t.lockedBody, t.lockedLink, 'Flow2-ForgotPassword.dc.html'], googleNotLinked: [t.googleTitle, t.googleBody] }[sc];
     const banner = B ? { show: true, title: B[0], body: B[1], hasLink: !!B[2], link: B[2] || '', href: B[3] || '#' } : { show: false, title: '', body: '', hasLink: false, link: '', href: '#' };

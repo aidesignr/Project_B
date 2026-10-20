@@ -80,8 +80,8 @@ body{margin:0}
         </div>
 
         <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
-          <div role="img" aria-label="{{t.qr}}" style="width: 128px; height: 128px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; background: url(&quot;assets/qr-code.png&quot;) center / cover no-repeat; color: #4b5563; border: 1px solid var(--ctrl-border); border-radius: 8px; font-size: 12px; line-height: 16px; text-align: center; padding: 12px">[QR code]</div>
-          <ol style="flex: 1 1 200px; margin: 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px">
+          <div role="img" aria-label="{{t.qr}}" style="width: 128px; height: 128px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; background: url(&quot;/_blob/5c0a5c719dd65b74a49ed8c0d63c24a4&quot;) center / cover no-repeat; color: #4b5563; border: 1px solid var(--ctrl-border); border-radius: 8px; font-size: 12px; line-height: 16px; text-align: center; padding: 12px">[QR code]</div>
+          <ol style="flex: 1 1 200px; margin: 0; padding-inline-start: 20px; list-style: decimal; display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px">
             <li>{{t.s1}}</li>
             <li>{{t.s2}}</li>
             <li>{{t.s3}}</li>
@@ -91,7 +91,7 @@ body{margin:0}
         <div style="display: flex; flex-direction: column; gap: 8px">
           <span id="key-label" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.keyLabel}}</span>
           <div dir="ltr" style="display: flex; align-items: center; gap: 8px; height: 32px; box-sizing: border-box; padding: 0 4px 0 12px; background: var(--well); border: 1px solid var(--ctrl-border); border-radius: 8px">
-            <code aria-labelledby="key-label" style="flex-grow: 1; font: 500 14px/20px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.08em; color: var(--fg)">[SETUP KEY]</code>
+            <code aria-labelledby="key-label" style="flex-grow: 1; font: 500 14px/20px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.08em; color: var(--fg)">JBSW Y3DP EHPK 3PXP MFRG GZDF</code>
             <button type="button" class="has-tip" data-tip="{{copyTip}}" aria-label="{{copyTip}}" onClick="{{doCopy}}" style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: transparent; color: var(--muted); border: 0; border-radius: 4px; cursor: pointer">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
             </button>
@@ -103,7 +103,7 @@ body{margin:0}
             <label for="setup-otp" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.code}}</label>
             <input id="setup-otp" type="text" dir="ltr" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" value="{{codeVal}}" onChange="{{noop}}" aria-invalid="{{codeErr}}" aria-describedby="setup-otp-err" style="height: 40px; box-sizing: border-box; padding: 0 16px; background: var(--input-bg); color: var(--fg); border: 1px solid {{codeBorder}}; border-radius: 8px; font: 500 20px/28px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.4em; text-align: center">
             <sc-if value="{{codeErr}}" hint-placeholder-val="{{false}}">
-              <p id="setup-otp-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 14px; line-height: 20px; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.codeErr}}</p>
+              <p id="setup-otp-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: 16px; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.codeErr}}</p>
             </sc-if>
           </div>
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px">
