@@ -15,6 +15,7 @@ import { SignUp } from "@/routes/SignUp";
 import { VerifyEmail } from "@/routes/VerifyEmail";
 import { Welcome } from "@/routes/Welcome";
 import { ModulePage } from "@/routes/ModulePage";
+import { FindingsPage } from "@/routes/FindingsPage";
 import { AppShell } from "@/components/shell/AppShell";
 
 function LocalizedApp() {
@@ -37,6 +38,7 @@ function LocalizedApp() {
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/welcome" element={<Welcome />} />
             <Route element={<AppShell />}>
+              <Route path="/findings" element={<FindingsPage />} />
               <Route path="/:module" element={<ModulePage />} />
               <Route path="/:module/:sub" element={<ModulePage />} />
             </Route>

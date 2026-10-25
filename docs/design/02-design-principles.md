@@ -90,6 +90,9 @@ Color is used heavily but deliberately. The strongest colors (Critical, High) ar
 | Tenant and group combobox (one search, tenant tree, single select) | No searchable two-level picker | Composed from `Popover` + ARIA tree (combobox with tree popup, D-063) |
 | Notifications panel (compact cards, mark all read, clear all + Undo, empty state) | No notification centre | Composed from `Popover`, `Button`; 11/10 type steps (D-061) |
 | Getting-started checklist (progress ring + steps) | No onboarding checklist | Composed from `Popover`, `Progress` |
+| Filter dropdown: static or on-demand, operator, two-level tree with parent icons, All/Selected tabs, search across both levels, Create from search, Select all / Unselect all, From/To calendar (D-064) | Kit has `Select` and `Combobox` but no faceted filter with an operator or a tree | Composed from `Popover`, `Select`, `Checkbox` (now with an indeterminate state), `ToggleGroup`, `Button` |
+| Severity toggle: icon + letter + count, pressed state (D-064) | No pressed filter chip that uses the severity tokens | Composed from `Button`, `Tooltip` |
+| Findings table extras: column customizer (show, hide, move up/down), pagination, floating bulk-action bar | Kit `Table` has no column chooser, pager or bulk bar | Native `<table>`, `Popover`, `Checkbox`, `Select`, `DropdownMenu` |
 
 ## Open conflicts
 
