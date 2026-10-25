@@ -108,7 +108,8 @@ export function FindingsPage({ preset = {} }: { preset?: FindingsPreset }) {
   const [detailOf, setDetailOf] = useState<Finding | null>(preset.drawer ? SAMPLE_FINDING : null);
   const [drawerOpen, setDrawerOpen] = useState(!!preset.drawer);
   const [drawerState, setDrawerState] = useState<DrawerState>(preset.drawer?.state ?? "ready");
-  const openDetail = (f: Finding) => { setDetailOf(f); setDrawerState("ready"); setDrawerOpen(true); };
+  const [detailTrigger, setDetailTrigger] = useState<HTMLElement | null>(null);
+  const openDetail = (f: Finding, trigger: HTMLElement) => { setDetailOf(f); setDetailTrigger(trigger); setDrawerState("ready"); setDrawerOpen(true); };
 
   // Any change to what's shown goes back to page 1.
   const setQuery = (q: string) => { setQueryState(q); setPage(1); };
@@ -345,6 +346,7 @@ export function FindingsPage({ preset = {} }: { preset?: FindingsPreset }) {
           defaultToast={preset.drawer?.toast}
           state={drawerState}
           onRetry={() => setDrawerState("ready")}
+          returnFocusTo={detailTrigger}
         />
       )}
     </PageContainer>

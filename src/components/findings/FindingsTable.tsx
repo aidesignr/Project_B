@@ -68,7 +68,7 @@ export function FindingsTable({
   onSelected: (update: (prev: string[]) => string[]) => void;
   compact: boolean;
   /** Opens the finding detail drawer. */
-  onOpen: (f: Finding) => void;
+  onOpen: (f: Finding, trigger: HTMLElement) => void;
 }) {
   const t = useT();
   const lastSeen = useLastSeen();
@@ -95,7 +95,7 @@ export function FindingsTable({
             type="button"
             data-slot="finding-open"
             aria-haspopup="dialog"
-            onClick={() => onOpen(f)}
+            onClick={(e) => onOpen(f, e.currentTarget)}
             className="max-w-full truncate rounded-sm text-start font-medium text-foreground underline-offset-4 outline-none hover:underline focus-visible:outline-2 focus-visible:outline-ring"
           >
             {f.name}

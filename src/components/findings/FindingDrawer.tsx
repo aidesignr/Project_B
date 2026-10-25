@@ -69,8 +69,11 @@ export function FindingDrawer({
   state = "ready",
   defaultToast,
   onRetry,
+  returnFocusTo,
 }: {
   finding: Finding;
+  /** The control that opened the drawer; focus goes back to it on close (it isn't a Radix trigger). */
+  returnFocusTo?: HTMLElement | null;
   detail?: FindingDetail;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -91,7 +94,11 @@ export function FindingDrawer({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent data-slot="finding-drawer" className="w-240">
+      <SheetContent
+        data-slot="finding-drawer"
+        className="w-240"
+        onCloseAutoFocus={(e) => { if (returnFocusTo?.isConnected) { e.preventDefault(); returnFocusTo.focus(); } }}
+      >
         {/* Header */}
         <div className="relative shrink-0 px-6 pt-5">
           <SheetClose asChild>
@@ -130,19 +137,20 @@ export function FindingDrawer({
             {TABS.map((id) => <TabsTrigger key={id} value={id}>{t(`findingDetail.tab.${id}`)}</TabsTrigger>)}
           </TabsList>
           <div className="min-h-0 flex-1 overflow-y-auto">
-            {state === "loading" ? (
-              <Loading />
-            ) : state === "error" ? (
-              <LoadError onRetry={onRetry} />
-            ) : (
-              <>
-                <TabsContent value="overview"><Overview finding={finding} detail={detail} ignored={ignored} onRemediation={() => setTab("remediation")} onRaw={() => setTab("raw")} /></TabsContent>
-                <TabsContent value="graph"><SecurityGraph detail={detail} defaultView={defaultGraphView} /></TabsContent>
-                <TabsContent value="remediation"><RemediationTab detail={detail} /></TabsContent>
-                <TabsContent value="log"><StatusLog detail={detail} /></TabsContent>
-                <TabsContent value="raw" className="h-full"><RawData detail={detail} defaultRaw={defaultRaw} onCopied={() => setToast("json")} /></TabsContent>
-              </>
-            )}
+            {/* Every tab keeps its panel (each tab's aria-controls must resolve); loading and error render inside it. */}
+            {TABS.map((id) => (
+              <TabsContent key={id} value={id} className={cn(id === "raw" && state === "ready" && "h-full")}>
+                {state === "loading" ? <Loading /> : state === "error" ? <LoadError onRetry={onRetry} /> : (
+                  {
+                    overview: <Overview finding={finding} detail={detail} ignored={ignored} onRemediation={() => setTab("remediation")} onRaw={() => setTab("raw")} />,
+                    graph: <SecurityGraph detail={detail} defaultView={defaultGraphView} />,
+                    remediation: <RemediationTab detail={detail} />,
+                    log: <StatusLog detail={detail} />,
+                    raw: <RawData detail={detail} defaultRaw={defaultRaw} onCopied={() => setToast("json")} />,
+                  }[id]
+                )}
+              </TabsContent>
+            ))}
           </div>
         </Tabs>
 
