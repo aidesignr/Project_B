@@ -49,7 +49,9 @@ const TABS: DrawerTab[] = ["overview", "graph", "remediation", "log", "raw"];
 const parseDay = (v: string) => { const [y, m, d] = v.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d)); };
 
 /** Best-effort clipboard write; the toast confirms either way, as the value is also on screen. */
-const copy = (text: string) => { try { void navigator.clipboard?.writeText(text); } catch { /* clipboard blocked */ } };
+const copy = (text: string) => {
+  try { navigator.clipboard?.writeText(text).catch(() => { /* permission denied */ }); } catch { /* no clipboard API */ }
+};
 
 /**
  * Finding detail drawer (canvas "Findings page", page "Finding detail"; D-066). Opens over the list
