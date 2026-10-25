@@ -15,26 +15,30 @@ export const CURRENT_USER = { name: "Alex Morgan", initials: "AM", email: "alex.
 /** Open critical findings, shown as the count badge on the Findings nav item. */
 export const OPEN_CRITICAL_FINDINGS = 12;
 
-export type Scope = { tenant: string; groupKey: string };
-export const scopeId = (s: Scope) => `${s.tenant}::${s.groupKey}`;
-
-export const SCOPES: Scope[] = [
-  { tenant: "Solution Engineering", groupKey: "shell.scope.group.all" },
-  { tenant: "Solution Engineering", groupKey: "shell.scope.group.production" },
-  { tenant: "Solution Engineering", groupKey: "shell.scope.group.staging" },
-  { tenant: "Platform Security", groupKey: "shell.scope.group.all" },
-  { tenant: "Platform Security", groupKey: "shell.scope.group.euWorkloads" },
-  { tenant: "Customer Demo", groupKey: "shell.scope.group.all" },
+/** Tenants and their groups. Display names are data; "All groups" is a label (shell.scope.allGroups). */
+export type Tenant = { name: string; groups: string[] };
+export const TENANTS: Tenant[] = [
+  { name: "Acme Corp", groups: ["Production", "Staging", "Development", "Shared services"] },
+  { name: "Globex", groups: ["EU workloads", "US workloads"] },
+  { name: "Initech", groups: ["Payments", "Analytics", "Data platform"] },
+  { name: "Umbrella Labs", groups: ["Research", "Production"] },
+  { name: "Stark Industries", groups: ["Manufacturing", "R&D"] },
 ];
+/** Selected scope: tenant index, and group index where 0 is "All groups". */
+export type Scope = { tenant: number; group: number };
 
-export type NotificationKind = "report" | "finding" | "compliance" | "policy";
+export type NotificationKind = "report" | "alert" | "compliance" | "policy";
+/** Copy comes from shell.notifications.item.<id>.title / .desc. */
 export type AppNotification = { id: string; kind: NotificationKind; module: ModuleId; minutesAgo: number; read: boolean };
 
 export const NOTIFICATIONS: AppNotification[] = [
   { id: "n1", kind: "report", module: "reports", minutesAgo: 5, read: false },
-  { id: "n2", kind: "finding", module: "findings", minutesAgo: 60, read: false },
-  { id: "n3", kind: "compliance", module: "compliance", minutesAgo: 180, read: true },
+  { id: "n2", kind: "alert", module: "findings", minutesAgo: 60, read: false },
+  { id: "n3", kind: "compliance", module: "compliance", minutesAgo: 180, read: false },
   { id: "n4", kind: "policy", module: "policies", minutesAgo: 1440, read: true },
+  { id: "n5", kind: "alert", module: "kspm", minutesAgo: 1500, read: true },
+  { id: "n6", kind: "report", module: "reports", minutesAgo: 2880, read: true },
+  { id: "n7", kind: "compliance", module: "compliance", minutesAgo: 4320, read: true },
 ];
 
 export const GETTING_STARTED = [

@@ -31,6 +31,8 @@
 
   /* size / line-height — line-heights are multiples of 4; sizes 14 and 18 are D-016 exceptions */
   --text-*: initial;
+  --text-3xs: 10px;  --text-3xs--line-height: 12px;  /* notification timestamps only (D-061) */
+  --text-2xs: 11px;  --text-2xs--line-height: 16px;  /* notification cards only (D-061) */
   --text-xs: 12px;   --text-xs--line-height: 16px;
   --text-sm: 14px;   --text-sm--line-height: 20px;
   --text-base: 16px; --text-base--line-height: 24px;
@@ -194,12 +196,16 @@
 /* ---------- Per-language type (07-i18n-and-rtl.md) ---------- */
 :lang(ar) {
   --font-sans: var(--font-sans-ar);
+  --text-2xs: 12px;  --text-2xs--line-height: 20px;  /* D-061: no sub-12px Arabic/Japanese */
+  --text-3xs: 12px;  --text-3xs--line-height: 16px;
   --text-sm--line-height: 24px;
   --text-base--line-height: 28px;
   letter-spacing: 0;
 }
 :lang(ja) {
   --font-sans: var(--font-sans-ja);
+  --text-2xs: 12px;  --text-2xs--line-height: 20px;  /* D-061: no sub-12px Arabic/Japanese */
+  --text-3xs: 12px;  --text-3xs--line-height: 16px;
   --text-sm--line-height: 24px;
   --text-base--line-height: 28px;
   letter-spacing: 0;

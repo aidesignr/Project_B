@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
+import { createIntl } from "react-intl";
+import { INTL_LOCALE, messagesFor, type Locale } from "@/i18n/locales";
 import { useT } from "@/i18n/useT";
 import { Button } from "@/components/ui/button";
 import { AppShell } from "./AppShell";
@@ -24,6 +26,11 @@ export default meta;
 type Story = StoryObj;
 
 const body = () => within(document.body);
+/** Message in the story's active locale (the light-ar project runs every story in Arabic). */
+const msg = (id: string, values?: Record<string, string | number>) => {
+  const locale = document.documentElement.lang as Locale;
+  return createIntl({ locale: INTL_LOCALE[locale], messages: messagesFor(locale) }).formatMessage({ id }, values) as string;
+};
 const q = (root: HTMLElement, slot: string) => {
   const el = root.querySelector<HTMLElement>(`[data-slot="${slot}"]`);
   if (!el) throw new Error(`No [data-slot="${slot}"]`);
@@ -109,13 +116,59 @@ export const Level2PageActive: Story = {
 
 /* ---------- 4 · Menus and panels open ---------- */
 
+/* Tenant and group selector (canvas "A2 · Components", 3a–3e) */
+
 export const TenantSelectorOpen: Story = {
   render: () => <AppShell defaultPinned pinnable><DemoPage /></AppShell>,
   play: async ({ canvasElement }) => {
     await userEvent.click(q(canvasElement, "tenant-trigger"));
+    await body().findByRole("combobox");
+    // The active tenant starts expanded: All groups + its 4 groups.
+    await waitFor(() => expect(document.querySelectorAll('[data-slot="scope-option"]')).toHaveLength(5));
+    await expect(body().getByRole("treeitem", { selected: true })).toHaveTextContent(msg("shell.scope.group.all"));
+  },
+};
+
+export const TenantSelectorSelectGroup: Story = {
+  render: () => <AppShell defaultPinned pinnable><DemoPage /></AppShell>,
+  play: async ({ canvasElement }) => {
+    const trigger = q(canvasElement, "tenant-trigger");
+    await userEvent.click(trigger);
+    await userEvent.click(await body().findByRole("treeitem", { name: "Staging" }));
+    await waitFor(() => expect(trigger).toHaveAccessibleName(msg("shell.scope.trigger", { tenant: "Acme Corp", group: "Staging" })));
+  },
+};
+
+export const TenantSelectorSearch: Story = {
+  render: () => <AppShell defaultPinned pinnable><DemoPage /></AppShell>,
+  play: async ({ canvasElement }) => {
+    await userEvent.click(q(canvasElement, "tenant-trigger"));
+    await userEvent.type(await body().findByRole("combobox"), "prod");
+    // "Production" under Acme Corp and Umbrella Labs; matches are highlighted.
+    await waitFor(() => expect(document.querySelectorAll('[data-slot="scope-option"]')).toHaveLength(2));
+    await expect(document.querySelectorAll("[role=tree] mark").length).toBe(2);
+  },
+};
+
+export const TenantSelectorKeyboard: Story = {
+  render: () => <AppShell defaultPinned pinnable><DemoPage /></AppShell>,
+  play: async ({ canvasElement }) => {
+    const trigger = q(canvasElement, "tenant-trigger");
+    await userEvent.click(trigger);
     const combobox = await body().findByRole("combobox");
-    await userEvent.type(combobox, "platform");
-    await waitFor(() => expect(body().getAllByRole("option")).toHaveLength(2));
+    await userEvent.type(combobox, "globex");
+    // Row 0 is the Globex tenant, row 1 "All groups", row 2 "EU workloads".
+    await userEvent.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}{Enter}");
+    await waitFor(() => expect(trigger).toHaveAccessibleName(msg("shell.scope.trigger", { tenant: "Globex", group: "EU workloads" })));
+  },
+};
+
+export const TenantSelectorNoResults: Story = {
+  render: () => <AppShell defaultPinned pinnable><DemoPage /></AppShell>,
+  play: async ({ canvasElement }) => {
+    await userEvent.click(q(canvasElement, "tenant-trigger"));
+    await userEvent.type(await body().findByRole("combobox"), "zebra");
+    await waitFor(() => expect(body().getByRole("status")).toHaveTextContent(msg("shell.scope.none", { query: "zebra" })));
   },
 };
 
@@ -127,11 +180,15 @@ export const HelpMenuOpen: Story = {
   },
 };
 
+/* Notifications (canvas "A2 · Components", 1a–1c) */
+
 export const NotificationsOpen: Story = {
   render: () => <AppShell defaultPinned pinnable><DemoPage /></AppShell>,
   play: async ({ canvasElement }) => {
     await userEvent.click(q(canvasElement, "notifications-trigger"));
-    await waitFor(() => expect(document.querySelector('[data-slot="mark-all-read"]')).not.toBeNull());
+    await waitFor(() => expect(document.querySelectorAll('[data-slot="notification"]')).toHaveLength(7));
+    await expect(document.querySelector('[data-slot="mark-all-read"]')).not.toBeNull();
+    await expect(document.querySelector('[data-slot="clear-all"]')).not.toBeNull();
   },
 };
 
@@ -139,20 +196,44 @@ export const NotificationsMarkAllRead: Story = {
   render: () => <AppShell defaultPinned pinnable><DemoPage /></AppShell>,
   play: async ({ canvasElement }) => {
     const trigger = q(canvasElement, "notifications-trigger");
-    const before = trigger.getAttribute("aria-label");
+    await expect(trigger).toHaveAccessibleName(msg("shell.notifications.label", { count: 3 }));
     await userEvent.click(trigger);
-    const markAll = await waitFor(() => q(document.body, "mark-all-read"));
-    await userEvent.click(markAll);
-    await waitFor(() => expect(trigger.getAttribute("aria-label")).not.toBe(before));
+    await userEvent.click(await waitFor(() => q(document.body, "mark-all-read")));
+    await waitFor(() => expect(trigger).toHaveAccessibleName(msg("shell.notifications.label", { count: 0 })));
     await expect(document.querySelector('[data-slot="mark-all-read"]')).toBeNull();
   },
 };
+
+export const NotificationsClearAllUndo: Story = {
+  render: () => <AppShell defaultPinned pinnable><DemoPage /></AppShell>,
+  play: async ({ canvasElement }) => {
+    await userEvent.click(q(canvasElement, "notifications-trigger"));
+    await userEvent.click(await waitFor(() => q(document.body, "clear-all")));
+    await waitFor(() => expect(body().getByText(msg("shell.notifications.cleared"))).toBeInTheDocument());
+    await userEvent.click(q(document.body, "undo-clear"));
+    await waitFor(() => expect(document.querySelectorAll('[data-slot="notification"]')).toHaveLength(7));
+  },
+};
+
+/* AskAI (canvas "A2 · Components", 2a–2d) */
 
 export const AskAIOpen: Story = {
   parameters: { route: "/findings" },
   render: () => <AppShell defaultPinned pinnable defaultAskAIOpen><DemoPage module="findings" /></AppShell>,
   play: async ({ canvasElement }) => {
     await expect(q(canvasElement, "askai-trigger")).toHaveAttribute("aria-expanded", "true");
+    await expect(q(canvasElement, "askai-dock")).toHaveAttribute("data-state", "open");
+    await expect(within(canvasElement).getByRole("complementary", { name: msg("shell.askai.label") })).toBeVisible();
+  },
+};
+
+export const AskAIClose: Story = {
+  render: () => <AppShell pinnable defaultAskAIOpen><DemoPage /></AppShell>,
+  play: async ({ canvasElement }) => {
+    await userEvent.click(q(canvasElement, "askai-close"));
+    const trigger = q(canvasElement, "askai-trigger");
+    await waitFor(() => expect(q(canvasElement, "askai-dock")).toHaveAttribute("data-state", "closed"));
+    await expect(trigger).toHaveFocus();
   },
 };
 
