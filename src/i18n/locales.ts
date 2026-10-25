@@ -4,6 +4,7 @@ import ja from "./messages/ja.json";
 import { extraMessages } from "./extra";
 import { shellMessages } from "./shell";
 import { findingsMessages } from "./findings";
+import { findingDetailMessages } from "./findingDetail";
 
 export const LOCALES = ["en", "ar", "ja"] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -17,5 +18,5 @@ export const isRtl = (locale: Locale) => locale === "ar";
 
 export function messagesFor(locale: Locale): Record<string, string> {
   const base = { en, ar, ja }[locale] as Record<string, string>;
-  return { ...base, ...extraMessages[locale], ...shellMessages[locale], ...findingsMessages[locale] };
+  return { ...base, ...extraMessages[locale], ...shellMessages[locale], ...findingsMessages[locale], ...findingDetailMessages[locale] };
 }

@@ -57,6 +57,7 @@ export function FindingsTable({
   selected,
   onSelected,
   compact,
+  onOpen,
 }: {
   groups: RowGroup[];
   columns: ColumnState[];
@@ -66,6 +67,8 @@ export function FindingsTable({
   /** Takes an updater so quick consecutive clicks don't overwrite each other. */
   onSelected: (update: (prev: string[]) => string[]) => void;
   compact: boolean;
+  /** Opens the finding detail drawer. */
+  onOpen: (f: Finding) => void;
 }) {
   const t = useT();
   const lastSeen = useLastSeen();
@@ -87,7 +90,17 @@ export function FindingsTable({
         );
       }
       case "name":
-        return <a href="#main-content" className="font-medium text-foreground no-underline hover:underline underline-offset-4">{f.name}</a>;
+        return (
+          <button
+            type="button"
+            data-slot="finding-open"
+            aria-haspopup="dialog"
+            onClick={() => onOpen(f)}
+            className="max-w-full truncate rounded-sm text-start font-medium text-foreground underline-offset-4 outline-none hover:underline focus-visible:outline-2 focus-visible:outline-ring"
+          >
+            {f.name}
+          </button>
+        );
       case "asset":
         return <span className="inline-flex min-w-0 max-w-full items-center gap-1"><IconPlaceholder /><bdi className="truncate">{f.asset}</bdi></span>;
       case "account":

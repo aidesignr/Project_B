@@ -45,6 +45,8 @@ import {
 } from "@/components/findings/data";
 import { FilterBar } from "@/components/findings/FilterBar";
 import { BulkBar, ColumnsMenu, FindingsTable, Pagination, type ColumnState, type RowGroup, type Sort } from "@/components/findings/FindingsTable";
+import { FindingDrawer, type DrawerState, type DrawerTab } from "@/components/findings/FindingDrawer";
+import { SAMPLE_FINDING } from "@/components/findings/detail";
 
 const SCANS: { id: string; icon: LucideIcon }[] = [
   { id: "cloud", icon: CloudIcon },
@@ -65,6 +67,8 @@ const defaultFilters = (): Partial<Record<FilterId, FilterState>> => ({
 });
 
 export type FindingsPreset = {
+  /** Opens the detail drawer for the sample finding with these defaults. */
+  drawer?: { tab?: DrawerTab; graphView?: "graph" | "list"; raw?: "finding" | "asset"; state?: DrawerState; toast?: "ignored" | "link" };
   open?: FilterId;
   addOpen?: boolean;
   columnsOpen?: boolean;
@@ -101,6 +105,10 @@ export function FindingsPage({ preset = {} }: { preset?: FindingsPreset }) {
   const [compact, setCompact] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
+  const [detailOf, setDetailOf] = useState<Finding | null>(preset.drawer ? SAMPLE_FINDING : null);
+  const [drawerOpen, setDrawerOpen] = useState(!!preset.drawer);
+  const [drawerState, setDrawerState] = useState<DrawerState>(preset.drawer?.state ?? "ready");
+  const openDetail = (f: Finding) => { setDetailOf(f); setDrawerState("ready"); setDrawerOpen(true); };
 
   // Any change to what's shown goes back to page 1.
   const setQuery = (q: string) => { setQueryState(q); setPage(1); };
@@ -317,13 +325,28 @@ export function FindingsPage({ preset = {} }: { preset?: FindingsPreset }) {
           />
         ) : (
           <>
-            <FindingsTable groups={groups} columns={columns} sort={sort} onSort={setSort} selected={selected} onSelected={setSelected} compact={compact} />
+            <FindingsTable groups={groups} columns={columns} sort={sort} onSort={setSort} selected={selected} onSelected={setSelected} compact={compact} onOpen={openDetail} />
             <Pagination page={current} pageSize={pageSize} total={rows.length} onPage={setPage} onPageSize={(n) => { setPageSize(n); setPage(1); }} />
           </>
         )}
       </section>
 
       {selected.length > 0 && <BulkBar count={selected.length} onClear={() => setSelected([])} />}
+
+      {detailOf && (
+        <FindingDrawer
+          key={detailOf.id}
+          finding={detailOf}
+          open={drawerOpen}
+          onOpenChange={setDrawerOpen}
+          defaultTab={preset.drawer?.tab}
+          defaultGraphView={preset.drawer?.graphView}
+          defaultRaw={preset.drawer?.raw}
+          defaultToast={preset.drawer?.toast}
+          state={drawerState}
+          onRetry={() => setDrawerState("ready")}
+        />
+      )}
     </PageContainer>
   );
 }

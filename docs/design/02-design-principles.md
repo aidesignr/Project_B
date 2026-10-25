@@ -93,6 +93,7 @@ Color is used heavily but deliberately. The strongest colors (Critical, High) ar
 | Filter dropdown: static or on-demand, operator, two-level tree with parent icons, All/Selected tabs, search across both levels, Create from search, Select all / Unselect all, From/To calendar (D-064) | Kit has `Select` and `Combobox` but no faceted filter with an operator or a tree | Composed from `Popover`, `Select`, `Checkbox` (now with an indeterminate state), `ToggleGroup`, `Button` |
 | Severity toggle: icon + letter + count, pressed state (D-064) | No pressed filter chip that uses the severity tokens | Composed from `Button`, `Tooltip` |
 | Findings table extras: column customizer (show, hide, move up/down), pagination, floating bulk-action bar | Kit `Table` has no column chooser, pager or bulk bar | Native `<table>`, `Popover`, `Checkbox`, `Select`, `DropdownMenu` |
+| Finding detail drawer: 960px two-column sheet with header actions, tabbed details, attack path with a list view, JSON viewer, in-drawer Undo toast (D-066) | Kit `Sheet` is a plain panel; no attack-path view or code viewer | Composed from `Sheet`, `Tabs`, `ToggleGroup`, `Button`, `Tooltip`, `Skeleton` |
 
 ## Open conflicts
 
