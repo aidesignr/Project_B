@@ -11,6 +11,7 @@ import { ShellProvider, useShell, type ShellOptions } from "./shell-context";
  * Master layout for every module (D-053): full-height sidebar on the inline-start side, a
  * 48px header and an independently scrolling main region beside it. The spacer reserves 56
  * (unpinned rail; the expanded sidebar floats over content) or 240 (pinned; content pushed).
+ * AskAI docks on the inline-end side at full height and resizes the column between (D-062).
  */
 export function AppShell({ children, forceExpanded, ...options }: ShellOptions & { children?: ReactNode; forceExpanded?: boolean }) {
   return (
@@ -44,8 +45,8 @@ function ShellLayout({ children, forceExpanded }: { children: ReactNode; forceEx
         <main id="main-content" tabIndex={-1} className="min-h-0 flex-1 overflow-y-auto outline-none">
           {children}
         </main>
-        <AskAIPanel />
       </div>
+      <AskAIPanel />
     </div>
   );
 }

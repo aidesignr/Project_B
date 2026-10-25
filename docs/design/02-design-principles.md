@@ -84,11 +84,11 @@ Color is used heavily but deliberately. The strongest colors (Critical, High) ar
 | Density tokens: control and row heights | Dense-data requirement | `Button`, `Input`, `Table` |
 | Radius re-based to 4 / 8 / 12 | Kit's 10px default breaks the 4px rule | `--radius` |
 | Severity badge, risk-factor chip, KPI tile, freshness label | Recurring patterns with no kit equivalent | Composed from `Badge`, `Card`, `Tooltip` |
-| AskAI chat panel + "Ask about this" shortcut | No chat/assistant component in the kit | Composed from `Sheet` (non-modal), `Textarea`, `Button`, `Badge` |
+| AskAI chat panel + "Ask about this" shortcut | No chat/assistant component in the kit | Docked full-height side panel (D-062), non-modal; `Textarea`, `Button`, `Badge`, `Tooltip` |
 | App shell: hover-expand sidebar rail (56 → 240 overlay), pinned sidebar (push), level 2 disclosure groups, count badge (D-053, D-056) | Kit's `Sidebar` has no hover-overlay rail or pin mode | `Sidebar` patterns, `Tooltip`, `Separator` |
 | Unified header breadcrumb with the page H1, page toolbar row (D-058) | Kit breadcrumb is standalone | `Breadcrumb` pattern |
-| Tenant and group combobox (filter, recent, grouped options) | No searchable two-level picker | Composed from `Popover` + listbox (combobox pattern) |
-| Notifications panel (unread/read, module link, empty state) | No notification centre | Composed from `Popover`, `Button` |
+| Tenant and group combobox (one search, tenant tree, single select) | No searchable two-level picker | Composed from `Popover` + ARIA tree (combobox with tree popup, D-063) |
+| Notifications panel (compact cards, mark all read, clear all + Undo, empty state) | No notification centre | Composed from `Popover`, `Button`; 11/10 type steps (D-061) |
 | Getting-started checklist (progress ring + steps) | No onboarding checklist | Composed from `Popover`, `Progress` |
 
 ## Open conflicts
