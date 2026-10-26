@@ -1,12 +1,11 @@
 import { useState, type FormEvent, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Loader2Icon } from "lucide-react";
 import { FormattedMessage } from "react-intl";
 import { usePreferences } from "@/app/preferences";
 import { useT } from "@/i18n/useT";
 import { EMAIL_RE, signUp } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { ErrorBanner, FieldError, Heading, PasswordInput, PasswordRules, TextLink, passwordMeetsRules } from "@/components/auth/parts";
+import { ErrorBanner, FieldError, Heading, PasswordInput, PasswordRules, SubmitButton, TextLink, passwordMeetsRules, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -23,6 +22,7 @@ export function SignUp() {
   const [submitted, setSubmitted] = useState(false);
   const [taken, setTaken] = useState(false);
   const [busy, setBusy] = useState(false);
+  const { formRef, focusFirstError } = useFocusFirstError();
   // Read the value now: a lazy read inside the updater can see the controlled input already reset.
   const set = (k: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -38,7 +38,7 @@ export function SignUp() {
     e.preventDefault();
     setSubmitted(true);
     const filled = f.first.trim() && f.last.trim() && f.org.trim();
-    if (!filled || !EMAIL_RE.test(f.email) || !passwordMeetsRules(f.pw) || f.pw !== f.confirm || !agreed) return;
+    if (!filled || !EMAIL_RE.test(f.email) || !passwordMeetsRules(f.pw) || f.pw !== f.confirm || !agreed) return focusFirstError();
     setBusy(true);
     const res = await signUp(f.email);
     setBusy(false);
@@ -73,13 +73,13 @@ export function SignUp() {
           {t("signUp.takenBody")}
         </ErrorBanner>
       )}
-      <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
         <p className="text-sm text-muted-foreground">{t("signUp.reqNote")}</p>
         <div className="grid grid-cols-2 gap-4">{names}</div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="email">{t("signUp.email")}</Label>
           <Input id="email" type="email" autoComplete="email" required aria-required placeholder="name@company.com" value={f.email} onChange={set("email")} aria-invalid={emailBad} aria-describedby={emailBad ? "email-error" : undefined} />
-          {emailBad && <FieldError id="email-error">{t("signIn.emailErr")}</FieldError>}
+          {emailBad && <FieldError id="email-error">{t("common.emailErr")}</FieldError>}
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="org">{t("signUp.org")}</Label>
@@ -88,13 +88,14 @@ export function SignUp() {
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="new-password">{t("signUp.pw")}</Label>
-          <PasswordInput ns="signUp" id="new-password" placeholder={t("placeholder.newPassword")} autoComplete="new-password" required aria-required value={f.pw} onChange={set("pw")} aria-invalid={pwWeak} aria-describedby="pw-rules" />
+          <PasswordInput ns="signUp" id="new-password" placeholder={t("placeholder.newPassword")} autoComplete="new-password" required aria-required value={f.pw} onChange={set("pw")} aria-invalid={pwWeak} aria-describedby={pwWeak ? "pw-error pw-rules" : "pw-rules"} />
+          {pwWeak && <FieldError id="pw-error">{t("common.weakErr")}</FieldError>}
           <PasswordRules ns="signUp" id="pw-rules" password={f.pw} submitted={submitted} />
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="confirm-password">{t("signUp.confirm")}</Label>
           <PasswordInput ns="signUp" id="confirm-password" placeholder={t("placeholder.confirmPassword")} autoComplete="new-password" required aria-required value={f.confirm} onChange={set("confirm")} aria-invalid={mismatch} aria-describedby={mismatch ? "confirm-error" : undefined} />
-          {mismatch && <FieldError id="confirm-error">{t("resetPassword.mismatch")}</FieldError>}
+          {mismatch && <FieldError id="confirm-error">{t("common.mismatch")}</FieldError>}
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-start gap-2">
@@ -105,10 +106,7 @@ export function SignUp() {
           </div>
           {termsErr && <FieldError id="terms-error">{t("signUp.termsErr")}</FieldError>}
         </div>
-        <Button type="submit" disabled={busy} aria-busy={busy}>
-          {busy && <Loader2Icon className="animate-spin motion-reduce:animate-none" aria-hidden />}
-          {busy ? t("signUp.creating") : t("signUp.create")}
-        </Button>
+        <SubmitButton busy={busy} busyLabel={t("signUp.creating")}>{t("signUp.create")}</SubmitButton>
       </form>
     </AuthLayout>
   );

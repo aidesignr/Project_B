@@ -1,6 +1,6 @@
-import { useState, type ComponentProps, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeftIcon, CheckCircle2Icon, CircleAlertIcon, CircleIcon, EyeIcon, EyeOffIcon, XCircleIcon, type LucideIcon } from "lucide-react";
+import { ArrowLeftIcon, CheckCircle2Icon, CircleAlertIcon, CircleIcon, EyeIcon, EyeOffIcon, Loader2Icon, XCircleIcon, type LucideIcon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -48,6 +48,30 @@ export function FieldError({ id, children }: { id: string; children: ReactNode }
       <CircleAlertIcon className="size-4 shrink-0" aria-hidden />
       <span>{children}</span>
     </p>
+  );
+}
+
+/**
+ * Moves focus to the first invalid field after a failed submit, so its error is read out
+ * through aria-describedby (WCAG 3.3.1). Put formRef on the <form>; call focusFirstError()
+ * whenever a submit (or the server) leaves a field invalid.
+ */
+export function useFocusFirstError() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    if (attempt) formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+  }, [attempt]);
+  return { formRef, focusFirstError: () => setAttempt((n) => n + 1) };
+}
+
+/** Form submit button: disabled with a spinner and aria-busy while the request runs. */
+export function SubmitButton({ busy = false, busyLabel, children, disabled, ...props }: ComponentProps<typeof Button> & { busy?: boolean; busyLabel?: ReactNode }) {
+  return (
+    <Button type="submit" disabled={busy || disabled} aria-busy={busy} {...props}>
+      {busy && <Loader2Icon className="animate-spin motion-reduce:animate-none" aria-hidden />}
+      {busy && busyLabel ? busyLabel : children}
+    </Button>
   );
 }
 

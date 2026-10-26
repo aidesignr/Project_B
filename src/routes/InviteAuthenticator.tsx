@@ -4,7 +4,7 @@ import { CopyIcon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { verifyCode } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { BackLink, CodeInput, FieldError, Heading, StepProgress } from "@/components/auth/parts";
+import { BackLink, CodeInput, FieldError, Heading, StepProgress, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -19,9 +19,14 @@ export function InviteAuthenticator() {
   const navigate = useNavigate();
   const { token = "demo" } = useParams();
   const [code, setCode] = useState("");
-  const [error, setError] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [wrong, setWrong] = useState(false);
   const [copied, setCopied] = useState(false);
   const [busy, setBusy] = useState(false);
+  const { formRef, focusFirstError } = useFocusFirstError();
+
+  // A short code is caught before sending; a wrong code clears as soon as it's edited.
+  const error = submitted && code.length !== 6 ? t("common.codeLength") : wrong ? t("inviteAuthenticator.codeErr") : null;
 
   async function copyKey() {
     try { await navigator.clipboard.writeText(SETUP_KEY); } catch { /* clipboard blocked; tooltip still confirms intent */ }
@@ -31,11 +36,14 @@ export function InviteAuthenticator() {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
+    setSubmitted(true);
+    if (code.length !== 6) return focusFirstError();
     setBusy(true);
     const ok = await verifyCode(code);
     setBusy(false);
-    setError(!ok);
+    setWrong(!ok);
     if (ok) navigate(`/invite/${token}/recovery-codes`);
+    else focusFirstError();
   }
 
   const copyLabel = copied ? t("common.copied") : t("inviteAuthenticator.copy");
@@ -67,21 +75,22 @@ export function InviteAuthenticator() {
         </div>
         <span role="status" className="sr-only">{copied ? t("common.copied") : ""}</span>
       </div>
-      <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="setup-otp">{t("inviteAuthenticator.code")}</Label>
           <CodeInput
             id="setup-otp"
+            aria-required
             value={code}
-            onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-            aria-invalid={error}
+            onChange={(e) => { setCode(e.target.value.replace(/\D/g, "")); setWrong(false); }}
+            aria-invalid={!!error}
             aria-describedby={error ? "otp-error" : undefined}
           />
-          {error && <FieldError id="otp-error">{t("inviteAuthenticator.codeErr")}</FieldError>}
+          {error && <FieldError id="otp-error">{error}</FieldError>}
         </div>
         <div className="flex items-center justify-between gap-4">
           <BackLink to={`/invite/${token}`}>{t("inviteAuthenticator.back")}</BackLink>
-          <Button type="submit" disabled={busy}>{t("inviteAuthenticator.verify")}</Button>
+          <SubmitButton busy={busy}>{t("inviteAuthenticator.verify")}</SubmitButton>
         </div>
       </form>
     </AuthLayout>
