@@ -31,8 +31,8 @@ Label                              (optional inline link, e.g. "Forgot password?
 | Placeholder | `text-muted-foreground`; an example (`name@company.com`, `000000`) or a short instruction ("Enter your first name", "Create a password", "Re-enter your password"). Translated (en/ar/ja). | `src/i18n/extra.ts` `placeholder.*` |
 | Input | 32px high (`h-8`), `rounded-md`, `border-input`; error border `error-border` when `aria-invalid` | `components/ui/input.tsx` · 03 dense defaults |
 | Code input | 40px high, Geist Mono 20px, centered, 6 digits, numeric keyboard | `CodeInput` in `parts.tsx` |
-| Helper / rules text | `text-xs` 12/16 | `PasswordRules` in `parts.tsx` |
-| Error | `text-xs` 12/16, `error-foreground`, 16px `CircleAlert` icon + text | `FieldError` in `parts.tsx` · 03 type scale |
+| Helper / rules text | `text-form-msg` 12/16 (ar, ja 12/20) | `PasswordRules` in `parts.tsx` · D-067 |
+| Error | `text-form-msg` 12/16 (ar, ja 12/20), `error-foreground`, 16px `CircleAlert` icon + text | `FieldError` in `parts.tsx` · 03 type scale · D-067 |
 | Required | `aria-required` on every required field in every form. Sign-up, the longest form, adds one line above the fields: "All fields are required." No asterisks in code. | all routes · `SignUp.tsx` `signUp.reqNote` |
 | Spacing | `gap-2` (8px) inside a field · `gap-4` (16px) between fields and between a field and the submit button · 2-column rows use `gap-4` | `SignUp.tsx`, `SignIn.tsx` |
 
@@ -60,7 +60,8 @@ Field errors follow the 06 error pattern, minus the title: **[what's wrong]. [ho
 |---|---|
 | "Invalid email" | "Enter an email address like name@company.com." |
 | "Passwords do not match!" | "Passwords don't match. Enter the same password in both fields." |
-| "Password too weak" | "This password doesn't meet all the rules below." (the checklist then shows which rules) |
+| "Password too weak" | "This password doesn't meet all the rules below." (the checklist then shows which rules, D-068) |
+| "Compromised password" | "This password has appeared in a known data breach. Choose a different one." (D-068) |
 | "Invalid code. Try again." | "That code didn't work. Codes change every 30 seconds, so enter the newest one." |
 | "You must accept the terms." | "Accept the Terms and the Evaluation Agreement to continue." |
 | "Login failed" (banner) | **Email or password is incorrect.** Check both and try again. After 5 failed attempts, sign-in is paused for 15 minutes. |
@@ -69,7 +70,7 @@ Field errors follow the 06 error pattern, minus the title: **[what's wrong]. [ho
 
 | The problem is… | Show it as | Example |
 |---|---|---|
-| About one field's value (format, missing, too weak, mismatch) | `FieldError` under that field | Email format, required field, weak password (with the red checklist), confirm password, short or wrong code, terms not accepted |
+| About one field's value (format, missing, too weak, mismatch) | `FieldError` under that field | Email format, required field, weak or breached password (with the checklist), confirm password, short or wrong code, terms not accepted |
 | About the account or the request as a whole, found by the server | One `ErrorBanner` above the form | Wrong email or password (we never say which, for security), locked account, email already registered |
 | About the link or session that opened the page | One `ErrorBanner`, form hidden or replaced with the next step | Expired invite, expired reset link |
 | Not an error, just a requirement | Helper text or the password checklist, neutral color | Password rules, breach-check note (reset and invite only, D-052) |
@@ -101,7 +102,7 @@ Never show a banner and a field error for the same problem. Never show more than
 | Layout uses logical properties (`ps`, `pe`, `start`, `end`). The show/hide button sits at `end-1`. | 07 · `check-spacing.mjs` |
 | Technical values stay LTR: email and code inputs use `dir="ltr"`; the "8–64" range in Arabic is wrapped in isolate marks (U+2066…U+2069) so RTL doesn't reorder it. | D-011 · 07 numerals · `extra.ts` `*.rLength` |
 | Japanese puts the family-name field first. | `SignUp.tsx` |
-| Arabic and Japanese use taller line-heights for `text-sm` and `text-base` (24 and 28). Error and rules text (`text-xs`) stays 12/16 in every locale (see Open issues). | 07 · `tokens/theme.css` |
+| Arabic and Japanese use taller line-heights: `text-sm` 24, `text-base` 28, and field errors and password rules (`text-form-msg`) 20. | 07 · `tokens/theme.css` · D-067 |
 
 ## Component reference
 
@@ -113,8 +114,9 @@ Never show a banner and a field error for the same problem. Never show more than
 | `PasswordInput` | Password field with show/hide toggle | `src/components/auth/parts.tsx` |
 | `CodeInput` | Single 6-digit code field (authenticator) | `src/components/auth/parts.tsx` |
 | `SubmitButton` | Form submit button with the busy state (disabled, spinner, `aria-busy`) | `src/components/auth/parts.tsx` |
+| `passwordProblem`, `PASSWORD_ERROR` | Returns `"weak"`, `"breached"` or `null` for a new password, and the matching error key | `src/components/auth/parts.tsx` · demo breached list in `src/lib/auth.ts` (D-068) |
 | `useFocusFirstError` | Hook: put `formRef` on the `<form>`, call `focusFirstError()` after a failed submit or server error | `src/components/auth/parts.tsx` |
-| Shared error copy | `common.emailErr`, `common.passwordRequired`, `common.weakErr`, `common.mismatch`, `common.codeLength` | `src/i18n/extra.ts` |
+| Shared error copy | `common.emailErr`, `common.passwordRequired`, `common.weakErr`, `common.mismatch`, `common.codeLength`, `common.breachedErr` | `src/i18n/extra.ts` |
 | `Input`, `Label`, `Checkbox` | Base controls | `src/components/ui/` |
 
 ## Open issues
@@ -123,6 +125,5 @@ Gaps that are still open. Items fixed after this doc was first written (focus on
 
 | # | Gap | Suggested fix |
 |---|---|---|
-| 1 | No breached-password error exists; the mock auth doesn't simulate one (D-052). | The real API returns it; show it as a field error on the password. |
-| 2 | Error and rules text is 12/16 in Arabic and Japanese, but body text in those locales uses line-height 24 (07), and the canvas boards use 24. | Decide whether `text-xs` gets a taller line-height for ar/ja, and log it. |
-| 3 | The login canvas doesn't show the newer states: password missing, code too short, the required-fields sign-up state, and the generic weak-password message (`E3-Invite-WeakPassword` still shows "Add at least 1 uppercase letter and 1 special character."). | Update the boards in the next canvas sync. |
+| 1 | The breached-password check uses a demo list in the frontend (D-068). | The backend runs the real check and returns its own error type; the message stays the same. |
+| 2 | The login canvas doesn't show the newer states: password missing, code too short, the required-fields sign-up state, and the generic weak-password message (`E3-Invite-WeakPassword` still shows "Add at least 1 uppercase letter and 1 special character."). | Update the boards in the next canvas sync. |

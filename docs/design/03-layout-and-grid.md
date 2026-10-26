@@ -91,7 +91,8 @@ Approved layout **A2** (D-053 to D-060). Design source: the "AccuKnox app shell"
 
 | Token | Size / line-height | Use |
 |---|---|---|
-| `text-xs` | 12 / 16 | table headers, captions, axis labels, field error messages |
+| `text-xs` | 12 / 16 | table headers, captions, axis labels |
+| `text-form-msg` | 12 / 16 (ar, ja: 12 / 20) | field error messages and password rules (D-067) |
 | `text-sm` | 14 / 20 | **default** UI and table body |
 | `text-base` | 16 / 24 | reading text (AI answers, docs) |
 | `text-lg` | 18 / 28 | card titles (sparingly) |

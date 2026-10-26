@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useT } from "@/i18n/useT";
 import { isExpiredToken } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { ErrorBanner, FieldError, Heading, PasswordInput, PasswordRules, StepProgress, SubmitButton, TextLink, passwordMeetsRules, useFocusFirstError } from "@/components/auth/parts";
+import { ErrorBanner, FieldError, Heading, PasswordInput, PASSWORD_ERROR, PasswordRules, StepProgress, SubmitButton, TextLink, passwordProblem, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,13 +28,13 @@ export function InvitePassword() {
     );
   }
 
-  const weak = submitted && !passwordMeetsRules(password);
+  const weak = submitted ? passwordProblem(password) : null;
   const mismatch = submitted && !weak && password !== confirm;
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitted(true);
-    if (passwordMeetsRules(password) && password === confirm) navigate(`/invite/${token}/authenticator`);
+    if (!passwordProblem(password) && password === confirm) navigate(`/invite/${token}/authenticator`);
     else focusFirstError();
   }
 
@@ -57,10 +57,10 @@ export function InvitePassword() {
             aria-required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            aria-invalid={weak}
+            aria-invalid={!!weak}
             aria-describedby={weak ? "pw-error pw-rules pw-breach" : "pw-rules pw-breach"}
           />
-          {weak && <FieldError id="pw-error">{t("common.weakErr")}</FieldError>}
+          {weak && <FieldError id="pw-error">{t(PASSWORD_ERROR[weak])}</FieldError>}
           <PasswordRules ns="invitePassword" id="pw-rules" password={password} submitted={submitted} />
           <p id="pw-breach" className="text-sm text-muted-foreground">{t("invitePassword.breach")}</p>
         </div>
