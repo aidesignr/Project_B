@@ -5,7 +5,7 @@ import { usePreferences } from "@/app/preferences";
 import { useT } from "@/i18n/useT";
 import { EMAIL_RE, signUp } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { ErrorBanner, FieldError, Heading, PasswordInput, PasswordRules, SubmitButton, TextLink, passwordMeetsRules, useFocusFirstError } from "@/components/auth/parts";
+import { ErrorBanner, FieldError, Heading, PasswordInput, PASSWORD_ERROR, PasswordRules, SubmitButton, TextLink, passwordProblem, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -30,7 +30,7 @@ export function SignUp() {
   };
 
   const emailBad = submitted && !EMAIL_RE.test(f.email);
-  const pwWeak = submitted && !passwordMeetsRules(f.pw);
+  const pwWeak = submitted ? passwordProblem(f.pw) : null;
   const mismatch = submitted && !pwWeak && f.pw !== f.confirm;
   const termsErr = submitted && !agreed;
 
@@ -38,7 +38,7 @@ export function SignUp() {
     e.preventDefault();
     setSubmitted(true);
     const filled = f.first.trim() && f.last.trim() && f.org.trim();
-    if (!filled || !EMAIL_RE.test(f.email) || !passwordMeetsRules(f.pw) || f.pw !== f.confirm || !agreed) return focusFirstError();
+    if (!filled || !EMAIL_RE.test(f.email) || passwordProblem(f.pw) || f.pw !== f.confirm || !agreed) return focusFirstError();
     setBusy(true);
     const res = await signUp(f.email);
     setBusy(false);
@@ -88,8 +88,8 @@ export function SignUp() {
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="new-password">{t("signUp.pw")}</Label>
-          <PasswordInput ns="signUp" id="new-password" placeholder={t("placeholder.newPassword")} autoComplete="new-password" required aria-required value={f.pw} onChange={set("pw")} aria-invalid={pwWeak} aria-describedby={pwWeak ? "pw-error pw-rules" : "pw-rules"} />
-          {pwWeak && <FieldError id="pw-error">{t("common.weakErr")}</FieldError>}
+          <PasswordInput ns="signUp" id="new-password" placeholder={t("placeholder.newPassword")} autoComplete="new-password" required aria-required value={f.pw} onChange={set("pw")} aria-invalid={!!pwWeak} aria-describedby={pwWeak ? "pw-error pw-rules" : "pw-rules"} />
+          {pwWeak && <FieldError id="pw-error">{t(PASSWORD_ERROR[pwWeak])}</FieldError>}
           <PasswordRules ns="signUp" id="pw-rules" password={f.pw} submitted={submitted} />
         </div>
         <div className="flex flex-col gap-2">

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ComponentProps, type ReactNode } from
 import { Link } from "react-router-dom";
 import { ArrowLeftIcon, CheckCircle2Icon, CircleAlertIcon, CircleIcon, EyeIcon, EyeOffIcon, Loader2Icon, XCircleIcon, type LucideIcon } from "lucide-react";
 import { useT } from "@/i18n/useT";
+import { isBreachedPassword } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,7 @@ export function BackLink({ to, children }: { to: string; children: ReactNode }) 
 /** Field-level error: icon + text, linked to the input with aria-describedby. */
 export function FieldError({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <p id={id} className="flex items-start gap-1 text-xs text-error-foreground">
+    <p id={id} className="flex items-start gap-1 text-form-msg text-error-foreground">
       <CircleAlertIcon className="size-4 shrink-0" aria-hidden />
       <span>{children}</span>
     </p>
@@ -127,11 +128,18 @@ export const PASSWORD_RULES = [
 
 export const passwordMeetsRules = (p: string) => PASSWORD_RULES.every((r) => r.test(p));
 
+/** Why a new password can't be used: rules not met, or found in a known breach (D-052). null = usable. */
+export const passwordProblem = (p: string): "weak" | "breached" | null =>
+  !passwordMeetsRules(p) ? "weak" : isBreachedPassword(p) ? "breached" : null;
+
+/** Field error message for each passwordProblem result. */
+export const PASSWORD_ERROR = { weak: "common.weakErr", breached: "common.breachedErr" } as const;
+
 /** Live checklist, 2 columns, one line per rule, at field-error size. Unmet rules turn red only after submit. */
 export function PasswordRules({ ns, password, submitted, id }: { ns: string; password: string; submitted: boolean; id: string }) {
   const t = useT();
   return (
-    <ul id={id} className="m-0 grid list-none grid-cols-2 gap-x-4 gap-y-2 p-0 text-xs">
+    <ul id={id} className="m-0 grid list-none grid-cols-2 gap-x-4 gap-y-2 p-0 text-form-msg">
       {PASSWORD_RULES.map(({ key, test }) => {
         const met = test(password);
         const failed = !met && submitted;

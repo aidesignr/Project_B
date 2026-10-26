@@ -68,6 +68,23 @@ export const RequiredFields: Story = {
   },
 };
 
+/** D-052: a password found in a known breach is rejected with a field error (demo list in lib/auth). */
+export const BreachedPassword: Story = {
+  name: "Error: password found in a data breach",
+  render: () => <SignUp />,
+  play: async ({ canvasElement }) => {
+    await fill(canvasElement, "first", "Maya");
+    await fill(canvasElement, "last", "Chen");
+    await fill(canvasElement, "email", "maya.chen@company.com");
+    await fill(canvasElement, "org", "Company Inc.");
+    await fill(canvasElement, "new-password", "Password123!");
+    await fill(canvasElement, "confirm-password", "Password123!");
+    await submit(canvasElement);
+    await expect(await waitFor(canvasElement, "#pw-error")).toBeVisible();
+    await waitForFocus(canvasElement, "new-password");
+  },
+};
+
 export const Verify: Story = { name: "Verify your email", render: () => <VerifyEmail />, parameters: { route: "/verify-email", ...figma("11-2587") } };
 
 export const SignedIn: Story = { name: "Signed in (placeholder)", render: () => <Welcome />, parameters: { route: "/welcome" } };

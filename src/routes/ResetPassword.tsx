@@ -4,7 +4,7 @@ import { CheckCircle2Icon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { isExpiredToken, resetPassword } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { FieldError, Heading, IconChip, PasswordInput, PasswordRules, SubmitButton, passwordMeetsRules, useFocusFirstError } from "@/components/auth/parts";
+import { FieldError, Heading, IconChip, PasswordInput, PASSWORD_ERROR, PasswordRules, SubmitButton, passwordProblem, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
@@ -21,13 +21,13 @@ export function ResetPassword() {
 
   if (isExpiredToken(token)) return <Navigate to="/forgot-password?expired=1" replace />;
 
-  const weak = submitted && !passwordMeetsRules(password);
+  const weak = submitted ? passwordProblem(password) : null;
   const mismatch = submitted && !weak && password !== confirm;
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitted(true);
-    if (!passwordMeetsRules(password) || password !== confirm) return focusFirstError();
+    if (passwordProblem(password) || password !== confirm) return focusFirstError();
     setBusy(true);
     await resetPassword(token, password);
     setBusy(false);
@@ -60,10 +60,10 @@ export function ResetPassword() {
             aria-required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            aria-invalid={weak}
+            aria-invalid={!!weak}
             aria-describedby={weak ? "pw-error pw-rules pw-breach" : "pw-rules pw-breach"}
           />
-          {weak && <FieldError id="pw-error">{t("common.weakErr")}</FieldError>}
+          {weak && <FieldError id="pw-error">{t(PASSWORD_ERROR[weak])}</FieldError>}
           <PasswordRules ns="resetPassword" id="pw-rules" password={password} submitted={submitted} />
           <p id="pw-breach" className="text-sm text-muted-foreground">{t("resetPassword.breach")}</p>
         </div>

@@ -51,6 +51,13 @@ export async function signUp(email: string): Promise<SignUpResult> {
   return { ok: true };
 }
 
+/**
+ * Demo stand-in for the breached-password check (D-052). The real check runs on the server
+ * (e.g. a k-anonymity range query); until then these well-known passwords trigger the message.
+ */
+const BREACHED_DEMO = ["Password123!", "P@ssw0rd123", "Welcome@2024", "Qwerty123!"];
+export const isBreachedPassword = (p: string) => BREACHED_DEMO.includes(p);
+
 export const isExpiredToken = (token: string | null | undefined) => token === "expired";
 
 /** Demo recovery codes (mock auth, the same for every account). */

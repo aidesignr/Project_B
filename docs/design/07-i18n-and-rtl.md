@@ -74,6 +74,8 @@ Implemented in `tokens/theme.css` with `:lang()` (line-heights stay multiples of
 | ar | IBM Plex Sans Arabic → Noto Sans Arabic → Archivo | 14 / **24** | 16 / **28** | **0, never tracked** | No italics (use weight). Max weight 600. Never letter-space or justify with tatweel. |
 | ja | Noto Sans JP → Hiragino Sans → Yu Gothic UI → Meiryo → Archivo | 14 / **24** | 16 / **28** | **0, never negative** | No italics. `word-break: auto-phrase`, `line-break: strict`. Don't break inside numbers or units. |
 
+Field errors and password rules use `text-form-msg`: 12/16 in en, 12/20 in ar and ja (D-067).
+
 Fonts are self-hosted (WOFF2, `font-display: swap`). Arabic and Japanese files load only for those locales.
 
 ## Locale formatting
