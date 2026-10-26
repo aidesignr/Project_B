@@ -126,4 +126,3 @@ Gaps that are still open. Items fixed after this doc was first written (focus on
 | # | Gap | Suggested fix |
 |---|---|---|
 | 1 | The breached-password check uses a demo list in the frontend (D-068). | The backend runs the real check and returns its own error type; the message stays the same. |
-| 2 | The login canvas doesn't show the newer states: password missing, code too short, the required-fields sign-up state, and the generic weak-password message (`E3-Invite-WeakPassword` still shows "Add at least 1 uppercase letter and 1 special character."). | Update the boards in the next canvas sync. |
