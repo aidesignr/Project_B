@@ -129,3 +129,14 @@ Viewports: 1280, 1440 and 1920 wide (dark + en is enough for viewport checks).
 | 9.8 | Reduced motion: no animation; no flashing or pulsing | |
 | 9.9 | 200% zoom and 320px reflow work; the text-spacing override clips nothing | |
 | 9.10 | `forced-colors` mode: borders, focus and severity icons remain visible | |
+
+## 10 · Forms ([09](09-form-validation.md))
+
+| ID | Check | Result |
+|---|---|---|
+| 10.1 | Every field has a visible label; every empty input has a translated placeholder that isn't the label | |
+| 10.2 | Nothing turns red while typing before the first submit; after submit, each invalid field shows an icon + text error under it | |
+| 10.3 | Each invalid input has `aria-invalid` and `aria-describedby` pointing to its error; required fields have `aria-required` | |
+| 10.4 | Field errors are 12/16 `error-foreground` and follow "[what's wrong]. [how to fix it]." with no banned words (06) | |
+| 10.5 | Account or request problems use one `ErrorBanner` (three-part rule); never a banner and a field error for the same problem | |
+| 10.6 | Correct `autocomplete` on every field; paste works in password and code fields; an error never clears what was typed | |
