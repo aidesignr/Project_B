@@ -112,5 +112,7 @@ Then complete `docs/design/review-checklist.md` in **dark + light**, **en + ar (
 | `06-content-and-tone.md` | Voice, banned list, patterns, destructive tiers, AI trust patterns, glossary |
 | `07-i18n-and-rtl.md` | react-intl setup, numerals, RTL mirroring, per-language type, locale formatting |
 | `08-accessibility.md` | Automated checks, contrast, keyboard, ARIA patterns, chart alternatives, motion, reflow |
+| `09-form-validation.md` | Field anatomy, when to validate, error copy, field vs page errors, form accessibility and RTL |
+| `10-filters.md` | Filter principles: static vs on-demand filters, dropdown anatomy, capability matrix, interactions, severity toggles, states, copy |
 | `decision-log.md` | Every decision: reason, alternatives, date, status |
 | `review-checklist.md` | Pass/fail checks for any new screen or component |

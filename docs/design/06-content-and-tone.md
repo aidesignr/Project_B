@@ -70,6 +70,8 @@ Every alert, finding and error states **what happened → why it matters → wha
 `[What failed]. [Why, if known]. [What to do].` + one action. Never show raw codes alone; put them in a "Details" disclosure.
 > We couldn't scan prod-eu. The access role was removed. **Reconnect account**
 
+Form field errors and placeholders: see [09](09-form-validation.md).
+
 ### Empty states
 | Type | Pattern | Example |
 |---|---|---|

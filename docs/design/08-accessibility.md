@@ -103,3 +103,5 @@ Automated checks catch about a third of issues. The manual checks below are stil
 | 3.3.7 Redundant entry | Never ask for the same information twice in one flow |
 | 3.3.8 Accessible authentication | No cognitive tests; paste and password managers allowed |
 | 3.3.1 / 3.3.3 Errors | Errors named in text, linked to the field (`aria-describedby`), with a fix suggestion (06) |
+
+Form labels, validation timing and error handling: see [09](09-form-validation.md).
