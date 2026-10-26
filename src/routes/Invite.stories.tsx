@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect } from "storybook/test";
-import { figma, fill, submit, waitFor } from "@/stories/helpers";
+import { figma, fill, submit, waitFor, waitForFocus } from "@/stories/helpers";
 import { InvitePassword } from "./InvitePassword";
 import { InviteAuthenticator } from "./InviteAuthenticator";
 import { RecoveryCodes } from "./RecoveryCodes";
@@ -23,6 +23,7 @@ export const WeakPassword: Story = {
     await fill(canvasElement, "confirm-password", "weakpass1");
     await submit(canvasElement);
     await expect(await waitFor(canvasElement, "#pw-error")).toBeVisible();
+    await waitForFocus(canvasElement, "new-password");
   },
 };
 
@@ -50,5 +51,6 @@ export const CodesNotSaved: Story = {
   play: async ({ canvasElement }) => {
     await submit(canvasElement);
     await expect(await waitFor(canvasElement, "#saved-error")).toBeVisible();
+    await waitForFocus(canvasElement, "saved");
   },
 };

@@ -4,7 +4,7 @@ import { Building2Icon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { EMAIL_RE, startSso, type SsoResult } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { BackLink, ErrorBanner, FieldError, Heading, IconChip, TextLink } from "@/components/auth/parts";
+import { BackLink, ErrorBanner, FieldError, Heading, IconChip, TextLink, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,15 +15,16 @@ export function Sso() {
   const t = useT();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<SsoError | null>(null);
   const [busy, setBusy] = useState(false);
+  const { formRef, focusFirstError } = useFocusFirstError();
+  const emailError = submitted && !EMAIL_RE.test(email);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    const bad = !EMAIL_RE.test(email);
-    setEmailError(bad);
-    if (bad) return;
+    setSubmitted(true);
+    if (!EMAIL_RE.test(email)) return focusFirstError();
     setBusy(true);
     const res = await startSso(email);
     setBusy(false);
@@ -47,7 +48,7 @@ export function Sso() {
         </ErrorBanner>
       )}
       {error === "idpError" && <ErrorBanner title={t("sso.idpTitle")}>{t("sso.idpBody")}</ErrorBanner>}
-      <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="email">{t("sso.email")}</Label>
           <Input
@@ -55,14 +56,15 @@ export function Sso() {
             type="email"
             autoComplete="username"
             placeholder="name@company.com"
+            aria-required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             aria-invalid={emailError}
             aria-describedby={emailError ? "email-error" : undefined}
           />
-          {emailError && <FieldError id="email-error">{t("signIn.emailErr")}</FieldError>}
+          {emailError && <FieldError id="email-error">{t("common.emailErr")}</FieldError>}
         </div>
-        <Button type="submit" disabled={busy}>{t("sso.cont")}</Button>
+        <SubmitButton busy={busy}>{t("sso.cont")}</SubmitButton>
       </form>
       <div className="flex flex-col gap-2 text-sm text-muted-foreground">
         <p>{t("sso.orgQ")} <TextLink to="/sso">{t("sso.orgLink")}</TextLink></p>

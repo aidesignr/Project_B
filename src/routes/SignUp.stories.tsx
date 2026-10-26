@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent } from "storybook/test";
-import { figma, fill, submit, waitFor, STRONG_PASSWORD } from "@/stories/helpers";
+import { figma, fill, submit, waitFor, waitForFocus, STRONG_PASSWORD } from "@/stories/helpers";
 import { SignUp } from "./SignUp";
 import { VerifyEmail } from "./VerifyEmail";
 import { Welcome } from "./Welcome";
@@ -52,6 +52,19 @@ export const TermsNotAccepted: Story = {
     await fillForm(canvasElement, "maya.chen@company.com", false);
     await submit(canvasElement);
     await expect(await waitFor(canvasElement, "#terms-error")).toBeVisible();
+  },
+};
+
+/** 09 · Forms: an empty submit marks every required field; focus moves to the first one. */
+export const RequiredFields: Story = {
+  name: "Error: required fields empty",
+  render: () => <SignUp />,
+  play: async ({ canvasElement }) => {
+    await submit(canvasElement);
+    for (const id of ["#first-error", "#last-error", "#email-error", "#org-error", "#pw-error", "#terms-error"]) {
+      await expect(await waitFor(canvasElement, id)).toBeVisible();
+    }
+    await waitForFocus(canvasElement, "first");
   },
 };
 

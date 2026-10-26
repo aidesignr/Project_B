@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent } from "storybook/test";
-import { figma, fill, submit, waitFor } from "@/stories/helpers";
+import { figma, fill, submit, waitFor, waitForFocus } from "@/stories/helpers";
 import { SignIn } from "./SignIn";
 import { Authenticator } from "./Authenticator";
 
@@ -19,6 +19,22 @@ export const InvalidEmail: Story = {
     await fill(canvasElement, "email", "maya.chen@company");
     await submit(canvasElement);
     await expect(await waitFor(canvasElement, "#email-error")).toBeVisible();
+    await waitForFocus(canvasElement, "email");
+  },
+};
+
+/** 09 · Forms: empty password is caught before sending; the error clears once the field is filled. */
+export const PasswordMissing: Story = {
+  name: "Error: password missing",
+  render: () => <SignIn />,
+  play: async ({ canvasElement }) => {
+    await fill(canvasElement, "email", "maya.chen@company.com");
+    await submit(canvasElement);
+    await expect(await waitFor(canvasElement, "#password-error")).toBeVisible();
+    await waitForFocus(canvasElement, "password");
+    await fill(canvasElement, "password", "anything");
+    await expect(canvasElement.querySelector("#password-error")).toBeNull();
+    await fill(canvasElement, "password", "");
   },
 };
 
@@ -67,5 +83,20 @@ export const WrongCode: Story = {
     await fill(canvasElement, "otp", "000000");
     await submit(canvasElement);
     await expect(await waitFor(canvasElement, "#otp-error")).toBeVisible();
+    await waitForFocus(canvasElement, "otp");
+  },
+};
+
+/** 09 · Forms: fewer than 6 digits is caught before sending. */
+export const CodeTooShort: Story = {
+  name: "Error: code too short",
+  render: () => <Authenticator />,
+  parameters: { route: "/sign-in/code" },
+  play: async ({ canvasElement }) => {
+    await fill(canvasElement, "otp", "123");
+    await submit(canvasElement);
+    await expect(await waitFor(canvasElement, "#otp-error")).toBeVisible();
+    await expect(canvasElement.querySelector("#otp")).toHaveAttribute("aria-invalid", "true");
+    await waitForFocus(canvasElement, "otp");
   },
 };

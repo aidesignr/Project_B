@@ -4,7 +4,7 @@ import { Building2Icon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { EMAIL_RE, signIn, signInWithGoogle } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { ErrorBanner, FieldError, Heading, PasswordInput, TextLink } from "@/components/auth/parts";
+import { ErrorBanner, FieldError, Heading, PasswordInput, SubmitButton, TextLink, useFocusFirstError } from "@/components/auth/parts";
 import { GoogleMark } from "@/components/auth/GoogleMark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,15 +18,19 @@ export function SignIn() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [banner, setBanner] = useState<Banner>(null);
   const [busy, setBusy] = useState(false);
+  const { formRef, focusFirstError } = useFocusFirstError();
+
+  // Errors appear on submit, then follow the input as it's corrected.
+  const emailError = submitted && !EMAIL_RE.test(email);
+  const passwordMissing = submitted && !password;
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    const badEmail = !EMAIL_RE.test(email);
-    setEmailError(badEmail);
-    if (badEmail) return;
+    setSubmitted(true);
+    if (!EMAIL_RE.test(email) || !password) return focusFirstError();
     setBusy(true);
     const res = await signIn(email, password);
     setBusy(false);
@@ -65,7 +69,7 @@ export function SignIn() {
         <Separator className="flex-1" />
       </div>
 
-      <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="email">{t("signIn.email")}</Label>
           <Input
@@ -73,21 +77,33 @@ export function SignIn() {
             type="email"
             autoComplete="username"
             placeholder="name@company.com"
+            aria-required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             aria-invalid={emailError}
             aria-describedby={emailError ? "email-error" : undefined}
           />
-          {emailError && <FieldError id="email-error">{t("signIn.emailErr")}</FieldError>}
+          {emailError && <FieldError id="email-error">{t("common.emailErr")}</FieldError>}
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">{t("signIn.password")}</Label>
             <TextLink to="/forgot-password" className="text-sm">{t("signIn.forgot")}</TextLink>
           </div>
-          <PasswordInput ns="signIn" id="password" placeholder={t("placeholder.password")} autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <PasswordInput
+            ns="signIn"
+            id="password"
+            placeholder={t("placeholder.password")}
+            autoComplete="current-password"
+            aria-required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            aria-invalid={passwordMissing}
+            aria-describedby={passwordMissing ? "password-error" : undefined}
+          />
+          {passwordMissing && <FieldError id="password-error">{t("common.passwordRequired")}</FieldError>}
         </div>
-        <Button type="submit" disabled={busy || banner === "locked"}>{t("signIn.signIn")}</Button>
+        <SubmitButton busy={busy} disabled={banner === "locked"}>{t("signIn.signIn")}</SubmitButton>
       </form>
 
       <div className="flex flex-col gap-2 text-sm text-muted-foreground">

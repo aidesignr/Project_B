@@ -33,7 +33,7 @@ Label                              (optional inline link, e.g. "Forgot password?
 | Code input | 40px high, Geist Mono 20px, centered, 6 digits, numeric keyboard | `CodeInput` in `parts.tsx` |
 | Helper / rules text | `text-xs` 12/16 | `PasswordRules` in `parts.tsx` |
 | Error | `text-xs` 12/16, `error-foreground`, 16px `CircleAlert` icon + text | `FieldError` in `parts.tsx` · 03 type scale |
-| Required note | One line above the fields, "All fields are required.", plus `aria-required` on each field. No asterisks in code. | `SignUp.tsx` `signUp.reqNote` |
+| Required | `aria-required` on every required field in every form. Sign-up, the longest form, adds one line above the fields: "All fields are required." No asterisks in code. | all routes · `SignUp.tsx` `signUp.reqNote` |
 | Spacing | `gap-2` (8px) inside a field · `gap-4` (16px) between fields and between a field and the submit button · 2-column rows use `gap-4` | `SignUp.tsx`, `SignIn.tsx` |
 
 ## When to validate
@@ -41,11 +41,11 @@ Label                              (optional inline link, e.g. "Forgot password?
 | Moment | What happens | Where in code |
 |---|---|---|
 | Typing, before the first submit | Nothing turns red. The password checklist ticks rules green as they're met (unmet rules stay neutral). | `PasswordRules` (`submitted=false`) |
-| Submit | Client checks run: required fields, email format (`EMAIL_RE`), password rules, matching passwords, terms checkbox. Every failing field shows its error at once (sign-in checks only the email). | `onSubmit` in each route |
-| After a failed submit | Sign-up, reset and invite re-check as people type, so an error clears as soon as the field is fixed. Sign-in and code fields keep their error until the next submit (see Open issues). | `submitted` state vs `emailError` / `error` state |
+| Submit | Client checks run before anything is sent: required fields, email format (`EMAIL_RE`), password rules, matching passwords, terms checkbox, 6-digit codes. Every failing field shows its error at once, and focus moves to the first one. | `onSubmit` + `useFocusFirstError` in each route |
+| After a failed submit | Every form re-checks as people type, so an error clears as soon as the field is fixed. A wrong-code error from the server clears when the code is edited. | `submitted` state in each route |
 | Confirm password | "Passwords don't match" shows only once the first password meets the rules, so people fix one thing at a time. | `mismatch` in `SignUp.tsx`, `ResetPassword.tsx`, `InvitePassword.tsx` |
-| Server response | Account-level results (wrong email or password, locked, email already registered, Google account not linked, expired link) show as one `ErrorBanner`. A wrong code shows as a field error on the code input. | `SignIn.tsx`, `SignUp.tsx`, `Authenticator.tsx`, `InviteAuthenticator.tsx` |
-| Waiting | The submit button is disabled while the request runs; sign-up also shows a spinner and "Creating account…" with `aria-busy`. | `busy` state |
+| Server response | Account-level results (wrong email or password, locked, email already registered, Google account not linked, expired link) show as one `ErrorBanner`. A wrong code shows as a field error on the code input, and focus returns to it. | `SignIn.tsx`, `SignUp.tsx`, `Authenticator.tsx`, `InviteAuthenticator.tsx` |
+| Waiting | The submit button is disabled with a spinner and `aria-busy` while the request runs. Sign-up also changes its label to "Creating account…". | `SubmitButton` |
 
 ## Writing error messages
 
@@ -60,6 +60,7 @@ Field errors follow the 06 error pattern, minus the title: **[what's wrong]. [ho
 |---|---|
 | "Invalid email" | "Enter an email address like name@company.com." |
 | "Passwords do not match!" | "Passwords don't match. Enter the same password in both fields." |
+| "Password too weak" | "This password doesn't meet all the rules below." (the checklist then shows which rules) |
 | "Invalid code. Try again." | "That code didn't work. Codes change every 30 seconds, so enter the newest one." |
 | "You must accept the terms." | "Accept the Terms and the Evaluation Agreement to continue." |
 | "Login failed" (banner) | **Email or password is incorrect.** Check both and try again. After 5 failed attempts, sign-in is paused for 15 minutes. |
@@ -68,7 +69,7 @@ Field errors follow the 06 error pattern, minus the title: **[what's wrong]. [ho
 
 | The problem is… | Show it as | Example |
 |---|---|---|
-| About one field's value (format, missing, too weak, mismatch) | `FieldError` under that field | Email format, required field, confirm password, wrong code, terms not accepted |
+| About one field's value (format, missing, too weak, mismatch) | `FieldError` under that field | Email format, required field, weak password (with the red checklist), confirm password, short or wrong code, terms not accepted |
 | About the account or the request as a whole, found by the server | One `ErrorBanner` above the form | Wrong email or password (we never say which, for security), locked account, email already registered |
 | About the link or session that opened the page | One `ErrorBanner`, form hidden or replaced with the next step | Expired invite, expired reset link |
 | Not an error, just a requirement | Helper text or the password checklist, neutral color | Password rules, breach-check note (reset and invite only, D-052) |
@@ -81,8 +82,8 @@ Never show a banner and a field error for the same problem. Never show more than
 |---|---|---|
 | Invalid input has `aria-invalid="true"` and `aria-describedby` pointing to its error's `id` | Done on every field with an error | WCAG 3.3.1, 4.1.2 · all routes |
 | Password input's `aria-describedby` includes the rules list (and the breach note where shown) | Done | `SignUp.tsx`, `ResetPassword.tsx`, `InvitePassword.tsx` |
-| Required fields have `aria-required` | Sign-up only (see Open issues) | WCAG 3.3.2 |
-| After a failed submit, focus moves to the first invalid field | **Not done**: focus stays on the submit button, and field errors aren't announced (see Open issues) | WCAG 3.3.1 (best practice) |
+| Required fields have `aria-required` | Done in every form | WCAG 3.3.2 |
+| After a failed submit, focus moves to the first invalid field, so its error is read out | Done (`useFocusFirstError`; covered by play tests) | WCAG 3.3.1 |
 | Page banners are announced | Done: `Alert` has `role="alert"` | `components/ui/alert.tsx` |
 | Color + icon + text, never color alone | Done | WCAG 1.4.1 · `FieldError`, `PasswordRules` |
 | Error text contrast ≥4.5:1; error border ≥3:1 | Done: `error-foreground` 6.53–8.96:1, `error-border` ≥3.07:1 on every surface | `node scripts/check-contrast.mjs` · 04 |
@@ -90,7 +91,7 @@ Never show a banner and a field error for the same problem. Never show more than
 | Input purpose via `autocomplete`: `username`, `current-password`, `new-password`, `given-name`, `family-name`, `email`, `organization`, `one-time-code` | Done | WCAG 1.3.5 |
 | Paste allowed in password and code fields | Done (no paste handlers) | WCAG 3.3.8 |
 | Confirm password asks for the password twice | Allowed: re-entry for security is an exception | WCAG 3.3.7 |
-| Spinners respect reduced motion | Done (`motion-reduce:animate-none`) | 08 Motion |
+| Spinners respect reduced motion | Done (`motion-reduce:animate-none` in `SubmitButton`) | 08 Motion |
 
 ## i18n and RTL
 
@@ -111,21 +112,17 @@ Never show a banner and a field error for the same problem. Never show more than
 | `PasswordRules` | Live 2-column rules checklist; pass `submitted` to turn unmet rules red | `src/components/auth/parts.tsx` · rules in `PASSWORD_RULES` (D-047) |
 | `PasswordInput` | Password field with show/hide toggle | `src/components/auth/parts.tsx` |
 | `CodeInput` | Single 6-digit code field (authenticator) | `src/components/auth/parts.tsx` |
+| `SubmitButton` | Form submit button with the busy state (disabled, spinner, `aria-busy`) | `src/components/auth/parts.tsx` |
+| `useFocusFirstError` | Hook: put `formRef` on the `<form>`, call `focusFirstError()` after a failed submit or server error | `src/components/auth/parts.tsx` |
+| Shared error copy | `common.emailErr`, `common.passwordRequired`, `common.weakErr`, `common.mismatch`, `common.codeLength` | `src/i18n/extra.ts` |
 | `Input`, `Label`, `Checkbox` | Base controls | `src/components/ui/` |
 
 ## Open issues
 
-Gaps found while writing this doc. None are fixed yet; each needs its own change.
+Gaps that are still open. Items fixed after this doc was first written (focus on the first error, re-validation, `aria-required`, code length, weak-password error, shared message keys, busy state, the D-011 comment) are now described in the sections above.
 
 | # | Gap | Suggested fix |
 |---|---|---|
-| 1 | After a failed submit, focus stays on the submit button and field errors aren't announced. Screen reader users don't hear what went wrong. | Move focus to the first invalid field (its `aria-describedby` then reads the error). |
-| 2 | Re-validation differs: sign-up, reset and invite clear errors as people type; sign-in's email error and both code errors stay until the next submit. | Use the `submitted` pattern everywhere. |
-| 3 | `aria-required` is only on sign-up. Sign-in, reset and invite fields have none, and an empty sign-in password isn't checked before the request. | Add `aria-required` and a required check to those forms. |
-| 4 | An empty code is sent for checking and comes back as "That code didn't work", which is misleading. | Check for 6 digits first: "Enter the 6-digit code from your app." |
-| 5 | Weak-password feedback differs: invite adds a field error only when an uppercase letter or special character is missing; sign-up and reset rely on the red checklist alone. | Pick one: checklist only, or checklist plus a field error naming what's missing. |
-| 6 | No breached-password error exists; the mock auth doesn't simulate one (D-052). | The real API returns it; show it as a field error on the password. |
-| 7 | Error and rules text is 12/16 in Arabic and Japanese, but body text in those locales uses line-height 24 (07), and the canvas boards use 24. | Decide whether `text-xs` gets a taller line-height for ar/ja, and log it. |
-| 8 | Sign-up reuses other screens' message keys (`signIn.emailErr`, `resetPassword.mismatch`). This is harmless today but couples translations across screens. | Move shared errors to `common.*` keys. |
-| 9 | Only sign-up sets `aria-busy` and shows a spinner while waiting. | Apply the same busy state to every submit. |
-| 10 | The comment on the Arabic `rLength` override in `src/i18n/extra.ts` cites D-007 (charts); the decision for LTR technical values is D-011. | Correct the comment. |
+| 1 | No breached-password error exists; the mock auth doesn't simulate one (D-052). | The real API returns it; show it as a field error on the password. |
+| 2 | Error and rules text is 12/16 in Arabic and Japanese, but body text in those locales uses line-height 24 (07), and the canvas boards use 24. | Decide whether `text-xs` gets a taller line-height for ar/ja, and log it. |
+| 3 | The login canvas doesn't show the newer states: password missing, code too short, the required-fields sign-up state, and the generic weak-password message (`E3-Invite-WeakPassword` still shows "Add at least 1 uppercase letter and 1 special character."). | Update the boards in the next canvas sync. |

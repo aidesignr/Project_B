@@ -4,7 +4,7 @@ import { CopyIcon, DownloadIcon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { RECOVERY_CODES } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { FieldError, Heading, StepProgress } from "@/components/auth/parts";
+import { FieldError, Heading, StepProgress, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,7 @@ export function RecoveryCodes() {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const { formRef, focusFirstError } = useFocusFirstError();
 
   function download() {
     const url = URL.createObjectURL(new Blob([RECOVERY_CODES.join("\n") + "\n"], { type: "text/plain" }));
@@ -33,6 +34,7 @@ export function RecoveryCodes() {
     e.preventDefault();
     setError(!saved);
     if (saved) navigate("/sign-in");
+    else focusFirstError();
   }
 
   return (
@@ -46,11 +48,12 @@ export function RecoveryCodes() {
         <Button variant="outline" onClick={download}><DownloadIcon aria-hidden />{t("recoveryCodes.download")}</Button>
         <Button variant="outline" onClick={copy}><CopyIcon aria-hidden />{copied ? t("common.copied") : t("recoveryCodes.copy")}</Button>
       </div>
-      <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <Checkbox
               id="saved"
+              aria-required
               checked={saved}
               onCheckedChange={(v) => { setSaved(v === true); if (v) setError(false); }}
               aria-invalid={error}
@@ -60,7 +63,7 @@ export function RecoveryCodes() {
           </div>
           {error && <FieldError id="saved-error">{t("recoveryCodes.savedErr")}</FieldError>}
         </div>
-        <Button type="submit">{t("recoveryCodes.finish")}</Button>
+        <SubmitButton>{t("recoveryCodes.finish")}</SubmitButton>
       </form>
     </AuthLayout>
   );
