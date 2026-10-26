@@ -83,34 +83,49 @@ body{margin:0}
           <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
             <div style="display: flex; flex-direction: column; gap: 8px; order: {{firstOrder}}">
               <label for="su-first" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.first}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
-              <input id="su-first" placeholder="{{t.phFirst}}" type="text" autocomplete="given-name" required aria-required="true" value="{{v.first}}" onChange="{{noop}}" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid var(--input); border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
+              <input id="su-first" placeholder="{{t.phFirst}}" type="text" autocomplete="given-name" required aria-required="true" value="{{v.first}}" onChange="{{noop}}" aria-invalid="{{e.first}}" aria-describedby="su-first-err" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{b.first}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit; outline: {{r.first}}; outline-offset: 2px">
+              <sc-if value="{{e.first}}" hint-placeholder-val="{{false}}">
+                <p id="su-first-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.reqErr}}</p>
+              </sc-if>
             </div>
             <div style="display: flex; flex-direction: column; gap: 8px; order: {{lastOrder}}">
               <label for="su-last" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.last}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
-              <input id="su-last" placeholder="{{t.phLast}}" type="text" autocomplete="family-name" required aria-required="true" value="{{v.last}}" onChange="{{noop}}" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid var(--input); border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
+              <input id="su-last" placeholder="{{t.phLast}}" type="text" autocomplete="family-name" required aria-required="true" value="{{v.last}}" onChange="{{noop}}" aria-invalid="{{e.last}}" aria-describedby="su-last-err" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{b.last}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
+              <sc-if value="{{e.last}}" hint-placeholder-val="{{false}}">
+                <p id="su-last-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.reqErr}}</p>
+              </sc-if>
             </div>
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px">
             <label for="su-email" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.email}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
-            <input id="su-email" type="email" dir="ltr" autocomplete="email" required aria-required="true" aria-invalid="{{taken}}" placeholder="name@company.com" value="{{v.email}}" onChange="{{noop}}" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{emailBorder}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit; text-align: start">
+            <input id="su-email" type="email" dir="ltr" autocomplete="email" required aria-required="true" aria-invalid="{{emailInvalid}}" aria-describedby="su-email-err" placeholder="name@company.com" value="{{v.email}}" onChange="{{noop}}" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{emailBorder}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit; text-align: start">
+            <sc-if value="{{e.email}}" hint-placeholder-val="{{false}}">
+              <p id="su-email-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.emailErr}}</p>
+            </sc-if>
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px">
             <label for="su-org" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.org}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
-            <input id="su-org" placeholder="{{t.phOrg}}" type="text" autocomplete="organization" required aria-required="true" value="{{v.org}}" onChange="{{noop}}" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid var(--input); border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
+            <input id="su-org" placeholder="{{t.phOrg}}" type="text" autocomplete="organization" required aria-required="true" value="{{v.org}}" onChange="{{noop}}" aria-invalid="{{e.org}}" aria-describedby="su-org-err" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{b.org}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
+            <sc-if value="{{e.org}}" hint-placeholder-val="{{false}}">
+              <p id="su-org-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.reqErr}}</p>
+            </sc-if>
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px">
             <label for="su-pw" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.pw}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
             <div style="position: relative">
-              <input id="su-pw" placeholder="{{t.phNewPw}}" type="{{eye1.type}}" autocomplete="new-password" required aria-required="true" aria-describedby="su-rules" value="{{v.pw}}" onChange="{{noop}}" style="width: 100%; height: 32px; box-sizing: border-box; padding-block: 0; padding-inline: 12px 36px; background: var(--input-bg); color: var(--fg); border: 1px solid var(--input); border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
+              <input id="su-pw" placeholder="{{t.phNewPw}}" type="{{eye1.type}}" autocomplete="new-password" required aria-required="true" aria-invalid="{{e.pw}}" aria-describedby="su-pw-err su-rules" value="{{v.pw}}" onChange="{{noop}}" style="outline: {{r.pw}}; outline-offset: 2px; width: 100%; height: 32px; box-sizing: border-box; padding-block: 0; padding-inline: 12px 36px; background: var(--input-bg); color: var(--fg); border: 1px solid {{b.pw}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
               <button type="button" class="has-tip" data-tip="{{eye1.tip}}" aria-label="{{eye1.tip}}" aria-pressed="{{eye1.shown}}" onClick="{{eye1.toggle}}" style="position: absolute; inset-inline-end: 4px; top: 4px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: transparent; color: var(--muted); border: 0; border-radius: 4px; cursor: pointer">
                 <sc-if value="{{eye1.hidden}}" hint-placeholder-val="{{true}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg></sc-if>
                 <sc-if value="{{eye1.shown}}" hint-placeholder-val="{{false}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"></path><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"></path><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"></path><path d="m2 2 20 20"></path></svg></sc-if>
               </button>
             </div>
+            <sc-if value="{{e.pw}}" hint-placeholder-val="{{false}}">
+              <p id="su-pw-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{pwErrText}}</p>
+            </sc-if>
           </div>
-          <ul id="su-rules" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; font-size: 12px; line-height: 16px">
+          <ul id="su-rules" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; font-size: 12px; line-height: {{msgLh}}">
             <sc-for list="{{rules}}" as="rule" hint-placeholder-count="5">
-              <li style="display: flex; align-items: center; gap: 8px; min-width: 0; white-space: nowrap; color: {{rule.color}}">
+              <li style="display: flex; align-items: center; gap: 8px; min-width: 0; white-space: nowrap; line-height: {{msgLh}}; color: {{rule.color}}">
                 <sc-if value="{{rule.met}}" hint-placeholder-val="{{true}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
                 <sc-if value="{{rule.unmet}}" hint-placeholder-val="{{false}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle></svg></sc-if>
                 <span style="overflow: hidden; text-overflow: ellipsis">{{rule.text}}<span class="sr-only"> {{rule.status}}</span></span>
@@ -129,11 +144,11 @@ body{margin:0}
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px">
             <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 14px; line-height: 20px; cursor: pointer">
-              <input type="checkbox" required aria-required="true" checked="{{agreed}}" onChange="{{toggleAgree}}" aria-invalid="{{termsErr}}" aria-describedby="su-terms-err" style="width: 16px; height: 16px; margin: 2px 0 0; flex-shrink: 0; accent-color: var(--primary)">
+              <input type="checkbox" required aria-required="true" checked="{{agreed}}" onChange="{{toggleAgree}}" aria-invalid="{{termsErr}}" aria-describedby="su-terms-err" style="outline: {{r.terms}}; outline-offset: 2px; width: 16px; height: 16px; margin: 2px 0 0; flex-shrink: 0; accent-color: var(--primary)">
               <span>{{t.agreePre}}<a href="#">{{t.terms}}</a>{{t.and}}<a href="#">{{t.eval}}</a>{{t.agreePost}}</span>
             </label>
             <sc-if value="{{termsErr}}" hint-placeholder-val="{{false}}">
-              <p id="su-terms-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: 16px; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.termsErr}}</p>
+              <p id="su-terms-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.termsErr}}</p>
             </sc-if>
           </div>
           <sc-if value="{{notLoading}}" hint-placeholder-val="{{true}}">
@@ -151,12 +166,12 @@ body{margin:0}
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"scenario":{"editor":"enum","options":["none","loading","emailTaken","termsNotAccepted"],"default":"none"},"$preview":{"width":1280,"height":1000}}'>
+<script type="text/x-dc" data-dc-script data-props='{"scenario":{"editor":"enum","options":["none","loading","emailTaken","termsNotAccepted","required","breached"],"default":"none"},"$preview":{"width":1280,"height":1000}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
     const sc = props.scenario || 'none';
-    this.state = { themePref: 'dark', lang: 'en', show1: false, show2: false, agreed: sc === 'loading' || sc === 'emailTaken' };
+    this.state = { themePref: 'dark', lang: 'en', show1: false, show2: false, agreed: sc === 'loading' || sc === 'emailTaken' || sc === 'breached' };
   }
   renderVals() {
     const C = {
@@ -174,15 +189,23 @@ class Component extends DCLogic {
       ar: { phFirst: 'أدخل اسمك الأول', phLast: 'أدخل اسم العائلة', phOrg: 'أدخل اسم مؤسستك', phPassword: 'أدخل كلمة المرور', phNewPw: 'أنشئ كلمة مرور', phConfirm: 'أعد إدخال كلمة المرور' },
       ja: { phFirst: '名を入力', phLast: '姓を入力', phOrg: '組織名を入力', phPassword: 'パスワードを入力', phNewPw: 'パスワードを作成', phConfirm: 'パスワードを再入力' }
     };
+    const M = {
+      en: { reqErr: 'This field is required.', emailErr: 'Enter an email address like name@company.com.', pwReq: 'Enter your password.', codeLength: 'Enter the 6-digit code from your app.', weakErr: "This password doesn't meet all the rules below.", breachedErr: 'This password has appeared in a known data breach. Choose a different one.' },
+      ar: { reqErr: 'هذا الحقل مطلوب.', emailErr: 'أدخل عنوان بريد إلكتروني مثل name@company.com.', pwReq: 'أدخل كلمة المرور.', codeLength: 'أدخل الرمز المكوّن من 6 أرقام من تطبيقك.', weakErr: 'كلمة المرور هذه لا تستوفي جميع القواعد أدناه.', breachedErr: 'ظهرت كلمة المرور هذه في تسريب بيانات معروف. اختر كلمة مرور مختلفة.' },
+      ja: { reqErr: 'この項目は必須です。', emailErr: 'name@company.com のような形式でメールアドレスを入力してください。', pwReq: 'パスワードを入力してください。', codeLength: 'アプリに表示される 6 桁のコードを入力してください。', weakErr: 'このパスワードは下記の条件をすべて満たしていません。', breachedErr: 'このパスワードは既知のデータ漏えいで見つかっています。別のパスワードを選んでください。' }
+    };
     const lang = this.state.lang;
-    const t = Object.assign({}, C[lang], P[lang], PH[lang]);
+    const t = Object.assign({}, C[lang], P[lang], PH[lang], M[lang]);
+    const RING = '2px solid var(--ring)';
     const sc = this.props.scenario || 'none';
-    const filled = sc !== 'none';
+    const required = sc === 'required';
+    const breached = sc === 'breached';
+    const filled = sc !== 'none' && !required;
     const metFlags = [0, 1, 2, 3, 4].map(() => filled);
     const rules = [t.rLower, t.rUpper, t.rNumber, t.rLength, t.rSpecial].map((text, i) => ({
       text, met: metFlags[i], unmet: !metFlags[i],
       status: metFlags[i] ? t.met : t.notMet,
-      color: metFlags[i] ? 'var(--ok-fg)' : 'var(--muted)'
+      color: metFlags[i] ? 'var(--ok-fg)' : (required ? 'var(--err-fg)' : 'var(--muted)')
     }));
     const pref = this.state.themePref;
     const osDark = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : true;
@@ -196,19 +219,26 @@ class Component extends DCLogic {
     const font = { en: "'Archivo', ui-sans-serif, system-ui, sans-serif", ar: "'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Archivo', sans-serif", ja: "'Noto Sans JP', 'Hiragino Sans', 'Archivo', sans-serif" }[lang];
     const eye = (k) => { const s = !!this.state[k]; return { type: s ? 'text' : 'password', tip: s ? t.hide : t.show, shown: s, hidden: !s, toggle: () => this.setState({ [k]: !s }) }; };
     const taken = sc === 'emailTaken';
+    const E = (on) => on ? 'var(--err-border)' : 'var(--input)';
     const loading = sc === 'loading';
     return {
+      msgLh: lang === 'en' ? '16px' : '20px', 
       t, lang, theme, themes, font, rules, taken, loading,
       notLoading: !loading,
       dir: lang === 'ar' ? 'rtl' : 'ltr',
       setLang: (e) => this.setState({ lang: e.target.value }),
       firstOrder: lang === 'ja' ? 2 : 1,
       lastOrder: lang === 'ja' ? 1 : 2,
-      v: filled ? { first: 'Maya', last: 'Chen', email: 'maya.chen@company.com', org: '[Organization]', pw: 'Horse-battery-7' } : { first: '', last: '', email: '', org: '', pw: '' },
-      emailBorder: taken ? 'var(--err-border)' : 'var(--input)',
+      v: filled ? { first: 'Maya', last: 'Chen', email: 'maya.chen@company.com', org: '[Organization]', pw: breached ? 'Password123!' : 'Horse-battery-7' } : { first: '', last: '', email: '', org: '', pw: '' },
+      e: { first: required, last: required, email: required, org: required, pw: required || breached },
+      b: { first: E(required), last: E(required), org: E(required), pw: E(required || breached) },
+      r: { first: required ? RING : '0', pw: breached ? RING : '0', terms: sc === 'termsNotAccepted' ? RING : '0' },
+      pwErrText: breached ? t.breachedErr : t.weakErr,
+      emailInvalid: taken || required,
+      emailBorder: taken || required ? 'var(--err-border)' : 'var(--input)',
       agreed: this.state.agreed,
       toggleAgree: () => this.setState({ agreed: !this.state.agreed }),
-      termsErr: sc === 'termsNotAccepted' && !this.state.agreed,
+      termsErr: (sc === 'termsNotAccepted' || required) && !this.state.agreed,
       eye1: eye('show1'), eye2: eye('show2'),
       noop: () => {}
     };
