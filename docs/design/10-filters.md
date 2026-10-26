@@ -1,6 +1,6 @@
 # Filters: principles and behaviour
 
-How filters work on data pages. The Findings page is the reference implementation; this file describes what its code does today. Where something isn't settled, it says **[open: …]**.
+How filters work on data pages. The Findings page is the reference implementation; this file describes what its code does today, and the capability matrix (§5) follows the latest spreadsheet, noting where code hasn't caught up. Where something isn't settled, it says **[open: …]**.
 
 Code: [data.ts](../../src/components/findings/data.ts) (filter definitions) · [FilterDropdown.tsx](../../src/components/findings/FilterDropdown.tsx) · [FilterBar.tsx](../../src/components/findings/FilterBar.tsx) · [FindingsPage.tsx](../../src/routes/FindingsPage.tsx) · [findings.ts](../../src/i18n/findings.ts) (copy) · [findings.stories.tsx](../../src/components/findings/findings.stories.tsx) (tested behaviour). Decisions: D-064, D-065.
 
@@ -70,44 +70,51 @@ Date popover: From | To fields · month header with previous/next · 7-column da
 
 ## 5. Capability matrix
 
-From `FILTERS` in `data.ts`. ✓ = on, blank = off.
+From the product owner's [filter capability spreadsheet](https://docs.google.com/spreadsheets/d/1pDIq7N9OqA8RL81V550nCrqpJunugJz2jQpLgKHD7m0/edit?usp=sharing) (updated October 2026), grouped as it groups them. ✓ = on, blank = off. Every filter in the spreadsheet requires a label, so that column is left out.
 
-| Filter | Operator | Select | Tree | Parent icon | Search | Tabs | Create | Select all | Unselect all | Date range |
-|---|---|---|---|---|---|---|---|---|---|---|
-| Group by | | Single | | | | | | | | |
-| Cloud provider | ✓ | Multi | ✓ | ✓ | ✓ | ✓ | | ✓ | ✓ | |
-| Asset category | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Asset type | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Asset name | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Region | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Tags | ✓ | Multi | | | ✓ | ✓ | ✓ | ✓ | ✓ | |
-| Label | ✓ | Single | | | ✓ | ✓ | | | ✓ | |
-| Finding source | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Collector | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| New finding | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Origin risk factor | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| SLA status | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Unique vulnerability name | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Finding name | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Data type | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Vulnerability name | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Tool output | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Finding status | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Compliance control | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Asset group | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Finding ID | ✓ | Multi | | | ✓ | ✓ | | ✓ | ✓ | |
-| Ignored | ✓ | Single | | | | | | | | |
-| Exploit available | ✓ | Single | | | | | | | | |
-| Investigation status | ✓ | Single | | | | | | | | |
-| Has tickets | ✓ | Single | | | | | | | | |
-| Present on | | | | | | | | | | ✓ |
-| Date discovered | | | | | | | | | | ✓ |
-| Last seen | | | | | | | | | | ✓ |
-| Last fixed | | | | | | | | | | ✓ |
+| Filter | Operator | Select | Tree | Parent icon | Child icon | Search | Tabs | Create | Select all | Unselect all | Single date | Date range |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Group by | | Single | | | | | | | | | | |
+| Cloud provider | ✓ | Multi | ✓ | ✓ | | ✓ | ✓ | | ✓ | ✓ | | |
+| **General multi-select** | | | | | | | | | | | | |
+| Asset category | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Asset type | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Asset name | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Region | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Tags | ✓ | Multi | | | | ✓ | ✓ | ✓ | ✓ | ✓ | | |
+| Label | ✓ | Single | | | | ✓ | ✓ | | | ✓ | | |
+| Finding source | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Collector | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| New finding | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Severity | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Origin risk factor | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| SLA status | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Unique vulnerability name | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Finding name | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Data type | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Vulnerability name | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Tool output | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Finding status | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Compliance control | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Asset group | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Finding ID | ✓ | Multi | | | | ✓ | ✓ | | ✓ | ✓ | | |
+| Classifier | ✓ | Multi | | ✓ | | ✓ | ✓ | | ✓ | ✓ | | |
+| **Yes or no** | | | | | | | | | | | | |
+| Ignored | ✓ | Single | | | | | | | | | | |
+| Exploit available | ✓ | Single | | | | | | | | | | |
+| Investigation status | ✓ | Single | | | | | | | | | | |
+| Has tickets | ✓ | Single | | | | | | | | | | |
+| **Date** | | | | | | | | | | | | |
+| Present on | | | | | | | | | | | | ✓ |
+| Date discovered | | | | | | | | | | | | ✓ |
+| Last seen | | | | | | | | | | | | ✓ |
+| Last fixed | | | | | | | | | | | | ✓ |
 
 - Operators are **Equals (=)** and **Not equals (≠)**. [open: the spreadsheet marks which filters support an operator but not which operators; "Contains" was dropped when the spreadsheet arrived.]
 - Ignored, Exploit available, Investigation status and Has tickets offer **Yes** and **No**. [open: Investigation status sits in the spreadsheet's yes-or-no group; confirm it shouldn't list real statuses.]
-- The spreadsheet's **Severity** row has no dropdown: the severity toggles replace it (D-064).
+- The spreadsheet now gives **Severity** a full multi-select definition. On the page the severity toggles still stand in for it (D-064), so there is no Severity dropdown. [open: confirm whether Severity should also be an on-demand dropdown, for example on pages without toggles.]
+- **Classifier** is new in the spreadsheet and isn't in `FILTERS` yet. It has a parent icon but no tree, so the icon sits on each value. [open: confirm which icon set it uses, and whether it should be a tree like Cloud provider.]
+- **Child icon** and **Single date** are new spreadsheet columns. No filter uses either yet; they're kept so a future filter can turn them on. Every date filter uses a From/To range.
 
 ## 6. Interactions
 
@@ -254,6 +261,7 @@ Filter names are the `findings.filter.<id>` keys (for example "Cloud provider", 
 ## 13. Known limits
 
 - The table uses 400 seeded mock findings. Only **Cloud provider**, **Finding name**, **Finding status** and **Asset name** narrow the rows; the other filters change the bar, not the table, until the findings API is wired.
+- The Classifier filter from the updated spreadsheet isn't built yet (§5).
 - Provider and asset icons are muted Lucide placeholders until the logos are supplied (D-065).
 - The calendar week starts on Sunday in every locale. [open: start the week by locale.]
 - Saved filters, Save and Save as new view are menus without behaviour yet. [open: define how a saved view stores filters.]
