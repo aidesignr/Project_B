@@ -114,5 +114,6 @@ Then complete `docs/design/review-checklist.md` in **dark + light**, **en + ar (
 | `08-accessibility.md` | Automated checks, contrast, keyboard, ARIA patterns, chart alternatives, motion, reflow |
 | `09-form-validation.md` | Field anatomy, when to validate, error copy, field vs page errors, form accessibility and RTL |
 | `10-filters.md` | Filter principles: static vs on-demand filters, dropdown anatomy, capability matrix, interactions, severity toggles, states, copy |
+| `11-tables.md` | Table principles: table actions, sorting, cell types with and without icons, links, row actions, selection and bulk bar, grouping, pagination, states |
 | `decision-log.md` | Every decision: reason, alternatives, date, status |
 | `review-checklist.md` | Pass/fail checks for any new screen or component |
