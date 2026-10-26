@@ -61,6 +61,7 @@ Approved layout **A2** (D-053 to D-060). Design source: the "AccuKnox app shell"
 | Row height | 36 (default), 28 (compact toggle). Never below 28. |
 | Cell padding | inline 12, block 8 |
 | Header | 36, `text-xs/16` medium, `--muted-foreground`, sticky |
+| Body text | `text-table` 12/16 (ar, ja: 12/20) for cells, group rows and pagination (D-070, 11 §6) |
 | Numbers | `tabular-nums`, aligned to the inline end |
 | First column | Severity icon (16) + title. Truncate with a tooltip; never wrap beyond 2 lines. |
 | Toolbar | 48 high. Search · filters · group-by · columns · export. Bulk actions replace the toolbar when rows are selected. |
@@ -93,7 +94,8 @@ Approved layout **A2** (D-053 to D-060). Design source: the "AccuKnox app shell"
 |---|---|---|
 | `text-xs` | 12 / 16 | table headers, captions, axis labels |
 | `text-form-msg` | 12 / 16 (ar, ja: 12 / 20) | field error messages and password rules (D-067) |
-| `text-sm` | 14 / 20 | **default** UI and table body |
+| `text-table` | 12 / 16 (ar, ja: 12 / 20) | table cells, group rows and pagination (D-070) |
+| `text-sm` | 14 / 20 | **default** UI (tables use `text-table`, D-070) |
 | `text-base` | 16 / 24 | reading text (AI answers, docs) |
 | `text-lg` | 18 / 28 | card titles (sparingly) |
 | `text-xl` | 20 / 28 | page title (H1) |

@@ -4,6 +4,8 @@ How tables work across the platform. The Findings table is the reference impleme
 
 Code: [FindingsTable.tsx](../../src/components/findings/FindingsTable.tsx) (table, row actions, columns menu, pagination, bulk bar) · [data.ts](../../src/components/findings/data.ts) (`COLUMNS`) · [parts.tsx](../../src/components/findings/parts.tsx) (icons and tones) · [FindingsPage.tsx](../../src/routes/FindingsPage.tsx) (table bar, sort, grouping, paging, states) · [findings.ts](../../src/i18n/findings.ts) (copy) · [findings.stories.tsx](../../src/components/findings/findings.stories.tsx), [findingDrawer.stories.tsx](../../src/components/findings/findingDrawer.stories.tsx) (tested behaviour). Sizes: [03](03-layout-and-grid.md). Filters above a table: [10](10-filters.md).
 
+Design boards that follow this file: canvas [Findings page](https://claude.ai/artifact/4bSLAeSVPGEaPbQ3M93jLQ) (every Findings list board imports `Main.dc.html`) and the xBOM Projects boards (`XbomProjects.dc.html`, `XP-*`) in the canvas [AccuKnox app shell](https://claude.ai/artifact/DVVia2MXZ5NqevRPpK4GaA). A new table board follows principles 9–12 from its first version.
+
 ## 1. Purpose and scope
 
 A table answers **"What should I fix first, and how?"**: it ranks many items by risk and lets people act on one or many. Use one when people compare items across several attributes or act on them in bulk.
@@ -26,6 +28,10 @@ A table answers **"What should I fix first, and how?"**: it ranks many items by 
 | 6 | Row selection and the bulk bar appear only on tables that have bulk actions | A checkbox column with nothing to do is noise |
 | 7 | Severity and status show an icon and a name; Resolved and Ignored are muted; no row tints | Never colour alone; strong colour only on open, actionable items (CLAUDE.md) |
 | 8 | Any change to what's shown (sort, filters, search, page size) returns to page 1 | A changed list never opens on an empty later page |
+| 9 | Table text is compact: **12/16** for headers, cells, group rows and pagination (§6, Type) | Dense tables show more rows per screen; controls keep their 32px size and targets |
+| 10 | Every value from a fixed set (a **classifier**) has a prefix icon, one per value (§6, Classifier icons) | People scan a column by shape before they read it; the name is always shown, so the icon never carries meaning alone |
+| 11 | Avatars get a colour from a fixed set of 8, picked by a stable hash of the person (§6, Avatars) | Owners are easier to tell apart at a glance; the same person keeps the same colour on every page and every visit |
+| 12 | Every table design and mock starts with **at least 30 rows** (§15, Mock data) | More than one page at the default 25, so pagination, sorting, scrolling and the bulk bar are exercised in every review |
 
 ## 3. Anatomy
 
@@ -76,8 +82,10 @@ Placed in one row with the result count: the count at inline-start, the actions 
 |---|---|---|---|
 | Severity | Severity icon (`SEVERITY_ICON`) | Name ("Critical") | Severity `-foreground` tone; muted for Resolved and Ignored. The score sorts but isn't shown |
 | Finding | None | Finding name | Opens the drawer (see §7) |
-| Asset | Leading icon (`box`) | Asset name in `<bdi>` | Icon is a muted placeholder until real icons ship (D-065) |
+| Asset | Leading icon (`box`) | Asset name in `<bdi>` | Icon is a muted placeholder until real icons ship (D-065). The canvas board uses the same icon (it showed a dashed square before) |
 | Cloud account | Leading icon (`cloud`) | Account name in `<bdi>` | As above |
+| Classifier (any fixed-set column, e.g. xBOM Classifier, Asset type, Finding source) | Prefix icon per value (see Classifier icons) | Value label, translated | Icon `muted-foreground`; no badge or fill around it |
+| Owner, assignee | 24px initials avatar (see Avatars) | Person's name | The avatar is decorative (`aria-hidden`); the name carries the meaning |
 | Status | Status icon (`STATUS_ICON`) | Name ("In progress") | Open and In progress use their status tones; Resolved and Ignored are muted |
 | Last seen | None | Relative time ("3 hours ago") | Hours under a day, then days under a week, then weeks |
 | Ticket | None | Ticket ID link in `<bdi>`, or an em dash | The dash is hidden from screen readers, which hear "No ticket" |
@@ -92,6 +100,79 @@ Placed in one row with the result count: the count at inline-start, the actions 
 | Truncation | Every cell truncates to one line; the table uses fixed column widths |
 | Technical values | Asset, account and ticket IDs are wrapped in `<bdi>` |
 | Row height | 36px default, 28px compact (`03`) |
+
+### Type
+
+| Part | Size | Notes |
+|---|---|---|
+| Header cells | 12/16 medium, `muted-foreground` | Unchanged |
+| Body cells, links, badges, tags | **12/16** | Was 14/20. Names and links keep medium weight so the first column still leads |
+| Group header rows | 12/16 medium, `muted-foreground` | Unchanged |
+| Pagination (rows per page, range, page numbers) | **12/16** | Buttons stay 32px |
+| Table bar (count, Columns, Compact rows, Export) | 14/20 | Outside the table card; matches other page controls |
+| Empty, error and loading copy | Unchanged (16/24 title, 14/20 body) | These are messages, not table rows |
+| Arabic and Japanese | 12/**20** | Same size, taller line so marks and characters don't clip in truncated cells; fits both 36 and 28 rows |
+
+12px is the smallest step in the kit scale; nothing in a table goes below it (the D-061 steps stay reserved for notification cards). Contrast doesn't change: cells keep `foreground` and `muted-foreground`.
+
+**Mismatch:** `FindingsTable.tsx` sets `text-sm` (14/20) on the table. Proposed fix: a `text-table` step in `tokens/theme.css` (12/16, 12/20 in ar/ja, like `text-form-msg` in D-067) on the `<table>` and the pagination row, with Storybook updated in the same PR. Code is not changed in this doc's PR.
+
+### Classifier icons
+
+A **classifier** is a column whose values come from a fixed, known set (types, categories, sources, providers). Free text (names, IDs, descriptions) and people are not classifiers.
+
+| Rule | Detail |
+|---|---|
+| One icon per value | Each value maps to one Lucide icon in a fixed table; the same value has the same icon in the table, the filter dropdown and the detail drawer |
+| Placement | Inline-start, 16px, 4px gap, then the label (same as other icon cells) |
+| Colour | `muted-foreground`. Never severity or chart colours: the icon tells types apart by shape, not colour |
+| Label | Always shown; the icon is `aria-hidden` |
+| Unknown value | `circle-help` icon + the raw value, so a new type from the API still renders |
+| Directional icons | Don't use arrows or other mirrored icons for classifiers |
+| No badge | The icon replaces the neutral badge used before; one less box per row |
+
+xBOM Classifier (CycloneDX component types), used on the xBOM Projects board:
+
+| Value | Icon |
+|---|---|
+| Application | `app-window` |
+| Framework | `layers` |
+| Library | `library` |
+| Container | `container` |
+| Platform | `server` |
+| Operating system | `monitor` |
+| Device | `cpu` |
+| Firmware | `circuit-board` |
+| File | `file` |
+| Machine learning model | `brain-circuit` |
+| Data | `database` |
+
+[open: icon maps for Asset type, Finding source and Cloud provider. Provider logos need brand assets (D-065); until then providers use `cloud`.]
+
+### Avatars
+
+| Rule | Detail |
+|---|---|
+| Size | 24px circle (`rounded-full`), initials 12/16 medium; first letter of the first two name parts |
+| Colour set | 8 tints, `avatar-1` … `avatar-8`, made from the `chart-1..8` hues mixed into `card` (32% dark, 24% light) |
+| Assignment | "Random" but stable: a hash of the user ID (the canvas uses the name) modulo 8. The same person gets the same tint on every row, page and visit; never re-rolled on render |
+| Text | Initials in `foreground` on the tint: ≥10.10:1 dark, ≥14.80:1 light (also on hover and selected rows) |
+| Meaning | Decorative only (`aria-hidden`); the name is always shown next to it. Colour never identifies a person on its own |
+| Not severity | Avatar tints are never used for severity, status or health, and charts never use the avatar tints |
+| No border | The tint is the boundary; the old `ctrl-border` ring is removed |
+
+| Token | Dark | Light |
+|---|---|---|
+| `avatar-1` | `#1e3c64` | `#ccdff5` |
+| `avatar-2` | `#512d27` | `#fadbce` |
+| `avatar-3` | `#14433e` | `#c8ecdf` |
+| `avatar-4` | `#4c3b1b` | `#fbe8c2` |
+| `avatar-5` | `#502a44` | `#f9dfe9` |
+| `avatar-6` | `#0c3a1b` | `#c2e1c2` |
+| `avatar-7` | `#3a3b65` | `#d9d5f5` |
+| `avatar-8` | `#55313b` | `#f8d3d3` |
+
+[open: the `avatar-*` tokens exist on the canvas only. Adding them to `tokens/tokens.css` needs `check-contrast` and the Figma sync (D-048).]
 
 ## 7. Links
 
@@ -185,6 +266,8 @@ Only on tables with bulk actions (principle 6). The Findings table has them.
 - Counts, ranges and page numbers use `Intl` number formatting; Arabic uses Western digits (`ar-u-nu-latn`, D-007).
 - "Last seen" uses `Intl.RelativeTimeFormat` with the active locale.
 - Technical values (assets, accounts, tickets) are wrapped in `<bdi>` and never translated.
+- Table text is 12/20 in Arabic and Japanese (12/16 in English), see §6 Type.
+- Classifier labels are translated; their icons don't mirror. Avatar initials come from the name as written (Arabic and Japanese names show their own first characters).
 
 ## 14. Tokens
 
@@ -196,13 +279,25 @@ Only on tables with bulk actions (principle 6). The Findings table has them.
 | Group header row | `bg-background`, `text-muted-foreground` |
 | Severity cell | `severity-*-foreground` (muted rows: `muted-foreground`) |
 | Status cell | `status-open-foreground`, `status-in-progress-foreground`; Resolved and Ignored `muted-foreground` |
-| Icon placeholders | `muted-foreground` |
+| Icon placeholders, classifier icons | `muted-foreground` |
+| Avatars | `avatar-1` … `avatar-8` (tint), `foreground` (initials) [open: not in `tokens.css` yet] |
+| Table text | `text-table` 12/16, 12/20 in ar/ja [open: not in `theme.css` yet; code uses `text-sm`] |
 | Links | `text-link` |
 | Current page | `text-link`, `bg-info-muted`, ring `primary` |
 | Bulk bar | `bg-popover`, `border-border`, `shadow-3`, `rounded-xl` |
 | Focus | `ring` |
 
 ## 15. Known limits
+
+### Mock data
+
+| Rule | Detail |
+|---|---|
+| Minimum | Every table in a design board, Storybook story or mock starts with **at least 30 rows** in its default state, so it has more than one page at the default 25 |
+| Realistic | Rows use plausible names and values from the product domain, never lorem ipsum. Every classifier value and several owners appear, so icons and avatar tints can be checked |
+| Seeded | Generated rows use a fixed seed, so screenshots and reviews match from run to run |
+| State boards | Loading, empty, no-results and error boards still show their state; the 30-row rule covers the default and selected boards |
+| Today | Findings: 400 seeded findings (code and canvas). xBOM Projects canvas: 36 projects across all 11 classifiers and 12 owners (was 10) |
 
 - Rows come from 400 seeded mock findings until the findings API is wired (D-065).
 - The table has a minimum width of 1120px and scrolls horizontally inside its card when narrower.
@@ -217,4 +312,5 @@ Only on tables with bulk actions (principle 6). The Findings table has them.
 - **D-064:** Findings filter bar (filters above the table).
 - **D-065:** Findings page in code: native table, icon placeholders, mock data.
 - **D-066:** Finding detail drawer, opened from the finding name.
+- **D-070:** Compact 12/16 table type, classifier prefix icons, stable avatar tints, 30-row minimum for mock tables (principles 9–12).
 - [open: record principles 1, 4, 5 and 6 (product owner, this doc) as a decision-log entry.]
