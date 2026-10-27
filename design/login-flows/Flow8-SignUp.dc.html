@@ -78,17 +78,30 @@ body{margin:0}
           </div>
         </sc-if>
 
-        <form style="display: flex; flex-direction: column; gap: 16px; margin: 0">
-          <p style="margin: 0; font-size: 12px; line-height: 16px; color: var(--muted)">{{t.reqNote}}</p>
-          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
-            <div style="display: flex; flex-direction: column; gap: 8px; order: {{firstOrder}}">
+        <form style="display: flex; flex-direction: column; gap: 12px; margin: 0">
+          <sc-if value="{{summary.show}}" hint-placeholder-val="{{false}}">
+            <div id="su-summary" role="alert" tabindex="-1" style="outline: {{summary.ring}}; outline-offset: 2px; margin-bottom: 4px; display: flex; gap: 12px; padding: 12px 16px; background: var(--err-bg); border: 1px solid var(--err-border); border-radius: 8px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px; color: var(--err-fg)"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+              <div style="display: flex; flex-direction: column; gap: 4px">
+                <p style="margin: 0; font-size: 14px; line-height: 20px; font-weight: 600">{{summary.title}}</p>
+                <p style="margin: 0; font-size: 14px; line-height: 20px">{{summary.body}}</p>
+                <ul style="margin: 0; padding-inline-start: 16px; list-style: disc; font-size: 14px; line-height: 20px">
+                  <sc-for list="{{summary.items}}" as="it" hint-placeholder-count="6">
+                    <li><a href="{{it.href}}" style="display: inline-flex; min-height: 24px; align-items: center; color: var(--fg); text-decoration: underline; text-underline-offset: 4px">{{it.label}}</a></li>
+                  </sc-for>
+                </ul>
+              </div>
+            </div>
+          </sc-if>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px">
+            <div style="display: flex; flex-direction: column; gap: 4px; order: {{firstOrder}}">
               <label for="su-first" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.first}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
               <input id="su-first" placeholder="{{t.phFirst}}" type="text" autocomplete="given-name" required aria-required="true" value="{{v.first}}" onChange="{{noop}}" aria-invalid="{{e.first}}" aria-describedby="su-first-err" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{b.first}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit; outline: {{r.first}}; outline-offset: 2px">
               <sc-if value="{{e.first}}" hint-placeholder-val="{{false}}">
                 <p id="su-first-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.reqErr}}</p>
               </sc-if>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 8px; order: {{lastOrder}}">
+            <div style="display: flex; flex-direction: column; gap: 4px; order: {{lastOrder}}">
               <label for="su-last" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.last}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
               <input id="su-last" placeholder="{{t.phLast}}" type="text" autocomplete="family-name" required aria-required="true" value="{{v.last}}" onChange="{{noop}}" aria-invalid="{{e.last}}" aria-describedby="su-last-err" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{b.last}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
               <sc-if value="{{e.last}}" hint-placeholder-val="{{false}}">
@@ -96,21 +109,21 @@ body{margin:0}
               </sc-if>
             </div>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; flex-direction: column; gap: 4px">
             <label for="su-email" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.email}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
             <input id="su-email" type="email" dir="ltr" autocomplete="email" required aria-required="true" aria-invalid="{{emailInvalid}}" aria-describedby="su-email-err" placeholder="name@company.com" value="{{v.email}}" onChange="{{noop}}" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{emailBorder}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit; text-align: start">
             <sc-if value="{{e.email}}" hint-placeholder-val="{{false}}">
               <p id="su-email-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.emailErr}}</p>
             </sc-if>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; flex-direction: column; gap: 4px">
             <label for="su-org" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.org}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
             <input id="su-org" placeholder="{{t.phOrg}}" type="text" autocomplete="organization" required aria-required="true" value="{{v.org}}" onChange="{{noop}}" aria-invalid="{{e.org}}" aria-describedby="su-org-err" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{b.org}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
             <sc-if value="{{e.org}}" hint-placeholder-val="{{false}}">
               <p id="su-org-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.reqErr}}</p>
             </sc-if>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; flex-direction: column; gap: 4px">
             <label for="su-pw" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.pw}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
             <div style="position: relative">
               <input id="su-pw" placeholder="{{t.phNewPw}}" type="{{eye1.type}}" autocomplete="new-password" required aria-required="true" aria-invalid="{{e.pw}}" aria-describedby="su-pw-err su-rules" value="{{v.pw}}" onChange="{{noop}}" style="outline: {{r.pw}}; outline-offset: 2px; width: 100%; height: 32px; box-sizing: border-box; padding-block: 0; padding-inline: 12px 36px; background: var(--input-bg); color: var(--fg); border: 1px solid {{b.pw}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
@@ -132,7 +145,7 @@ body{margin:0}
               </li>
             </sc-for>
           </ul>
-          <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; flex-direction: column; gap: 4px">
             <label for="su-pw2" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.confirm}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
             <div style="position: relative">
               <input id="su-pw2" placeholder="{{t.phConfirm}}" type="{{eye2.type}}" autocomplete="new-password" required aria-required="true" value="{{v.pw}}" onChange="{{noop}}" style="width: 100%; height: 32px; box-sizing: border-box; padding-block: 0; padding-inline: 12px 36px; background: var(--input-bg); color: var(--fg); border: 1px solid var(--input); border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit">
@@ -142,20 +155,20 @@ body{margin:0}
               </button>
             </div>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; flex-direction: column; gap: 4px">
             <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 14px; line-height: 20px; cursor: pointer">
-              <input type="checkbox" required aria-required="true" checked="{{agreed}}" onChange="{{toggleAgree}}" aria-invalid="{{termsErr}}" aria-describedby="su-terms-err" style="outline: {{r.terms}}; outline-offset: 2px; width: 16px; height: 16px; margin: 2px 0 0; flex-shrink: 0; accent-color: var(--primary)">
-              <span>{{t.agreePre}}<a href="#">{{t.terms}}</a>{{t.and}}<a href="#">{{t.eval}}</a>{{t.agreePost}}</span>
+              <input id="su-terms" type="checkbox" required aria-required="true" checked="{{agreed}}" onChange="{{toggleAgree}}" aria-invalid="{{termsErr}}" aria-describedby="su-terms-err" style="outline: {{r.terms}}; outline-offset: 2px; width: 16px; height: 16px; margin: 2px 0 0; flex-shrink: 0; accent-color: var(--primary)">
+              <span>{{t.agreePre}}<a href="#">{{t.terms}}</a>{{t.and}}<a href="#">{{t.eval}}</a>{{t.agreePost}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></span>
             </label>
             <sc-if value="{{termsErr}}" hint-placeholder-val="{{false}}">
               <p id="su-terms-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.termsErr}}</p>
             </sc-if>
           </div>
           <sc-if value="{{notLoading}}" hint-placeholder-val="{{true}}">
-            <a href="Flow9-VerifyEmail.dc.html" style="height: 32px; display: flex; align-items: center; justify-content: center; background: var(--primary); color: var(--on-primary); text-decoration: none; border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500">{{t.create}}</a>
+            <a href="Flow9-VerifyEmail.dc.html" style="margin-top: 4px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--primary); color: var(--on-primary); text-decoration: none; border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500">{{t.create}}</a>
           </sc-if>
           <sc-if value="{{loading}}" hint-placeholder-val="{{false}}">
-            <button type="button" disabled aria-busy="true" style="height: 32px; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--primary); color: var(--on-primary); border: 0; border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500; font-family: inherit; cursor: wait">
+            <button type="button" disabled aria-busy="true" style="margin-top: 4px; height: 32px; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--primary); color: var(--on-primary); border: 0; border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500; font-family: inherit; cursor: wait">
               <svg class="spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
               {{t.creating}}
             </button>
@@ -180,9 +193,9 @@ class Component extends DCLogic {
       ja: { language: '言語', theme: 'テーマ', light: 'ライト', dark: 'ダーク', system: 'システム設定', show: 'パスワードを表示', hide: 'パスワードを非表示' }
     };
     const P = {
-      en: { title: 'Create your account', have: 'Already have an account?', signIn: 'Sign in', reqNote: 'All fields are required.', first: 'First name', last: 'Last name', email: 'Work email', org: 'Organization name', pw: 'Create password', confirm: 'Confirm password', agreePre: 'I agree to the ', terms: 'Terms', and: ' and the ', eval: 'Evaluation Agreement', agreePost: '', create: 'Create account', creating: 'Creating your account…', takenTitle: 'An account already exists for this email', takenBody: "Sign in instead, or reset your password if you can't remember it.", termsErr: 'Accept the Terms and the Evaluation Agreement to continue.', rLower: '1 lowercase letter', rUpper: '1 uppercase letter', rNumber: '1 number', rLength: '8–64 characters', rSpecial: '1 special character', met: '(met)', notMet: '(not met)', breach: "We also check that your password hasn't appeared in a known data breach." },
-      ar: { title: 'إنشاء حسابك', have: 'لديك حساب بالفعل؟', signIn: 'تسجيل الدخول', reqNote: 'جميع الحقول مطلوبة.', first: 'الاسم الأول', last: 'اسم العائلة', email: 'البريد الإلكتروني للعمل', org: 'اسم المؤسسة', pw: 'إنشاء كلمة مرور', confirm: 'تأكيد كلمة المرور', agreePre: 'أوافق على ', terms: 'الشروط', and: ' و', eval: 'اتفاقية التقييم', agreePost: '', create: 'إنشاء الحساب', creating: 'جارٍ إنشاء حسابك…', takenTitle: 'يوجد حساب بالفعل لهذا البريد الإلكتروني', takenBody: 'سجّل الدخول بدلاً من ذلك، أو أعِد تعيين كلمة المرور إن لم تتذكرها.', termsErr: 'وافق على الشروط واتفاقية التقييم للمتابعة.', rLower: 'حرف صغير (a–z)', rUpper: 'حرف كبير (A–Z)', rNumber: 'رقم واحد', rLength: '8–64 حرفًا', rSpecial: 'رمز خاص واحد', met: '(مستوفى)', notMet: '(غير مستوفى)', breach: 'نتحقق أيضًا من أن كلمة المرور لم تظهر في أي تسريب بيانات معروف.' },
-      ja: { title: 'アカウントを作成', have: 'すでにアカウントをお持ちですか？', signIn: 'サインイン', reqNote: 'すべての項目が必須です。', first: '名', last: '姓', email: '仕事用メールアドレス', org: '組織名', pw: 'パスワードを作成', confirm: 'パスワードの確認', agreePre: '', terms: '利用規約', and: 'と', eval: '評価契約', agreePost: 'に同意します', create: 'アカウントを作成', creating: 'アカウントを作成しています…', takenTitle: 'このメールアドレスのアカウントはすでに存在します', takenBody: '代わりにサインインするか、パスワードを忘れた場合はリセットしてください。', termsErr: '続行するには、利用規約と評価契約に同意してください。', rLower: '小文字 1 文字', rUpper: '大文字 1 文字', rNumber: '数字 1 文字', rLength: '8～64 文字', rSpecial: '記号 1 文字', met: '（条件を満たしています）', notMet: '（条件を満たしていません）', breach: 'パスワードが既知のデータ侵害で流出していないかも確認します。' }
+      en: { title: 'Create your account', have: 'Already have an account?', signIn: 'Sign in', first: 'First name', last: 'Last name', email: 'Work email', org: 'Organization name', pw: 'Create password', confirm: 'Confirm password', agreePre: 'I agree to the ', terms: 'Terms', and: ' and the ', eval: 'Evaluation Agreement', agreePost: '', create: 'Create account', creating: 'Creating your account…', takenTitle: 'An account already exists for this email', takenBody: "Sign in instead, or reset your password if you can't remember it.", termsErr: 'Accept the Terms and the Evaluation Agreement to continue.', rLower: '1 lowercase letter', rUpper: '1 uppercase letter', rNumber: '1 number', rLength: '8–64 characters', rSpecial: '1 special character', met: '(met)', notMet: '(not met)', breach: "We also check that your password hasn't appeared in a known data breach." },
+      ar: { title: 'إنشاء حسابك', have: 'لديك حساب بالفعل؟', signIn: 'تسجيل الدخول', first: 'الاسم الأول', last: 'اسم العائلة', email: 'البريد الإلكتروني للعمل', org: 'اسم المؤسسة', pw: 'إنشاء كلمة مرور', confirm: 'تأكيد كلمة المرور', agreePre: 'أوافق على ', terms: 'الشروط', and: ' و', eval: 'اتفاقية التقييم', agreePost: '', create: 'إنشاء الحساب', creating: 'جارٍ إنشاء حسابك…', takenTitle: 'يوجد حساب بالفعل لهذا البريد الإلكتروني', takenBody: 'سجّل الدخول بدلاً من ذلك، أو أعِد تعيين كلمة المرور إن لم تتذكرها.', termsErr: 'وافق على الشروط واتفاقية التقييم للمتابعة.', rLower: 'حرف صغير (a–z)', rUpper: 'حرف كبير (A–Z)', rNumber: 'رقم واحد', rLength: '8–64 حرفًا', rSpecial: 'رمز خاص واحد', met: '(مستوفى)', notMet: '(غير مستوفى)', breach: 'نتحقق أيضًا من أن كلمة المرور لم تظهر في أي تسريب بيانات معروف.' },
+      ja: { title: 'アカウントを作成', have: 'すでにアカウントをお持ちですか？', signIn: 'サインイン', first: '名', last: '姓', email: '仕事用メールアドレス', org: '組織名', pw: 'パスワードを作成', confirm: 'パスワードの確認', agreePre: '', terms: '利用規約', and: 'と', eval: '評価契約', agreePost: 'に同意します', create: 'アカウントを作成', creating: 'アカウントを作成しています…', takenTitle: 'このメールアドレスのアカウントはすでに存在します', takenBody: '代わりにサインインするか、パスワードを忘れた場合はリセットしてください。', termsErr: '続行するには、利用規約と評価契約に同意してください。', rLower: '小文字 1 文字', rUpper: '大文字 1 文字', rNumber: '数字 1 文字', rLength: '8～64 文字', rSpecial: '記号 1 文字', met: '（条件を満たしています）', notMet: '（条件を満たしていません）', breach: 'パスワードが既知のデータ侵害で流出していないかも確認します。' }
     };
     const PH = {
       en: { phFirst: 'Enter your first name', phLast: 'Enter your last name', phOrg: 'Enter your organization name', phPassword: 'Enter your password', phNewPw: 'Create a password', phConfirm: 'Re-enter your password' },
@@ -193,6 +206,11 @@ class Component extends DCLogic {
       en: { reqErr: 'This field is required.', emailErr: 'Enter an email address like name@company.com.', pwReq: 'Enter your password.', codeLength: 'Enter the 6-digit code from your app.', weakErr: "This password doesn't meet all the rules below.", breachedErr: 'This password has appeared in a known data breach. Choose a different one.' },
       ar: { reqErr: 'هذا الحقل مطلوب.', emailErr: 'أدخل عنوان بريد إلكتروني مثل name@company.com.', pwReq: 'أدخل كلمة المرور.', codeLength: 'أدخل الرمز المكوّن من 6 أرقام من تطبيقك.', weakErr: 'كلمة المرور هذه لا تستوفي جميع القواعد أدناه.', breachedErr: 'ظهرت كلمة المرور هذه في تسريب بيانات معروف. اختر كلمة مرور مختلفة.' },
       ja: { reqErr: 'この項目は必須です。', emailErr: 'name@company.com のような形式でメールアドレスを入力してください。', pwReq: 'パスワードを入力してください。', codeLength: 'アプリに表示される 6 桁のコードを入力してください。', weakErr: 'このパスワードは下記の条件をすべて満たしていません。', breachedErr: 'このパスワードは既知のデータ漏えいで見つかっています。別のパスワードを選んでください。' }
+    };
+    const summaryCopy = {
+      en: { errorsTitle: "We couldn't create your account", termsLabel: 'Terms and Evaluation Agreement', fix: (n) => 'Fix ' + n + ' fields to continue:' },
+      ar: { errorsTitle: 'تعذّر علينا إنشاء حسابك', termsLabel: 'الشروط واتفاقية التقييم', fix: (n) => 'صحّح ' + n + ' حقول للمتابعة:' },
+      ja: { errorsTitle: 'アカウントを作成できませんでした', termsLabel: '利用規約と評価契約', fix: (n) => n + ' 件の項目を修正してください:' }
     };
     const lang = this.state.lang;
     const t = Object.assign({}, C[lang], P[lang], PH[lang], M[lang]);
@@ -232,7 +250,18 @@ class Component extends DCLogic {
       v: filled ? { first: 'Maya', last: 'Chen', email: 'maya.chen@company.com', org: '[Organization]', pw: breached ? 'Password123!' : 'Horse-battery-7' } : { first: '', last: '', email: '', org: '', pw: '' },
       e: { first: required, last: required, email: required, org: required, pw: required || breached },
       b: { first: E(required), last: E(required), org: E(required), pw: E(required || breached) },
-      r: { first: required ? RING : '0', pw: breached ? RING : '0', terms: sc === 'termsNotAccepted' ? RING : '0' },
+      // Several errors (required): focus is on the summary banner, so no field shows the ring.
+      r: { first: '0', pw: breached ? RING : '0', terms: sc === 'termsNotAccepted' ? RING : '0' },
+      summary: (() => {
+        const s = summaryCopy[lang];
+        const names = lang === 'ja' ? ['last', 'first'] : ['first', 'last'];
+        const items = required
+          ? names.map((k) => ({ href: '#su-' + k, label: t[k] })).concat([
+              { href: '#su-email', label: t.email }, { href: '#su-org', label: t.org }, { href: '#su-pw', label: t.pw }
+            ], this.state.agreed ? [] : [{ href: '#su-terms', label: s.termsLabel }])
+          : [];
+        return { show: items.length > 1, items, title: s.errorsTitle, body: s.fix(items.length), ring: items.length > 1 ? RING : '0' };
+      })(),
       pwErrText: breached ? t.breachedErr : t.weakErr,
       emailInvalid: taken || required,
       emailBorder: taken || required ? 'var(--err-border)' : 'var(--input)',

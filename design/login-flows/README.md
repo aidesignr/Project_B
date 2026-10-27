@@ -13,7 +13,9 @@ These files are design source, not production code. Each `.dc.html` board loads 
 - Controls are compact: 32px inputs and buttons, 24px icon buttons, 40px code inputs.
 - Every empty input shows a placeholder (for example "Enter your first name", "Create a password").
 - Field error messages and the password rules use 12/16 text (12/20 in Arabic and Japanese, D-067).
-- Error states show a focus ring on the first invalid field: where focus lands after a failed submit (09).
+- Required fields show a red asterisk after the label, required checkboxes included; there's no "All fields are required" note (D-075).
+- Spacing is compact: 4px from label to field to message, 12px between fields, 16px before the submit button, 24px between the name columns (D-075).
+- Error states show the focus ring where focus lands after a failed submit (09): on the field when one field fails, or on the summary banner when several do. The banner sits first in the form, lists each field as a link and says how many to fix (`E5-SignUp-RequiredFields`, D-075).
 - Weak and breached passwords get one field error each: "This password doesn't meet all the rules below." and "This password has appeared in a known data breach. Choose a different one." (D-068).
 - Password rules show in 2 columns, one line each: 8–64 characters, plus 1 lowercase, 1 uppercase, 1 number and 1 special character. Reset and invite add a note that we also check for breached passwords (D-047); sign-up leaves it out (D-052).
 - The invite authenticator step numbers its instructions and shows a demo setup key; the recovery-codes step shows 10 demo codes. Code (`src/lib/auth.ts`) uses the same values.
