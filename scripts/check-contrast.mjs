@@ -51,6 +51,7 @@ const rules = [
   ["sidebar-accent-foreground", ["sidebar-accent"], TEXT, "text"],
   ["sidebar-primary-foreground", ["sidebar-primary"], TEXT, "text"],
   ["link", SURFACES, TEXT, "text"],
+  ["foreground", Array.from({ length: 8 }, (_, i) => `avatar-${i + 1}`), TEXT, "text"],
   ["chart-label", ["chart-surface"], TEXT, "text"],
   ["graph-node-foreground", ["graph-node"], TEXT, "text"],
   ["primary", ["background", "card", "popover"], UI, "ui"],

@@ -40,7 +40,19 @@ export const MAP = {
   "shadcn colors/sidebar/sidebar accent foreground": "sidebar-accent-foreground",
   "shadcn colors/sidebar/sidebar border": "sidebar-border",
   "shadcn colors/sidebar/sidebar ring": "sidebar-ring",
+  // AccuKnox additions (not in the Obra kit): created by the sync script if missing.
+  "shadcn colors/accuknox/avatar 1": "avatar-1",
+  "shadcn colors/accuknox/avatar 2": "avatar-2",
+  "shadcn colors/accuknox/avatar 3": "avatar-3",
+  "shadcn colors/accuknox/avatar 4": "avatar-4",
+  "shadcn colors/accuknox/avatar 5": "avatar-5",
+  "shadcn colors/accuknox/avatar 6": "avatar-6",
+  "shadcn colors/accuknox/avatar 7": "avatar-7",
+  "shadcn colors/accuknox/avatar 8": "avatar-8",
 };
+
+/** Variables the sync script may create; every other name must already exist in the kit. */
+export const CREATABLE_PREFIX = "shadcn colors/accuknox/";
 
 // Expected Figma values: { "<variable name>": { light: "#rrggbb", dark: "#rrggbb" } }
 export function expectedValues() {

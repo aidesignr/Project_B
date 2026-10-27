@@ -29,6 +29,7 @@ export function FilterDropdown({
   onChange,
   onRemove,
   defaultOpen = false,
+  label: labelProp,
   field,
 }: {
   def: FilterDef;
@@ -36,6 +37,8 @@ export function FilterDropdown({
   onChange: (next: FilterState) => void;
   onRemove?: () => void;
   defaultOpen?: boolean;
+  /** Filter name; defaults to `findings.filter.<id>`. */
+  label?: string;
   /**
    * Form-field mode (report configuration, D-072): a full-width trigger under a visible label,
    * with a placeholder, `aria-invalid` and the field error linked by `aria-describedby`. No operator. A required
@@ -51,7 +54,7 @@ export function FilterDropdown({
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const listId = useId();
 
-  const label = field?.label ?? t(`findings.filter.${def.id}`);
+  const label = field?.label ?? labelProp ?? t(`findings.filter.${def.id}`);
   const ariaName = field?.required ? t("forms.requiredLabel", { label }) : label;
   const nameOf = (v: FilterValue) => (v.labelKey ? t(v.labelKey) : (v.label ?? v.id));
   const all = useMemo(() => leaves(def, value.custom), [def, value.custom]);

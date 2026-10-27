@@ -49,7 +49,7 @@ export const MODULES: readonly ModuleDef[] = [
   { id: "compliance", path: "/compliance", icon: ShieldCheckIcon, group: "main", subs: [] },
   { id: "policies", path: "/policies", icon: FileLockIcon, group: "main", subs: [] },
   { id: "workloads", path: "/workloads", icon: BoxesIcon, group: "main", subs: subs("workloads", ["graph", "policies"]) },
-  { id: "xbom", path: "/xbom", icon: LayersIcon, group: "main", subs: subs("xbom", ["dashboard", "findings"]) },
+  { id: "xbom", path: "/xbom", icon: LayersIcon, group: "main", subs: subs("xbom", ["dashboard", "projects", "findings"]) },
   { id: "aiml", path: "/aiml", icon: BrainCircuitIcon, group: "main", subs: subs("aiml", ["dashboard", "assets", "rt-policies", "prompt-firewall"]) },
   { id: "reports", path: "/reports", icon: FileChartColumnIcon, group: "main", subs: [] },
   { id: "settings", path: "/settings", icon: SettingsIcon, group: "admin", subs: [] },

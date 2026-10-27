@@ -120,7 +120,7 @@ export function FindingsTable({
 
   return (
     <div className="overflow-x-auto">
-      <table data-slot="findings-table" className="w-full min-w-280 table-fixed border-collapse text-sm">
+      <table data-slot="findings-table" className="w-full min-w-280 table-fixed border-collapse text-table">
         <caption className="sr-only">{t("findings.table.caption")}</caption>
         <thead>
           <tr className="h-9 border-b border-border text-xs font-medium text-muted-foreground">
@@ -201,7 +201,20 @@ function RowActions({ name, compact }: { name: string; compact: boolean }) {
 }
 
 /** Show, hide and reorder columns. Drag handles are visual; Move up/down is the keyboard and pointer alternative (WCAG 2.5.7). */
-export function ColumnsMenu({ columns, onChange, defaultOpen }: { columns: ColumnState[]; onChange: (c: ColumnState[]) => void; defaultOpen?: boolean }) {
+export function ColumnsMenu<C extends string = ColumnId>({
+  columns,
+  onChange,
+  defaultOpen,
+  defs = COLUMNS as unknown as { id: C; locked?: boolean }[],
+  labelOf,
+}: {
+  columns: { id: C; visible: boolean }[];
+  onChange: (c: { id: C; visible: boolean }[]) => void;
+  defaultOpen?: boolean;
+  /** Column definitions for another table; defaults to the Findings columns. */
+  defs?: { id: C; locked?: boolean }[];
+  labelOf?: (id: C) => string;
+}) {
   const t = useT();
   const move = (i: number, d: number) => {
     const next = columns.slice();
@@ -217,8 +230,8 @@ export function ColumnsMenu({ columns, onChange, defaultOpen }: { columns: Colum
         <p className="px-1 pb-1 text-xs font-medium text-muted-foreground">{t("findings.columns.hint")}</p>
         <ul className="flex flex-col gap-1">
           {columns.map((c, i) => {
-            const locked = !!COLUMNS.find((d) => d.id === c.id)?.locked;
-            const name = t(`findings.column.${c.id}`);
+            const locked = !!defs.find((d) => d.id === c.id)?.locked;
+            const name = labelOf ? labelOf(c.id) : t(`findings.column.${c.id}`);
             const id = `col-${c.id}`;
             return (
               <li key={c.id} className="flex h-8 items-center gap-1 rounded-sm ps-1 hover:bg-accent">
@@ -233,7 +246,7 @@ export function ColumnsMenu({ columns, onChange, defaultOpen }: { columns: Colum
           })}
         </ul>
         <div className="my-1 h-px bg-border" />
-        <Button variant="link" size="sm" className="self-start px-1" onClick={() => onChange(COLUMNS.map((c) => ({ id: c.id, visible: true })))}>{t("findings.columns.reset")}</Button>
+        <Button variant="link" size="sm" className="self-start px-1" onClick={() => onChange(defs.map((c) => ({ id: c.id, visible: true })))}>{t("findings.columns.reset")}</Button>
       </PopoverContent>
     </Popover>
   );
@@ -251,7 +264,8 @@ export function Pagination({ page, pageSize, total, onPage, onPageSize }: { page
   const start = total ? (page - 1) * pageSize + 1 : 0;
   const end = Math.min(page * pageSize, total);
   return (
-    <div data-slot="pagination" className="flex min-h-12 flex-wrap items-center gap-4 border-t border-border px-3 py-2">
+    // Table text (12/16, 12/20 in ar/ja) on the labels, select and page buttons; controls stay 32px (D-070).
+    <div data-slot="pagination" className="flex min-h-12 flex-wrap items-center gap-4 border-t border-border px-3 py-2 text-table [&_[data-slot=button]]:text-table [&_[data-slot=select-trigger]]:text-table">
       <div className="flex items-center gap-2">
         <span id="rows-per-page" className="text-muted-foreground">{t("findings.pagination.rowsPerPage")}</span>
         <Select value={String(pageSize)} onValueChange={(v) => onPageSize(Number(v))}>

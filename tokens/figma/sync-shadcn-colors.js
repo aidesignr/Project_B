@@ -108,6 +108,38 @@ const VALUES = {
   "shadcn colors/sidebar/sidebar ring": {
     "light": "#1565d8",
     "dark": "#4d94ff"
+  },
+  "shadcn colors/accuknox/avatar 1": {
+    "light": "#ccdff5",
+    "dark": "#1e3c64"
+  },
+  "shadcn colors/accuknox/avatar 2": {
+    "light": "#fadbce",
+    "dark": "#512d27"
+  },
+  "shadcn colors/accuknox/avatar 3": {
+    "light": "#c8ecdf",
+    "dark": "#14433e"
+  },
+  "shadcn colors/accuknox/avatar 4": {
+    "light": "#fbe8c2",
+    "dark": "#4c3b1b"
+  },
+  "shadcn colors/accuknox/avatar 5": {
+    "light": "#f9dfe9",
+    "dark": "#502a44"
+  },
+  "shadcn colors/accuknox/avatar 6": {
+    "light": "#c2e1c2",
+    "dark": "#0c3a1b"
+  },
+  "shadcn colors/accuknox/avatar 7": {
+    "light": "#d9d5f5",
+    "dark": "#3a3b65"
+  },
+  "shadcn colors/accuknox/avatar 8": {
+    "light": "#f8d3d3",
+    "dark": "#55313b"
   }
 };
 const MODES = {"shadcn":"light","shadcn-dark":"dark"};
@@ -118,10 +150,20 @@ if (!modeIds.light || !modeIds.dark) throw new Error("Expected modes " + Object.
 const rgb = (h) => ({ r: parseInt(h.slice(1, 3), 16) / 255, g: parseInt(h.slice(3, 5), 16) / 255, b: parseInt(h.slice(5, 7), 16) / 255, a: 1 });
 const vars = await Promise.all(col.variableIds.map((id) => figma.variables.getVariableByIdAsync(id)));
 const byName = Object.fromEntries(vars.map((v) => [v.name, v]));
-const missing = Object.keys(VALUES).filter((n) => !byName[n]);
+// AccuKnox additions are created on first sync (fill scopes, like the kit's card and muted); kit variables must exist.
+const CREATABLE = "shadcn colors/accuknox/";
+const missing = Object.keys(VALUES).filter((n) => !byName[n] && !n.startsWith(CREATABLE));
 if (missing.length) throw new Error("Variables not found: " + missing.join(", "));
+let created = 0;
+for (const name of Object.keys(VALUES).filter((n) => !byName[n])) {
+  const v = figma.variables.createVariable(name, col, "COLOR");
+  v.scopes = ["FRAME_FILL", "SHAPE_FILL"];
+  if (name.includes("/avatar ")) v.description = "AccuKnox avatar tint (D-070): initials in foreground; decorative, never severity or chart.";
+  byName[name] = v;
+  created++;
+}
 let updated = 0;
 for (const [name, theme] of Object.entries(VALUES)) {
   for (const t of ["light", "dark"]) { byName[name].setValueForMode(modeIds[t], rgb(theme[t])); updated++; }
 }
-return { collection: col.name, variables: Object.keys(VALUES).length, valuesSet: updated };
+return { collection: col.name, variables: Object.keys(VALUES).length, created, valuesSet: updated };

@@ -200,6 +200,15 @@
   --chart-6: #008300;
   --chart-7: #9085e9;
   --chart-8: #e66767;
+  /* avatar tints: chart-1..8 hues mixed into card, 32% (D-070); initials in foreground, decorative only */
+  --avatar-1: #1e3c64;
+  --avatar-2: #512d27;
+  --avatar-3: #14433e;
+  --avatar-4: #4c3b1b;
+  --avatar-5: #502a44;
+  --avatar-6: #0c3a1b;
+  --avatar-7: #3a3b65;
+  --avatar-8: #55313b;
   /* sequential (magnitude), low → high; dark mode: high values are brighter */
   --chart-seq-1: #184f95;
   --chart-seq-2: #1c5cab;
@@ -348,6 +357,15 @@
   --chart-6: #008300;
   --chart-7: #6250d6;
   --chart-8: #e34948;
+  /* avatar tints: chart-1..8 hues mixed into card, 24% (D-070); initials in foreground, decorative only */
+  --avatar-1: #ccdff5;
+  --avatar-2: #fadbce;
+  --avatar-3: #c8ecdf;
+  --avatar-4: #fbe8c2;
+  --avatar-5: #f9dfe9;
+  --avatar-6: #c2e1c2;
+  --avatar-7: #d9d5f5;
+  --avatar-8: #f8d3d3;
   --chart-seq-1: #b7d3f6;
   --chart-seq-2: #86b6ef;
   --chart-seq-3: #5598e7;
