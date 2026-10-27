@@ -195,7 +195,14 @@ export function XbomProjectsPage({ preset = {} }: { preset?: ProjectsPreset }) {
         ) : (
           <>
             <ProjectsTable rows={pageRows} columns={columns} sort={sort} onSort={(s) => { setSort(s); setPage(1); }} selected={selected} onSelected={setSelected} compact={compact} />
-            <Pagination page={current} pageSize={pageSize} total={rows.length} onPage={setPage} onPageSize={(n) => { setPageSize(n); setPage(1); }} />
+            <Pagination
+              page={current}
+              pageSize={pageSize}
+              total={rows.length}
+              onPage={setPage}
+              onPageSize={(n) => { setPageSize(n); setPage(1); }}
+              className="text-table [&_[data-slot=button]]:text-table [&_[data-slot=select-trigger]]:text-table"
+            />
           </>
         )}
       </section>

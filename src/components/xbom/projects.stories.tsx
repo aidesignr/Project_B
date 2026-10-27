@@ -34,8 +34,12 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const c = within(canvasElement);
     await expect(c.getByRole("table")).toBeInTheDocument();
-    await expect(c.getAllByRole("row")).toHaveLength(11);
+    // 36 mock projects: 25 on page 1 (plus the header row), 11 on page 2 (D-070).
+    await expect(c.getAllByRole("row")).toHaveLength(26);
     await expect(c.getByRole("button", { name: msg("xbom.projects.add") })).toBeInTheDocument();
+    await userEvent.click(c.getByRole("button", { name: msg("findings.pagination.next") }));
+    await expect(c.getAllByRole("row")).toHaveLength(12);
+    await userEvent.click(c.getByRole("button", { name: msg("findings.pagination.first") }));
     // Project name sorts ascending by default; a click reverses it.
     const nameHeader = c.getByRole("columnheader", { name: msg("xbom.projects.column.name") });
     await expect(nameHeader).toHaveAttribute("aria-sort", "ascending");
@@ -62,7 +66,7 @@ export const FiltersApplied: Story = {
   render: () => <Page preset={{ filters: { classifier: { selected: ["application", "container"] }, tags: { selected: ["production"] } }, open: "classifier" }} />,
   play: async ({ canvasElement }) => {
     await body().findByRole("dialog", { name: msg("findings.filter.dialog", { label: msg("xbom.projects.filter.classifier") }) });
-    await expect(within(canvasElement).getAllByRole("row")).toHaveLength(5);
+    await expect(within(canvasElement).getAllByRole("row")).toHaveLength(9);
   },
 };
 

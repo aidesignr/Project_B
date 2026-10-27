@@ -255,7 +255,7 @@ export function ColumnsMenu<C extends string = ColumnId>({
 export const PAGE_SIZES = [25, 50, 100];
 
 /** Rows per page, range, and page buttons with gaps (first, last, current ±1). */
-export function Pagination({ page, pageSize, total, onPage, onPageSize }: { page: number; pageSize: number; total: number; onPage: (p: number) => void; onPageSize: (n: number) => void }) {
+export function Pagination({ page, pageSize, total, onPage, onPageSize, className }: { page: number; pageSize: number; total: number; onPage: (p: number) => void; onPageSize: (n: number) => void; className?: string }) {
   const t = useT();
   const intl = useIntl();
   const pages = Math.max(1, Math.ceil(total / pageSize));
@@ -264,7 +264,7 @@ export function Pagination({ page, pageSize, total, onPage, onPageSize }: { page
   const start = total ? (page - 1) * pageSize + 1 : 0;
   const end = Math.min(page * pageSize, total);
   return (
-    <div data-slot="pagination" className="flex min-h-12 flex-wrap items-center gap-4 border-t border-border px-3 py-2">
+    <div data-slot="pagination" className={cn("flex min-h-12 flex-wrap items-center gap-4 border-t border-border px-3 py-2", className)}>
       <div className="flex items-center gap-2">
         <span id="rows-per-page" className="text-muted-foreground">{t("findings.pagination.rowsPerPage")}</span>
         <Select value={String(pageSize)} onValueChange={(v) => onPageSize(Number(v))}>

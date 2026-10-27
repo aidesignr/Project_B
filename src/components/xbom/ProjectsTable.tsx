@@ -1,10 +1,23 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useIntl } from "react-intl";
 import {
+  AppWindowIcon,
   ArrowDownIcon,
   ArrowUpDownIcon,
   ArrowUpIcon,
+  BrainCircuitIcon,
+  CircleHelpIcon,
+  CircuitBoardIcon,
+  ContainerIcon,
+  CpuIcon,
+  DatabaseIcon,
   DownloadIcon,
+  FileIcon,
+  LayersIcon,
+  LibraryIcon,
+  MonitorIcon,
+  ServerIcon,
+  type LucideIcon,
   EllipsisIcon,
   EyeIcon,
   PencilIcon,
@@ -26,7 +39,32 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { PROJECT_COLUMNS, type Project, type ProjectColumnId } from "./data";
+import { PROJECT_COLUMNS, type Classifier, type Project, type ProjectColumnId } from "./data";
+
+/** One icon per classifier value, `muted-foreground`, label always shown (11 §6, D-070). */
+export const CLASSIFIER_ICON: Record<Classifier, LucideIcon> = {
+  application: AppWindowIcon,
+  framework: LayersIcon,
+  library: LibraryIcon,
+  container: ContainerIcon,
+  platform: ServerIcon,
+  operatingSystem: MonitorIcon,
+  device: CpuIcon,
+  firmware: CircuitBoardIcon,
+  file: FileIcon,
+  mlModel: BrainCircuitIcon,
+  data: DatabaseIcon,
+};
+
+/** Avatar tints (11 §6, D-070). Listed in full so Tailwind generates each class. */
+const AVATAR_TINTS = ["bg-avatar-1", "bg-avatar-2", "bg-avatar-3", "bg-avatar-4", "bg-avatar-5", "bg-avatar-6", "bg-avatar-7", "bg-avatar-8"];
+
+/** Stable tint per person: the same key always lands on the same colour. Mock rows key on the name until owners have IDs. */
+export const avatarTint = (key: string) => {
+  let h = 0;
+  for (const ch of key) h = (h * 31 + ch.codePointAt(0)!) >>> 0;
+  return AVATAR_TINTS[h % AVATAR_TINTS.length];
+};
 
 export type ProjectSort = { column: ProjectColumnId; dir: "asc" | "desc" };
 export type ProjectColumnState = { id: ProjectColumnId; visible: boolean };
@@ -64,8 +102,15 @@ export function ProjectsTable({
     switch (id) {
       case "name":
         return <a href="#main-content" className="block truncate rounded-sm font-medium text-link no-underline underline-offset-4 outline-none hover:underline focus-visible:outline-2 focus-visible:outline-ring"><bdi>{p.name}</bdi></a>;
-      case "classifier":
-        return <span className="inline-block h-5 max-w-full truncate rounded-sm bg-muted px-1 align-middle text-xs leading-5 font-medium text-foreground">{t(`xbom.classifier.${p.classifier}`)}</span>;
+      case "classifier": {
+        const Icon = CLASSIFIER_ICON[p.classifier] ?? CircleHelpIcon;
+        return (
+          <span className="inline-flex min-w-0 max-w-full items-center gap-1">
+            <Icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+            <span className="truncate">{t(`xbom.classifier.${p.classifier}`)}</span>
+          </span>
+        );
+      }
       case "tags": {
         const rest = p.tags.slice(2);
         return (
@@ -99,7 +144,7 @@ export function ProjectsTable({
       case "owner":
         return (
           <span className="flex min-w-0 items-center gap-2">
-            <span aria-hidden className="grid size-6 shrink-0 place-items-center rounded-full border border-control-border bg-muted text-xs font-medium">{initials(p.owner)}</span>
+            <span aria-hidden className={cn("grid size-6 shrink-0 place-items-center rounded-full text-table font-medium text-foreground", avatarTint(p.owner))}>{initials(p.owner)}</span>
             <span className="truncate">{p.owner}</span>
           </span>
         );
@@ -117,7 +162,7 @@ export function ProjectsTable({
 
   return (
     <div className="overflow-x-auto">
-      <table data-slot="projects-table" className="w-full min-w-240 table-fixed border-collapse text-sm">
+      <table data-slot="projects-table" className="w-full min-w-240 table-fixed border-collapse text-table">
         <caption className="sr-only">{t("xbom.projects.caption")}</caption>
         <thead>
           <tr className="h-9 border-b border-border text-xs font-medium text-muted-foreground">

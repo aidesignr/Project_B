@@ -115,7 +115,7 @@ Placed in one row with the result count: the count at inline-start, the actions 
 
 12px is the smallest step in the kit scale; nothing in a table goes below it (the D-061 steps stay reserved for notification cards). Contrast doesn't change: cells keep `foreground` and `muted-foreground`.
 
-**Mismatch:** `FindingsTable.tsx` sets `text-sm` (14/20) on the table. Proposed fix: a `text-table` step in `tokens/theme.css` (12/16, 12/20 in ar/ja, like `text-form-msg` in D-067) on the `<table>` and the pagination row, with Storybook updated in the same PR. Code is not changed in this doc's PR.
+**Mismatch:** `FindingsTable.tsx` still sets `text-sm` (14/20) on the table. The `text-table` step (12/16, 12/20 in ar/ja, like `text-form-msg` in D-067) is now in `tokens/theme.css` and used by the xBOM Projects table and its pagination (`Pagination` takes a `className`). Proposed fix: put `text-table` on the Findings `<table>` and pagination row, with Storybook updated in the same PR.
 
 ### Classifier icons
 
@@ -172,7 +172,7 @@ xBOM Classifier (CycloneDX component types), used on the xBOM Projects board:
 | `avatar-7` | `#3a3b65` | `#d9d5f5` |
 | `avatar-8` | `#55313b` | `#f8d3d3` |
 
-[open: the `avatar-*` tokens exist on the canvas only. Adding them to `tokens/tokens.css` needs `check-contrast` and the Figma sync (D-048).]
+The `avatar-*` tokens are in `tokens/tokens.css` and `check-contrast` covers initials on each tint. Code: `avatarTint()` in [ProjectsTable.tsx](../../src/components/xbom/ProjectsTable.tsx) (mock rows hash the name until owners have IDs). [open: the tokens aren't in the obra-ds Figma library yet (D-048 sync); `check-figma-drift` only compares the shadcn colour set, so it doesn't catch this.]
 
 ## 7. Links
 
@@ -280,8 +280,8 @@ Only on tables with bulk actions (principle 6). The Findings table has them.
 | Severity cell | `severity-*-foreground` (muted rows: `muted-foreground`) |
 | Status cell | `status-open-foreground`, `status-in-progress-foreground`; Resolved and Ignored `muted-foreground` |
 | Icon placeholders, classifier icons | `muted-foreground` |
-| Avatars | `avatar-1` … `avatar-8` (tint), `foreground` (initials) [open: not in `tokens.css` yet] |
-| Table text | `text-table` 12/16, 12/20 in ar/ja [open: not in `theme.css` yet; code uses `text-sm`] |
+| Avatars | `avatar-1` … `avatar-8` (tint), `foreground` (initials) [open: not in Figma yet] |
+| Table text | `text-table` 12/16, 12/20 in ar/ja (xBOM Projects; Findings still uses `text-sm`) |
 | Links | `text-link` |
 | Current page | `text-link`, `bg-info-muted`, ring `primary` |
 | Bulk bar | `bg-popover`, `border-border`, `shadow-3`, `rounded-xl` |
@@ -297,7 +297,7 @@ Only on tables with bulk actions (principle 6). The Findings table has them.
 | Realistic | Rows use plausible names and values from the product domain, never lorem ipsum. Every classifier value and several owners appear, so icons and avatar tints can be checked |
 | Seeded | Generated rows use a fixed seed, so screenshots and reviews match from run to run |
 | State boards | Loading, empty, no-results and error boards still show their state; the 30-row rule covers the default and selected boards |
-| Today | Findings: 400 seeded findings (code and canvas). xBOM Projects canvas: 36 projects across all 11 classifiers and 12 owners (was 10) |
+| Today | Findings: 400 seeded findings (code and canvas). xBOM Projects: 36 projects across all 11 classifiers and 12 owners, in the canvas and in code |
 
 - Rows come from 400 seeded mock findings until the findings API is wired (D-065).
 - The table has a minimum width of 1120px and scrolls horizontally inside its card when narrower.
