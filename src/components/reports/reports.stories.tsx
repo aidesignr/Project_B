@@ -7,7 +7,7 @@ import { ReportConfigPage } from "@/routes/ReportConfigPage";
 import type { ReportPreset } from "./ReportForm";
 
 /**
- * Reports › Templates › CSPM cloud misconfiguration (canvas "Report configuration"; D-067, D-068).
+ * Reports › Templates › CSPM cloud misconfiguration (canvas "Report configuration"; D-071, D-072).
  * Scope fields reuse the Findings filter dropdown; validation follows the login flow.
  */
 const meta: Meta = {

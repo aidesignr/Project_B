@@ -55,14 +55,14 @@ On a conflict: flag it → state the trade-off → propose a fix → add an entr
 - Marks below 3:1 (light: severity medium/info, chart-3/4/5) need visible labels or the table view.
 - Ranked list first; the attack-path graph opens from a finding and always has a list view.
 
-### Forms (D-067)
+### Forms (D-071, D-073; full rules in `09-form-validation.md`, open conflicts with the login forms in D-074)
 - Required fields: label followed by a red asterisk (`*` in `text-error-foreground`, `aria-hidden`). The control carries `required` / `aria-required`; screen readers never rely on the asterisk.
 - Every input, textarea and select trigger has placeholder text in `text-muted-foreground` (e.g. "name@company.com", "Select accounts"). A placeholder is an example or prompt, never the label and never the only instruction.
 - Validation follows the login flow (`FieldError` in `src/components/auth/parts.tsx`): on submit, each invalid field gets `aria-invalid` (border → `error-border`) and an error message directly below it: icon + 12px text in `error-foreground`, linked with `aria-describedby`. Message says what's wrong and how to fix it.
 - More than one error after submit: one `ErrorBanner` above the form listing each problem, each linked to its field. Max one banner per page.
-- Focus and selection (D-069): every field (input, textarea, select or dropdown trigger, chips input, date picker) shows the same outer ring around the whole field box: 2px `ring`, 2px offset, on focus and while its popup is open. Inner parts (clear ×, chevron) draw no ring of their own.
-- Reset (D-069): a text link after Cancel. It clears every field to empty so the placeholders show, clears errors and confirmations, and keeps mode switches (e.g. report type). It's reversible, so it shows "We cleared all fields." with Undo.
-- Spacing (D-069): compact. 12px between field rows, 24px between columns, 4px from label to control and from control to its error or help, 16px between form blocks (banner, type switch, fields, actions).
+- Focus and selection (D-073): every field (input, textarea, select or dropdown trigger, chips input, date picker) shows the same outer ring around the whole field box: 2px `ring`, 2px offset, on focus and while its popup is open. Inner parts (clear ×, chevron) draw no ring of their own.
+- Reset (D-073): a text link after Cancel. It clears every field to empty so the placeholders show, clears errors and confirmations, and keeps mode switches (e.g. report type). It's reversible, so it shows "We cleared all fields." with Undo.
+- Spacing (D-073): compact. 12px between field rows, 24px between columns, 4px from label to control and from control to its error or help, 16px between form blocks (banner, type switch, fields, actions).
 
 ### Copy
 - Calm, plain, confident.
@@ -121,5 +121,8 @@ Then complete `docs/design/review-checklist.md` in **dark + light**, **en + ar (
 | `06-content-and-tone.md` | Voice, banned list, patterns, destructive tiers, AI trust patterns, glossary |
 | `07-i18n-and-rtl.md` | react-intl setup, numerals, RTL mirroring, per-language type, locale formatting |
 | `08-accessibility.md` | Automated checks, contrast, keyboard, ARIA patterns, chart alternatives, motion, reflow |
+| `09-form-validation.md` | Field anatomy, when to validate, error copy, field vs page errors, form accessibility and RTL |
+| `10-filters.md` | Filter principles: static vs on-demand filters, dropdown anatomy, capability matrix, interactions, severity toggles, states, copy |
+| `11-tables.md` | Table principles: table actions, sorting, cell types with and without icons, links, row actions, selection and bulk bar, grouping, pagination, states |
 | `decision-log.md` | Every decision: reason, alternatives, date, status |
 | `review-checklist.md` | Pass/fail checks for any new screen or component |

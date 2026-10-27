@@ -1,4 +1,4 @@
-// Messages for report configuration (canvas "Report configuration") and shared form-field rules (D-067).
+// Messages for report configuration (canvas "Report configuration") and shared form-field rules (D-071).
 // Account names, tags, finding sources, times and UTC offsets are data and stay untranslated.
 import type { Locale } from "./locales";
 

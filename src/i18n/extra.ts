@@ -20,6 +20,13 @@ export const extraMessages: Record<Locale, Record<string, string>> = {
     "placeholder.password": "Enter your password",
     "placeholder.newPassword": "Create a password",
     "placeholder.confirmPassword": "Re-enter your password",
+    // Errors shared by several forms (09 · Forms and validation).
+    "common.emailErr": "Enter an email address like name@company.com.",
+    "common.passwordRequired": "Enter your password.",
+    "common.weakErr": "This password doesn't meet all the rules below.",
+    "common.mismatch": "Passwords don't match. Enter the same password in both fields.",
+    "common.codeLength": "Enter the 6-digit code from your app.",
+    "common.breachedErr": "This password has appeared in a known data breach. Choose a different one.",
   },
   ar: {
     "signUp.agree": "أوافق على <terms>الشروط</terms> و<eval>اتفاقية التقييم</eval>",
@@ -37,7 +44,13 @@ export const extraMessages: Record<Locale, Record<string, string>> = {
     "placeholder.password": "أدخل كلمة المرور",
     "placeholder.newPassword": "أنشئ كلمة مرور",
     "placeholder.confirmPassword": "أعد إدخال كلمة المرور",
-    // Isolate the numeric range so RTL layout doesn't reorder it to "64–8" (D-007: technical values stay LTR).
+    "common.emailErr": "أدخل عنوان بريد إلكتروني مثل name@company.com.",
+    "common.passwordRequired": "أدخل كلمة المرور.",
+    "common.weakErr": "كلمة المرور هذه لا تستوفي جميع القواعد أدناه.",
+    "common.mismatch": "كلمتا المرور غير متطابقتين. أدخل كلمة المرور نفسها في الحقلين.",
+    "common.codeLength": "أدخل الرمز المكوّن من 6 أرقام من تطبيقك.",
+    "common.breachedErr": "ظهرت كلمة المرور هذه في تسريب بيانات معروف. اختر كلمة مرور مختلفة.",
+    // Isolate the numeric range so RTL layout doesn't reorder it to "64–8" (D-011: technical values stay LTR).
     "signUp.rLength": "⁦8–64⁩ حرفًا",
     "invitePassword.rLength": "⁦8–64⁩ حرفًا",
     "resetPassword.rLength": "⁦8–64⁩ حرفًا",
@@ -58,5 +71,11 @@ export const extraMessages: Record<Locale, Record<string, string>> = {
     "placeholder.password": "パスワードを入力",
     "placeholder.newPassword": "パスワードを作成",
     "placeholder.confirmPassword": "パスワードを再入力",
+    "common.emailErr": "name@company.com のような形式でメールアドレスを入力してください。",
+    "common.passwordRequired": "パスワードを入力してください。",
+    "common.weakErr": "このパスワードは下記の条件をすべて満たしていません。",
+    "common.mismatch": "パスワードが一致しません。両方の欄に同じパスワードを入力してください。",
+    "common.codeLength": "アプリに表示される 6 桁のコードを入力してください。",
+    "common.breachedErr": "このパスワードは既知のデータ漏えいで見つかっています。別のパスワードを選んでください。",
   },
 };

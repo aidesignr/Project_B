@@ -4,7 +4,7 @@ import { KeyRoundIcon, MailIcon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { EMAIL_RE, requestPasswordReset } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { BackLink, ErrorBanner, FieldError, Heading, IconChip } from "@/components/auth/parts";
+import { BackLink, ErrorBanner, FieldError, Heading, IconChip, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,15 +14,16 @@ export function ForgotPassword() {
   const [params] = useSearchParams();
   const expired = params.get("expired") === "1";
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
+  const { formRef, focusFirstError } = useFocusFirstError();
+  const emailError = submitted && !EMAIL_RE.test(email);
 
   async function send(e?: FormEvent) {
     e?.preventDefault();
-    const bad = !EMAIL_RE.test(email);
-    setEmailError(bad);
-    if (bad) return;
+    setSubmitted(true);
+    if (!EMAIL_RE.test(email)) return focusFirstError();
     setBusy(true);
     await requestPasswordReset(email);
     setBusy(false);
@@ -53,7 +54,7 @@ export function ForgotPassword() {
         <Heading title={t("forgotPassword.title")}>{t("forgotPassword.body")}</Heading>
       </div>
       {expired && <ErrorBanner title={t("forgotPassword.expTitle")}>{t("forgotPassword.expBody")}</ErrorBanner>}
-      <form noValidate onSubmit={send} className="flex flex-col gap-4">
+      <form ref={formRef} noValidate onSubmit={send} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="email">{t("forgotPassword.email")}</Label>
           <Input
@@ -61,14 +62,15 @@ export function ForgotPassword() {
             type="email"
             autoComplete="username"
             placeholder="name@company.com"
+            aria-required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             aria-invalid={emailError}
             aria-describedby={emailError ? "email-error" : undefined}
           />
-          {emailError && <FieldError id="email-error">{t("signIn.emailErr")}</FieldError>}
+          {emailError && <FieldError id="email-error">{t("common.emailErr")}</FieldError>}
         </div>
-        <Button type="submit" disabled={busy}>{t("forgotPassword.send")}</Button>
+        <SubmitButton busy={busy}>{t("forgotPassword.send")}</SubmitButton>
       </form>
       <p className="text-sm text-muted-foreground">{t("forgotPassword.sso")}</p>
     </AuthLayout>

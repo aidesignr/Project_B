@@ -12,7 +12,9 @@ These files are design source, not production code. Each `.dc.html` board loads 
 - Every screen has a language switch (en, ar with RTL, ja) and a theme switch (Light, Dark, System).
 - Controls are compact: 32px inputs and buttons, 24px icon buttons, 40px code inputs.
 - Every empty input shows a placeholder (for example "Enter your first name", "Create a password").
-- Field error messages and the password rules use 12/16 text, the smallest step in the type scale.
+- Field error messages and the password rules use 12/16 text (12/20 in Arabic and Japanese, D-067).
+- Error states show a focus ring on the first invalid field: where focus lands after a failed submit (09).
+- Weak and breached passwords get one field error each: "This password doesn't meet all the rules below." and "This password has appeared in a known data breach. Choose a different one." (D-068).
 - Password rules show in 2 columns, one line each: 8–64 characters, plus 1 lowercase, 1 uppercase, 1 number and 1 special character. Reset and invite add a note that we also check for breached passwords (D-047); sign-up leaves it out (D-052).
 - The invite authenticator step numbers its instructions and shows a demo setup key; the recovery-codes step shows 10 demo codes. Code (`src/lib/auth.ts`) uses the same values.
 
@@ -20,11 +22,11 @@ These files are design source, not production code. Each `.dc.html` board loads 
 
 | Journey | Base screens | States and errors |
 |---|---|---|
-| J1 · Sign in (email, password, authenticator) | `OptionB-Split`, `Flow1-Authenticator` | `E1-SignIn-InvalidEmail`, `E1-SignIn-WrongCredentials`, `E1-SignIn-Locked`, `E1-Auth-WrongCode` |
+| J1 · Sign in (email, password, authenticator) | `OptionB-Split`, `Flow1-Authenticator` | `E1-SignIn-InvalidEmail`, `E1-SignIn-PasswordMissing`, `E1-SignIn-WrongCredentials`, `E1-SignIn-Locked`, `E1-Auth-WrongCode`, `E1-Auth-CodeTooShort` |
 | J2 · Forgot password | `Flow2-ForgotPassword`, `Flow7-ResetPassword` | `S2-Forgot-Sent`, `S2-Reset-Success`, `E2-Reset-LinkExpired`, `E2-Reset-Mismatch` |
 | J3 · Invite: set password, authenticator, recovery codes | `Flow3-InvitePassword`, `Flow4-InviteAuthenticator`, `Flow5-RecoveryCodes` | `E3-Invite-WeakPassword`, `E3-Invite-Expired`, `E3-Invite-WrongCode`, `E3-Invite-CodesNotSaved` |
 | J4 · SSO (OpenID and Google) | `Flow6-SSO` | `E4-SSO-NotFound`, `E4-SSO-ProviderError`, `E4-Google-NotLinked` |
-| J5 · Self sign-up | `Flow8-SignUp`, `Flow9-VerifyEmail` | `S5-SignUp-Loading`, `E5-SignUp-EmailTaken`, `E5-SignUp-TermsNotAccepted` |
+| J5 · Self sign-up | `Flow8-SignUp`, `Flow9-VerifyEmail` | `S5-SignUp-Loading`, `E5-SignUp-EmailTaken`, `E5-SignUp-TermsNotAccepted`, `E5-SignUp-RequiredFields`, `E5-SignUp-BreachedPassword` |
 
 The `E*` and `S*` files are thin wrappers. Each one imports a base screen with a `scenario` prop. `canvas.json` holds the board positions and titles.
 

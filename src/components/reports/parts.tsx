@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { FieldError } from "@/components/auth/parts";
 
-/** Red asterisk after a required label (D-067). Decorative: the control itself carries `required`. */
+/** Red asterisk after a required label (D-071). Decorative: the control itself carries `required`. */
 export function RequiredMark() {
   return <span aria-hidden className="ms-1 text-error-foreground">*</span>;
 }
@@ -156,7 +156,7 @@ export function StartDatePicker({ id, value, placeholder, onChange, invalid, des
           aria-invalid={invalid || undefined}
           aria-describedby={describedBy}
           className={cn(
-            // Same outer ring as every field: on focus and while the calendar is open (D-069).
+            // Same outer ring as every field: on focus and while the calendar is open (D-073).
             "flex h-8 w-full min-w-0 items-center gap-2 rounded-md border bg-background ps-3 pe-2 text-start text-sm outline-none hover:bg-accent focus:outline-2 focus:outline-offset-2 focus:outline-ring data-[state=open]:outline-2 data-[state=open]:outline-offset-2 data-[state=open]:outline-ring",
             invalid ? "border-error-border" : "border-input",
           )}

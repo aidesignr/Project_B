@@ -36,4 +36,14 @@ export async function waitFor(root: HTMLElement, selector: string, timeout = 500
   throw new Error(`Timed out waiting for ${selector}`);
 }
 
+/** Waits until the element with this id has focus (errors move focus to the first invalid field). */
+export async function waitForFocus(root: HTMLElement, id: string, timeout = 2000) {
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    if (root.ownerDocument.activeElement?.id === id) return;
+    await new Promise((r) => setTimeout(r, 50));
+  }
+  throw new Error(`Focus never reached #${id} (on #${root.ownerDocument.activeElement?.id ?? "nothing"})`);
+}
+
 export const STRONG_PASSWORD = "Strong#Pass1";

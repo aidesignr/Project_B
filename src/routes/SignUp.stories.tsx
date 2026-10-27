@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent } from "storybook/test";
-import { figma, fill, submit, waitFor, STRONG_PASSWORD } from "@/stories/helpers";
+import { figma, fill, submit, waitFor, waitForFocus, STRONG_PASSWORD } from "@/stories/helpers";
 import { SignUp } from "./SignUp";
 import { VerifyEmail } from "./VerifyEmail";
 import { Welcome } from "./Welcome";
@@ -52,6 +52,36 @@ export const TermsNotAccepted: Story = {
     await fillForm(canvasElement, "maya.chen@company.com", false);
     await submit(canvasElement);
     await expect(await waitFor(canvasElement, "#terms-error")).toBeVisible();
+  },
+};
+
+/** 09 · Forms: an empty submit marks every required field; focus moves to the first one. */
+export const RequiredFields: Story = {
+  name: "Error: required fields empty",
+  render: () => <SignUp />,
+  play: async ({ canvasElement }) => {
+    await submit(canvasElement);
+    for (const id of ["#first-error", "#last-error", "#email-error", "#org-error", "#pw-error", "#terms-error"]) {
+      await expect(await waitFor(canvasElement, id)).toBeVisible();
+    }
+    await waitForFocus(canvasElement, "first");
+  },
+};
+
+/** D-052: a password found in a known breach is rejected with a field error (demo list in lib/auth). */
+export const BreachedPassword: Story = {
+  name: "Error: password found in a data breach",
+  render: () => <SignUp />,
+  play: async ({ canvasElement }) => {
+    await fill(canvasElement, "first", "Maya");
+    await fill(canvasElement, "last", "Chen");
+    await fill(canvasElement, "email", "maya.chen@company.com");
+    await fill(canvasElement, "org", "Company Inc.");
+    await fill(canvasElement, "new-password", "Password123!");
+    await fill(canvasElement, "confirm-password", "Password123!");
+    await submit(canvasElement);
+    await expect(await waitFor(canvasElement, "#pw-error")).toBeVisible();
+    await waitForFocus(canvasElement, "new-password");
   },
 };
 

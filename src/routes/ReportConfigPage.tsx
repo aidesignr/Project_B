@@ -3,7 +3,7 @@ import { useSetCrumbs } from "@/components/shell/shell-context";
 import { ReportForm, type ReportPreset } from "@/components/reports/ReportForm";
 
 /**
- * Reports › Templates › <template> (canvas "Report configuration", D-068). The page owns its
+ * Reports › Templates › <template> (canvas "Report configuration", D-072). The page owns its
  * larger H1, so the header shows a plain breadcrumb. The preview column is a full-height tinted
  * panel. One template is mocked until the reports API exists; `:templateId` is not read yet.
  */

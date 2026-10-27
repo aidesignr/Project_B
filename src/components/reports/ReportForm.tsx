@@ -24,7 +24,7 @@ export type ReportPreset = {
   open?: ReportOpen;
 };
 
-/** Report scope: the Findings page filters, as fixed form fields (D-068). Values are the Findings data. */
+/** Report scope: the Findings page filters, as fixed form fields (D-072). Values are the Findings data. */
 const SCOPE: { id: ScopeId; def: FilterDef; required: boolean }[] = [
   { id: "accounts", def: { ...FILTERS.provider, id: "accounts" }, required: true },
   { id: "findingsType", def: { ...FILTERS.findingSource, id: "findingsType" }, required: true },
@@ -60,7 +60,7 @@ const yesterday = () => { const d = new Date(); return isoDate(new Date(d.getFul
 /**
  * Report configuration form (canvas "Report configuration"): report type, then one section of
  * fields, then the preview column. Validation runs on submit and then live, so each error clears
- * as soon as its field is fixed (login flow, D-067).
+ * as soon as its field is fixed (login flow, D-071).
  */
 export function ReportForm({ preset = {} }: { preset?: ReportPreset }) {
   const t = useT();
@@ -76,7 +76,7 @@ export function ReportForm({ preset = {} }: { preset?: ReportPreset }) {
   const [emails, setEmails] = useState(error ? DEFAULT_EMAILS.map((e) => e.replace("@acme.com", e.startsWith("keith") ? "@acme" : "@acme.com")) : DEFAULT_EMAILS);
   const [sched, setSched] = useState(defaultSched);
   const [start, setStart] = useState(error ? yesterday() : firstOfNextMonth());
-  /** What Reset cleared, so the confirmation can offer Undo (reversible action, D-069). */
+  /** What Reset cleared, so the confirmation can offer Undo (reversible action, D-073). */
   const [cleared, setCleared] = useState<Snapshot | null>(null);
   const bannerRef = useRef<HTMLDivElement>(null);
 
@@ -268,7 +268,7 @@ export function ReportForm({ preset = {} }: { preset?: ReportPreset }) {
           ))}
         </ToggleGroup>
 
-        {/* Fields are 3 of the page's 12 columns; wide fields 6. Compact rows: 12px between fields (D-069). */}
+        {/* Fields are 3 of the page's 12 columns; wide fields 6. Compact rows: 12px between fields (D-073). */}
         <div className="grid grid-cols-7 gap-x-6 gap-y-3 max-sm:grid-cols-1">
           <Field label={t("reports.name.label")} htmlFor="f-name" required error={show("name") && t("reports.name.error")} errorId="f-name-err" className="col-span-6 max-sm:col-span-1">
             <Input

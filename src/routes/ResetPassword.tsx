@@ -4,7 +4,7 @@ import { CheckCircle2Icon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { isExpiredToken, resetPassword } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { FieldError, Heading, IconChip, PasswordInput, PasswordRules, passwordMeetsRules } from "@/components/auth/parts";
+import { FieldError, Heading, IconChip, PasswordInput, PASSWORD_ERROR, PasswordRules, SubmitButton, passwordProblem, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
@@ -17,15 +17,17 @@ export function ResetPassword() {
   const [submitted, setSubmitted] = useState(false);
   const [done, setDone] = useState(false);
   const [busy, setBusy] = useState(false);
+  const { formRef, focusFirstError } = useFocusFirstError();
 
   if (isExpiredToken(token)) return <Navigate to="/forgot-password?expired=1" replace />;
 
-  const mismatch = submitted && passwordMeetsRules(password) && password !== confirm;
+  const weak = submitted ? passwordProblem(password) : null;
+  const mismatch = submitted && !weak && password !== confirm;
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitted(true);
-    if (!passwordMeetsRules(password) || password !== confirm) return;
+    if (passwordProblem(password) || password !== confirm) return focusFirstError();
     setBusy(true);
     await resetPassword(token, password);
     setBusy(false);
@@ -47,7 +49,7 @@ export function ResetPassword() {
   return (
     <AuthLayout>
       <Heading title={t("resetPassword.title")}>{t("resetPassword.body")}</Heading>
-      <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="new-password">{t("resetPassword.pw")}</Label>
           <PasswordInput
@@ -55,11 +57,13 @@ export function ResetPassword() {
             id="new-password"
             placeholder={t("placeholder.newPassword")}
             autoComplete="new-password"
+            aria-required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            aria-describedby="pw-rules pw-breach"
-            aria-invalid={submitted && !passwordMeetsRules(password)}
+            aria-invalid={!!weak}
+            aria-describedby={weak ? "pw-error pw-rules pw-breach" : "pw-rules pw-breach"}
           />
+          {weak && <FieldError id="pw-error">{t(PASSWORD_ERROR[weak])}</FieldError>}
           <PasswordRules ns="resetPassword" id="pw-rules" password={password} submitted={submitted} />
           <p id="pw-breach" className="text-sm text-muted-foreground">{t("resetPassword.breach")}</p>
         </div>
@@ -70,14 +74,15 @@ export function ResetPassword() {
             id="confirm-password"
             placeholder={t("placeholder.confirmPassword")}
             autoComplete="new-password"
+            aria-required
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             aria-invalid={mismatch}
             aria-describedby={mismatch ? "confirm-error" : undefined}
           />
-          {mismatch && <FieldError id="confirm-error">{t("resetPassword.mismatch")}</FieldError>}
+          {mismatch && <FieldError id="confirm-error">{t("common.mismatch")}</FieldError>}
         </div>
-        <Button type="submit" disabled={busy}>{t("resetPassword.save")}</Button>
+        <SubmitButton busy={busy}>{t("resetPassword.save")}</SubmitButton>
       </form>
     </AuthLayout>
   );

@@ -37,7 +37,7 @@ export function FilterDropdown({
   onRemove?: () => void;
   defaultOpen?: boolean;
   /**
-   * Form-field mode (report configuration, D-068): a full-width trigger under a visible label,
+   * Form-field mode (report configuration, D-072): a full-width trigger under a visible label,
    * with a placeholder, `aria-invalid` and the field error linked by `aria-describedby`. No operator. A required
    * single select can't be cleared, so it always keeps a value once picked.
    */
@@ -64,7 +64,7 @@ export function FilterDropdown({
   else if (selected[0]) first = nameOf(selected[0]);
   const more = def.kind === "date" ? 0 : Math.max(0, selected.length - 1);
   const has = !!first;
-  // Form fields have no operator (D-068): a report field always means "equals".
+  // Form fields have no operator (D-072): a report field always means "equals".
   const hasOps = !!def.ops && !field;
   const opSymbol = hasOps && has ? t(`findings.op.${value.op}.symbol`) : "";
   const triggerLabel = has
@@ -170,7 +170,7 @@ export function FilterDropdown({
       data-slot="filter-field"
       data-filter={def.id}
       className={cn(
-        // One outer ring around the whole field, on focus and while open (D-069); inner buttons draw none.
+        // One outer ring around the whole field, on focus and while open (D-073); inner buttons draw none.
         "flex h-8 w-full min-w-0 items-center rounded-md border bg-background focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring has-[[data-state=open]]:outline-2 has-[[data-state=open]]:outline-offset-2 has-[[data-state=open]]:outline-ring",
         field.invalid ? "border-error-border" : "border-input",
       )}
