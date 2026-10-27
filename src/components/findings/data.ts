@@ -37,7 +37,7 @@ export type FilterId =
 
 /** One row of the dropdown spreadsheet. */
 export type FilterDef = {
-  /** Findings filters use a `FilterId`; other pages pass their own id and a `label` to the dropdown. */
+  /** A Findings filter id, or another page's own id: xBOM Projects passes a `label`, report configuration a `field`. */
   id: FilterId | (string & {});
   kind: "list" | "date";
   multi?: boolean;

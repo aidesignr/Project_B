@@ -1,4 +1,5 @@
-import { useLocation } from "react-router-dom";
+import { Fragment } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { BookOpenIcon, ChevronRightIcon, CircleHelpIcon, ExternalLinkIcon, InfoIcon, LifeBuoyIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, SearchIcon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { cn } from "@/lib/utils";
@@ -10,7 +11,7 @@ import { AskAIButton } from "./AskAI";
 import { NotificationsMenu } from "./Notifications";
 import { TenantSelector } from "./TenantSelector";
 import { MODULES } from "./nav";
-import { useShell } from "./shell-context";
+import { usePageCrumbs, useShell, type Crumb } from "./shell-context";
 
 /**
  * Fix-sidebar button, first in the header (D-057): pins the sidebar open (content pushed) or
@@ -79,8 +80,10 @@ export function SearchButton() {
 export function HeaderBreadcrumb() {
   const t = useT();
   const { pathname } = useLocation();
+  const crumbs = usePageCrumbs();
   const [, moduleId, subId] = pathname.split("/");
   const module = MODULES.find((m) => m.id === moduleId);
+  if (crumbs) return <PageCrumbs crumbs={crumbs} />;
   if (!module) return <div className="min-w-0 flex-1" />;
   const sub = module.subs.find((x) => x.id === subId) ?? module.subs[0];
   const moduleName = t(`shell.module.${module.id}`);
@@ -97,6 +100,28 @@ export function HeaderBreadcrumb() {
         <li aria-current="page" className="min-w-0 truncate">
           <h1 className="inline text-sm font-semibold text-foreground" title={title}>{title}</h1>
         </li>
+      </ol>
+    </nav>
+  );
+}
+
+/** Breadcrumb set by a page that renders its own, larger H1: no heading here, the last step is the current page. */
+function PageCrumbs({ crumbs }: { crumbs: Crumb[] }) {
+  const t = useT();
+  return (
+    <nav aria-label={t("shell.page.breadcrumb")} className="min-w-0 flex-1">
+      <ol className="flex min-w-0 items-center gap-1 text-xs whitespace-nowrap text-muted-foreground">
+        {crumbs.map((c, i) => {
+          const last = i === crumbs.length - 1;
+          return (
+            <Fragment key={c.label + i}>
+              <li className={last ? "min-w-0 truncate font-medium text-foreground" : "@max-4xl:hidden"} aria-current={last ? "page" : undefined}>
+                {c.to && !last ? <Link to={c.to} className="rounded-sm hover:text-foreground hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-ring">{c.label}</Link> : c.label}
+              </li>
+              {!last && <li aria-hidden className="flex @max-4xl:hidden"><ChevronRightIcon className="size-3 rtl:-scale-x-100" /></li>}
+            </Fragment>
+          );
+        })}
       </ol>
     </nav>
   );

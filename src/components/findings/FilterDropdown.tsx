@@ -30,6 +30,7 @@ export function FilterDropdown({
   onRemove,
   defaultOpen = false,
   label: labelProp,
+  field,
 }: {
   def: FilterDef;
   value: FilterState;
@@ -38,6 +39,12 @@ export function FilterDropdown({
   defaultOpen?: boolean;
   /** Filter name; defaults to `findings.filter.<id>`. */
   label?: string;
+  /**
+   * Form-field mode (report configuration, D-072): a full-width trigger under a visible label,
+   * with a placeholder, `aria-invalid` and the field error linked by `aria-describedby`. No operator. A required
+   * single select can't be cleared, so it always keeps a value once picked.
+   */
+  field?: { id: string; label: string; placeholder: string; required?: boolean; clearable?: boolean; invalid?: boolean; describedBy?: string };
 }) {
   const t = useT();
   const intl = useIntl();
@@ -47,7 +54,8 @@ export function FilterDropdown({
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const listId = useId();
 
-  const label = labelProp ?? t(`findings.filter.${def.id}`);
+  const label = field?.label ?? labelProp ?? t(`findings.filter.${def.id}`);
+  const ariaName = field?.required ? t("forms.requiredLabel", { label }) : label;
   const nameOf = (v: FilterValue) => (v.labelKey ? t(v.labelKey) : (v.label ?? v.id));
   const all = useMemo(() => leaves(def, value.custom), [def, value.custom]);
   const selected = all.filter((l) => value.selected.includes(l.id));
@@ -59,10 +67,17 @@ export function FilterDropdown({
   else if (selected[0]) first = nameOf(selected[0]);
   const more = def.kind === "date" ? 0 : Math.max(0, selected.length - 1);
   const has = !!first;
-  const opSymbol = def.ops && has ? t(`findings.op.${value.op}.symbol`) : "";
+  // Form fields have no operator (D-072): a report field always means "equals".
+  const hasOps = !!def.ops && !field;
+  const opSymbol = hasOps && has ? t(`findings.op.${value.op}.symbol`) : "";
   const triggerLabel = has
-    ? t("findings.filter.aria", { label, op: def.ops ? value.op : "none", value: first, more })
-    : t("findings.filter.ariaEmpty", { label });
+    ? field
+      ? t("forms.ariaValue", { label: ariaName, value: first, more })
+      : t("findings.filter.aria", { label: ariaName, op: def.ops ? value.op : "none", value: first, more })
+    : field
+      ? t("forms.ariaEmpty", { label: ariaName, placeholder: field.placeholder })
+      : t("findings.filter.ariaEmpty", { label });
+  const clearable = has && (field ? (field.clearable ?? !(field.required && !def.multi)) : true);
 
   const onOpenChange = (next: boolean) => {
     setOpen(next);
@@ -97,6 +112,7 @@ export function FilterDropdown({
   const pick = (row: Row) => {
     const on = row.state === "on";
     if (!def.multi) {
+      if (on && (field?.required || field?.clearable === false)) { setOpen(false); return; }
       onChange({ ...value, selected: on ? [] : [row.value.id] });
       if (!on && !def.tabs) setOpen(false);
       return;
@@ -136,10 +152,64 @@ export function FilterDropdown({
 
   const textTone = dynamic ? "text-link" : "text-muted-foreground";
 
+  const clearButton = clearable && (
+    <button
+      type="button"
+      data-slot="filter-clear"
+      aria-label={t("findings.filter.clear", { label })}
+      onClick={() => onChange({ ...value, selected: [], from: undefined, to: undefined })}
+      className={cn(
+        "me-1 grid size-6 shrink-0 place-items-center rounded-sm outline-none",
+        !field && "focus-visible:outline-2 focus-visible:outline-ring",
+        dynamic ? "text-link hover:bg-info-muted" : "text-foreground hover:bg-accent",
+      )}
+    >
+      <XIcon className="size-4" aria-hidden />
+    </button>
+  );
+
+  const anchor = field ? (
+    <div
+      data-slot="filter-field"
+      data-filter={def.id}
+      className={cn(
+        // One outer ring around the whole field, on focus and while open (D-073); inner buttons draw none.
+        "flex h-8 w-full min-w-0 items-center rounded-md border bg-background focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring has-[[data-state=open]]:outline-2 has-[[data-state=open]]:outline-offset-2 has-[[data-state=open]]:outline-ring",
+        field.invalid ? "border-error-border" : "border-input",
+      )}
+    >
+      <PopoverTrigger asChild>
+        <button
+          id={field.id}
+          type="button"
+          aria-label={triggerLabel}
+          aria-invalid={field.invalid || undefined}
+          aria-describedby={field.describedBy}
+          className="flex h-full min-w-0 flex-1 items-center gap-1 rounded-md ps-3 pe-2 text-start text-sm outline-none hover:bg-accent"
+        >
+          {opSymbol && <span className="shrink-0 font-medium text-muted-foreground">{opSymbol}</span>}
+          {has && def.iconParent && <IconPlaceholder icon={CloudIcon} />}
+          {has ? (
+            <span className={cn("min-w-0 truncate", def.multi && "font-semibold")}>{first}</span>
+          ) : (
+            <span className="min-w-0 truncate text-muted-foreground">{field.placeholder}</span>
+          )}
+          {more > 0 && (
+            <span className="inline-flex h-5 shrink-0 items-center rounded-sm bg-muted px-1 text-xs font-medium text-foreground">
+              {t("findings.filter.more", { count: more })}
+            </span>
+          )}
+          <ChevronDownIcon className={cn("ms-auto size-4 shrink-0 text-muted-foreground transition-transform", open && "rotate-180")} aria-hidden />
+        </button>
+      </PopoverTrigger>
+      {clearButton}
+    </div>
+  ) : null;
+
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverAnchor asChild>
-        <div
+        {anchor ?? <div
           data-slot="filter"
           data-filter={def.id}
           className={cn("inline-flex h-8 min-w-0 max-w-90 items-center rounded-md border bg-background", dynamic ? "border-primary" : "border-control-border")}
@@ -162,20 +232,7 @@ export function FilterDropdown({
               <ChevronDownIcon className={cn("size-4 shrink-0", textTone)} aria-hidden />
             </button>
           </PopoverTrigger>
-          {has && (
-            <button
-              type="button"
-              data-slot="filter-clear"
-              aria-label={t("findings.filter.clear", { label })}
-              onClick={() => onChange({ ...value, selected: [], from: undefined, to: undefined })}
-              className={cn(
-                "me-1 grid size-6 shrink-0 place-items-center rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-ring",
-                dynamic ? "text-link hover:bg-info-muted" : "text-foreground hover:bg-accent",
-              )}
-            >
-              <XIcon className="size-4" aria-hidden />
-            </button>
-          )}
+          {clearButton}
           {onRemove && (
             <button
               type="button"
@@ -187,10 +244,15 @@ export function FilterDropdown({
               <MinusIcon className="size-4" aria-hidden />
             </button>
           )}
-        </div>
+        </div>}
       </PopoverAnchor>
-      <PopoverContent align="start" collisionPadding={16} className="flex w-80 flex-col gap-2 rounded-xl p-2" aria-label={t("findings.filter.dialog", { label })}>
-        {def.ops && (
+      <PopoverContent
+        align="start"
+        collisionPadding={16}
+        className={cn("flex flex-col gap-2 rounded-xl p-2", field ? "w-(--radix-popover-trigger-width) min-w-80" : "w-80")}
+        aria-label={field ? label : t("findings.filter.dialog", { label })}
+      >
+        {hasOps && (
           <>
             <Select value={value.op} onValueChange={(op) => onChange({ ...value, op: op as Operator })}>
               <SelectTrigger aria-label={t("findings.op.label")} className="w-full font-normal"><SelectValue /></SelectTrigger>

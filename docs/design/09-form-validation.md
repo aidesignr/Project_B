@@ -104,6 +104,19 @@ Never show a banner and a field error for the same problem. Never show more than
 | Japanese puts the family-name field first. | `SignUp.tsx` |
 | Arabic and Japanese use taller line-heights: `text-sm` 24, `text-base` 28, and field errors and password rules (`text-form-msg`) 20. | 07 · `tokens/theme.css` · D-067 |
 
+## Product forms: report configuration (D-071, D-073)
+
+The report configuration page (`src/components/reports`) is the first product form. It follows the sections above, plus these rules the design owner asked for. Where they differ from the login forms, see Open issues 2–4 (D-074).
+
+| Rule | Spec | Source |
+|---|---|---|
+| Required marker | Red asterisk after the label (`text-error-foreground`, `aria-hidden`). The control still carries `required` / `aria-required`, or says "required" in its accessible name. | `RequiredMark`, `Field` in `src/components/reports/parts.tsx` |
+| Placeholders | Every input, textarea and dropdown trigger has one ("Select accounts", "name@company.com"). | `ReportForm.tsx` · `src/i18n/reports.ts` |
+| Focus and selection | One outer ring on the whole field box: 2px `ring`, 2px offset, on focus and while the field's popup is open. Inner parts (clear ×, chevron) draw no ring. Same for inputs, textarea, dropdowns, the recipients chips box and the date picker. | `FilterDropdown` field mode, `EmailChipsInput`, `StartDatePicker` · WCAG 2.4.7, 2.4.11 |
+| Validation | On submit, then live. Error under each invalid field (`FieldError`). Several errors: one banner listing them, each linked to its field, and focus moves to the banner. One error: focus moves to that field. Empty required schedule fields fail too. | `ReportForm.tsx` `onSubmit` |
+| Reset | Text link after Cancel. Clears every field to empty (placeholders show), clears errors and confirmations, keeps mode switches (report type). It's reversible, so it shows "We cleared all fields." with Undo. | `ReportForm.tsx` `reset`, `undoReset` · 06 destructive tiers |
+| Spacing | Compact: 4px from label to control and from control to its error or help, 12px between field rows, 24px between columns, 16px between form blocks. Fields are 3 of the page's 12 columns; wide fields 6. | `ReportForm.tsx` |
+
 ## Component reference
 
 | Component | Use for | File |
@@ -117,6 +130,10 @@ Never show a banner and a field error for the same problem. Never show more than
 | `passwordProblem`, `PASSWORD_ERROR` | Returns `"weak"`, `"breached"` or `null` for a new password, and the matching error key | `src/components/auth/parts.tsx` · demo breached list in `src/lib/auth.ts` (D-068) |
 | `useFocusFirstError` | Hook: put `formRef` on the `<form>`, call `focusFirstError()` after a failed submit or server error | `src/components/auth/parts.tsx` |
 | Shared error copy | `common.emailErr`, `common.passwordRequired`, `common.weakErr`, `common.mismatch`, `common.codeLength`, `common.breachedErr` | `src/i18n/extra.ts` |
+| `Field`, `RequiredMark` | Label (red asterisk when required), control, field error and help, stacked 4px apart | `src/components/reports/parts.tsx` |
+| `FilterDropdown` with `field` | Findings-style dropdown as a form field: full-width trigger, placeholder, `aria-invalid`, linked error, no operator; required single selects can't be cleared | `src/components/findings/FilterDropdown.tsx` (D-072) |
+| `EmailChipsInput` | Recipients: chips with remove, Enter or comma to add, invalid chips flagged after submit | `src/components/reports/parts.tsx` |
+| `StartDatePicker` | Single date with past days disabled; an empty value shows the placeholder | `src/components/reports/parts.tsx` |
 | `Input`, `Label`, `Checkbox` | Base controls | `src/components/ui/` |
 
 ## Open issues
@@ -126,3 +143,6 @@ Gaps that are still open. Items fixed after this doc was first written (focus on
 | # | Gap | Suggested fix |
 |---|---|---|
 | 1 | The breached-password check uses a demo list in the frontend (D-068). | The backend runs the real check and returns its own error type; the message stays the same. |
+| 2 | Required marker differs: the report form uses a red asterisk; the login forms use no asterisks and an "All fields are required" note (D-074). | Pick one rule for every form. |
+| 3 | Spacing differs: the report form is compact (4px / 12px); the login forms use 8px / 16px (D-074). | Pick one rule, or keep compact for product forms only and say so above. |
+| 4 | Several field errors: the report form shows one banner and focuses it; the login forms focus the first invalid field and keep banners for account problems (D-074). | Pick one rule for every form. |
