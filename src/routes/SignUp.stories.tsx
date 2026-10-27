@@ -55,7 +55,7 @@ export const TermsNotAccepted: Story = {
   },
 };
 
-/** 09 · Forms: an empty submit marks every required field; focus moves to the first one. */
+/** 09 · Forms: an empty submit marks every required field; the summary banner lists them and takes focus (D-075). */
 export const RequiredFields: Story = {
   name: "Error: required fields empty",
   render: () => <SignUp />,
@@ -64,6 +64,11 @@ export const RequiredFields: Story = {
     for (const id of ["#first-error", "#last-error", "#email-error", "#org-error", "#pw-error", "#terms-error"]) {
       await expect(await waitFor(canvasElement, id)).toBeVisible();
     }
+    await waitForFocus(canvasElement, "error-summary");
+    const links = canvasElement.querySelectorAll<HTMLAnchorElement>("#error-summary a");
+    await expect(links).toHaveLength(6); // first, last, email, org, password, terms (confirm waits for a valid password)
+    // Each link moves focus to its field.
+    await userEvent.click(links[0]);
     await waitForFocus(canvasElement, "first");
   },
 };
@@ -79,6 +84,7 @@ export const BreachedPassword: Story = {
     await fill(canvasElement, "org", "Company Inc.");
     await fill(canvasElement, "new-password", "Password123!");
     await fill(canvasElement, "confirm-password", "Password123!");
+    await userEvent.click(canvasElement.querySelector("#terms")!);
     await submit(canvasElement);
     await expect(await waitFor(canvasElement, "#pw-error")).toBeVisible();
     await waitForFocus(canvasElement, "new-password");

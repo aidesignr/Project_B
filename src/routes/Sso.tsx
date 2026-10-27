@@ -4,7 +4,7 @@ import { Building2Icon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { EMAIL_RE, startSso, type SsoResult } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { BackLink, ErrorBanner, FieldError, Heading, IconChip, TextLink, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
+import { BackLink, ErrorBanner, FieldError, Heading, IconChip, RequiredMark, SubmitButton, TextLink, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,9 +48,9 @@ export function Sso() {
         </ErrorBanner>
       )}
       {error === "idpError" && <ErrorBanner title={t("sso.idpTitle")}>{t("sso.idpBody")}</ErrorBanner>}
-      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email">{t("sso.email")}</Label>
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="email">{t("sso.email")}<RequiredMark /></Label>
           <Input
             id="email"
             type="email"
@@ -64,7 +64,7 @@ export function Sso() {
           />
           {emailError && <FieldError id="email-error">{t("common.emailErr")}</FieldError>}
         </div>
-        <SubmitButton busy={busy}>{t("sso.cont")}</SubmitButton>
+        <SubmitButton className="mt-1" busy={busy}>{t("sso.cont")}</SubmitButton>
       </form>
       <div className="flex flex-col gap-2 text-sm text-muted-foreground">
         <p>{t("sso.orgQ")} <TextLink to="/sso">{t("sso.orgLink")}</TextLink></p>

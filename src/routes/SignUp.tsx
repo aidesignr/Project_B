@@ -5,7 +5,7 @@ import { usePreferences } from "@/app/preferences";
 import { useT } from "@/i18n/useT";
 import { EMAIL_RE, signUp } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { ErrorBanner, FieldError, Heading, PasswordInput, PASSWORD_ERROR, PasswordRules, SubmitButton, TextLink, passwordProblem, useFocusFirstError } from "@/components/auth/parts";
+import { ErrorBanner, errorItems, FieldError, FieldErrorSummary, Heading, PASSWORD_ERROR, PasswordInput, passwordProblem, PasswordRules, RequiredMark, SubmitButton, TextLink, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -38,7 +38,10 @@ export function SignUp() {
     e.preventDefault();
     setSubmitted(true);
     const filled = f.first.trim() && f.last.trim() && f.org.trim();
-    if (!filled || !EMAIL_RE.test(f.email) || passwordProblem(f.pw) || f.pw !== f.confirm || !agreed) return focusFirstError();
+    if (!filled || !EMAIL_RE.test(f.email) || passwordProblem(f.pw) || f.pw !== f.confirm || !agreed) {
+      setTaken(false); // one banner at a time
+      return focusFirstError();
+    }
     setBusy(true);
     const res = await signUp(f.email);
     setBusy(false);
@@ -50,13 +53,23 @@ export function SignUp() {
   const requiredError = (k: "first" | "last" | "org") => missing(k) && <FieldError id={`${k}-error`}>{t("signUp.requiredErr")}</FieldError>;
   const nameField = (k: "first" | "last", auto: string) => (
     <div key={k} className="flex min-w-0 flex-col gap-2">
-      <Label htmlFor={k}>{t(`signUp.${k}`)}</Label>
+      <Label htmlFor={k}>{t(`signUp.${k}`)}<RequiredMark /></Label>
       <Input id={k} autoComplete={auto} placeholder={t(`placeholder.${k}`)} required aria-required value={f[k]} onChange={set(k)} aria-invalid={missing(k)} aria-describedby={missing(k) ? `${k}-error` : undefined} />
       {requiredError(k)}
     </div>
   );
   // Japanese puts the family name first.
   const names = locale === "ja" ? [nameField("last", "family-name"), nameField("first", "given-name")] : [nameField("first", "given-name"), nameField("last", "family-name")];
+  // In form order (names follow the locale's order).
+  const nameOrder: ("first" | "last")[] = locale === "ja" ? ["last", "first"] : ["first", "last"];
+  const fieldErrors = errorItems(
+    ...nameOrder.map((k) => missing(k) && { id: k, label: t(`signUp.${k}`) }),
+    emailBad && { id: "email", label: t("signUp.email") },
+    missing("org") && { id: "org", label: t("signUp.org") },
+    !!pwWeak && { id: "new-password", label: t("signUp.pw") },
+    mismatch && { id: "confirm-password", label: t("signUp.confirm") },
+    termsErr && { id: "terms", label: t("signUp.termsLabel") },
+  );
   const docLink = (key: string) => (chunks: ReactNode[]) => <TextLink key={key} to="/sign-up">{chunks}</TextLink>;
 
   return (
@@ -73,40 +86,41 @@ export function SignUp() {
           {t("signUp.takenBody")}
         </ErrorBanner>
       )}
-      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
-        <p className="text-sm text-muted-foreground">{t("signUp.reqNote")}</p>
-        <div className="grid grid-cols-2 gap-4">{names}</div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email">{t("signUp.email")}</Label>
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-3">
+        <FieldErrorSummary title={t("signUp.errorsTitle")} items={fieldErrors} />
+        <div className="grid grid-cols-2 gap-x-6 gap-y-3">{names}</div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="email">{t("signUp.email")}<RequiredMark /></Label>
           <Input id="email" type="email" autoComplete="email" required aria-required placeholder="name@company.com" value={f.email} onChange={set("email")} aria-invalid={emailBad} aria-describedby={emailBad ? "email-error" : undefined} />
           {emailBad && <FieldError id="email-error">{t("common.emailErr")}</FieldError>}
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="org">{t("signUp.org")}</Label>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="org">{t("signUp.org")}<RequiredMark /></Label>
           <Input id="org" autoComplete="organization" placeholder={t("placeholder.org")} required aria-required value={f.org} onChange={set("org")} aria-invalid={missing("org")} aria-describedby={missing("org") ? "org-error" : undefined} />
           {requiredError("org")}
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="new-password">{t("signUp.pw")}</Label>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="new-password">{t("signUp.pw")}<RequiredMark /></Label>
           <PasswordInput ns="signUp" id="new-password" placeholder={t("placeholder.newPassword")} autoComplete="new-password" required aria-required value={f.pw} onChange={set("pw")} aria-invalid={!!pwWeak} aria-describedby={pwWeak ? "pw-error pw-rules" : "pw-rules"} />
           {pwWeak && <FieldError id="pw-error">{t(PASSWORD_ERROR[pwWeak])}</FieldError>}
           <PasswordRules ns="signUp" id="pw-rules" password={f.pw} submitted={submitted} />
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="confirm-password">{t("signUp.confirm")}</Label>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="confirm-password">{t("signUp.confirm")}<RequiredMark /></Label>
           <PasswordInput ns="signUp" id="confirm-password" placeholder={t("placeholder.confirmPassword")} autoComplete="new-password" required aria-required value={f.confirm} onChange={set("confirm")} aria-invalid={mismatch} aria-describedby={mismatch ? "confirm-error" : undefined} />
           {mismatch && <FieldError id="confirm-error">{t("common.mismatch")}</FieldError>}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <div className="flex items-start gap-2">
             <Checkbox id="terms" className="mt-[2px]" checked={agreed} onCheckedChange={(v) => setAgreed(v === true)} aria-invalid={termsErr} aria-describedby={termsErr ? "terms-error" : undefined} />
             <Label htmlFor="terms" className="font-normal">
               <FormattedMessage id="signUp.agree" values={{ terms: docLink("terms"), eval: docLink("eval") }} />
+              <RequiredMark />
             </Label>
           </div>
           {termsErr && <FieldError id="terms-error">{t("signUp.termsErr")}</FieldError>}
         </div>
-        <SubmitButton busy={busy} busyLabel={t("signUp.creating")}>{t("signUp.create")}</SubmitButton>
+        <SubmitButton className="mt-1" busy={busy} busyLabel={t("signUp.creating")}>{t("signUp.create")}</SubmitButton>
       </form>
     </AuthLayout>
   );

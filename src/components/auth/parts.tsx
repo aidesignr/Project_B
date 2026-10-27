@@ -61,9 +61,52 @@ export function useFocusFirstError() {
   const formRef = useRef<HTMLFormElement>(null);
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
-    if (attempt) formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+    if (!attempt) return;
+    // Several errors: the summary banner (D-075). One: that field.
+    const form = formRef.current;
+    (form?.querySelector<HTMLElement>('[data-slot="error-summary"]') ?? form?.querySelector<HTMLElement>('[aria-invalid="true"]'))?.focus();
   }, [attempt]);
   return { formRef, focusFirstError: () => setAttempt((n) => n + 1) };
+}
+
+type ErrorItem = { id: string; label: string };
+/** The fields that fail right now, in form order, for `FieldErrorSummary`. Pass `false` for a field without an error. */
+export const errorItems = (...items: (ErrorItem | false | null | undefined)[]) => items.filter((x): x is ErrorItem => !!x);
+
+/** Red asterisk after a required field's label (D-075). Decorative: the control carries `required` / `aria-required`. */
+export function RequiredMark() {
+  return <span aria-hidden className="ms-1 text-error-foreground">*</span>;
+}
+
+/**
+ * Several field errors after submit: one banner, first in the form, listing each problem as a link
+ * that moves focus to its field (D-075). Renders nothing for zero or one error, where the field's own
+ * message is enough. `useFocusFirstError` focuses it when it shows.
+ */
+export function FieldErrorSummary({ title, items }: { title: string; items: ErrorItem[] }) {
+  const t = useT();
+  if (items.length < 2) return null;
+  return (
+    <div id="error-summary" data-slot="error-summary" tabIndex={-1} className="mb-1 rounded-md outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+      <ErrorBanner title={title}>
+        {t("common.fixFields", { count: items.length })}
+        <ul className="mt-1 list-disc ps-4">
+          {items.map((item) => (
+            <li key={item.id}>
+              {/* 24px tall so a long list of stacked links still meets the target size (WCAG 2.5.8). */}
+              <a
+                href={`#${item.id}`}
+                onClick={(e) => { e.preventDefault(); document.getElementById(item.id)?.focus(); }}
+                className="inline-flex min-h-6 items-center text-foreground underline underline-offset-4 hover:no-underline"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </ErrorBanner>
+    </div>
+  );
 }
 
 /** Form submit button: disabled with a spinner and aria-busy while the request runs. */

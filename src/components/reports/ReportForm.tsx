@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import { useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { ArrowLeftIcon, CalendarClockIcon, CircleCheckIcon, ExternalLinkIcon, InfoIcon, SendIcon } from "lucide-react";
@@ -7,7 +7,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { ErrorBanner } from "@/components/auth/parts";
+import { FieldErrorSummary } from "@/components/auth/parts";
 import { FilterDropdown } from "@/components/findings/FilterDropdown";
 import { FILTERS, emptyFilter, type FilterDef, type FilterState } from "@/components/findings/data";
 import { EmailChipsInput, Field, StartDatePicker, isEmail, isoDate, parseIso } from "./parts";
@@ -78,7 +78,6 @@ export function ReportForm({ preset = {} }: { preset?: ReportPreset }) {
   const [start, setStart] = useState(error ? yesterday() : firstOfNextMonth());
   /** What Reset cleared, so the confirmation can offer Undo (reversible action, D-073). */
   const [cleared, setCleared] = useState<Snapshot | null>(null);
-  const bannerRef = useRef<HTMLDivElement>(null);
 
   const touched = <T,>(fn: (v: T) => void) => (v: T) => { setDone(false); setCleared(null); fn(v); };
   const isOD = mode === "ondemand";
@@ -177,7 +176,7 @@ export function ReportForm({ preset = {} }: { preset?: ReportPreset }) {
     // Several errors: focus the banner that lists them. One: focus that field.
     // After React renders the banner and messages (a timeout, not rAF: rAF pauses in background tabs).
     setTimeout(() => {
-      if (failing.length > 1) bannerRef.current?.focus();
+      if (failing.length > 1) document.querySelector<HTMLElement>('[data-slot="error-summary"]')?.focus();
       else document.getElementById(ids[failing[0]])?.focus();
     }, 0);
   };
@@ -219,21 +218,7 @@ export function ReportForm({ preset = {} }: { preset?: ReportPreset }) {
       </div>
 
       <form noValidate onSubmit={onSubmit} aria-label={t("reports.template.cspm")} className="flex min-w-0 flex-col gap-4">
-        {errorItems.length > 1 && (
-          <div ref={bannerRef} tabIndex={-1} className="rounded-md outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
-            <ErrorBanner title={t(isOD ? "reports.errors.titleSend" : "reports.errors.titleSave")}>
-              {t("reports.errors.body", { count: errorItems.length })}
-              <ul className="mt-1 list-disc ps-4">
-                {errorItems.map(([k, id, text]) => (
-                  <li key={k}>
-                    {/* 24px tall so a long list of stacked links still meets the target size (WCAG 2.5.8). */}
-                    <a href={`#${id}`} className="inline-flex min-h-6 items-center text-foreground underline underline-offset-4 hover:no-underline">{text}</a>
-                  </li>
-                ))}
-              </ul>
-            </ErrorBanner>
-          </div>
-        )}
+        <FieldErrorSummary title={t(isOD ? "reports.errors.titleSend" : "reports.errors.titleSave")} items={errorItems.map(([, id, label]) => ({ id, label }))} />
         {done && (
           <Alert role="status">
             <CircleCheckIcon className="text-success-foreground" aria-hidden />

@@ -1,7 +1,7 @@
 # 09 · Forms and validation
 
 How form fields look, when we check them, and how we tell people what to fix.
-This covers the login app's forms today (`src/routes/`) and is the default for product forms (settings, integrations, policies) later.
+This covers every form: the login app (`src/routes/`) and product forms, starting with report configuration (`src/components/reports`). One set of rules for all of them (D-075).
 Every rule cites its source: a file, a decision (`decision-log.md`) or a WCAG 2.2 criterion. Gaps between these rules and the code are listed under [Open issues](#open-issues).
 
 ## Principles
@@ -12,7 +12,7 @@ Every rule cites its source: a file, a decision (`decision-log.md`) or a WCAG 2.
 | 2 | Check on submit, not while people type. The password checklist is the one live aid, and it stays neutral until submit. | 2 · Clarity: red text mid-typing reads as an alarm for work in progress | `noValidate` + `submitted` state in `SignUp.tsx`, `ResetPassword.tsx`, `InvitePassword.tsx` · `PasswordRules` |
 | 3 | Put the error next to the field it's about and say how to fix it. | 1 · Accessibility, 2 · Clarity | WCAG 3.3.1, 3.3.3 · `FieldError` · 06 errors pattern |
 | 4 | Never use color alone: icon + text, plus an error border on the input. | 1 · Accessibility | WCAG 1.4.1 · `FieldError`, `aria-invalid:border-error-border` in `components/ui/input.tsx` |
-| 5 | Field problems go at the field; problems with the account or request go in one banner at the top. | 2 · Clarity, alert fatigue (02) | CLAUDE.md "Max 1 page banner" · `ErrorBanner` |
+| 5 | Field problems go at the field. When several fields fail, one summary banner first in the form lists them as links, and focus moves to it. Problems with the account or request go in one banner at the top. | 1 · Accessibility, 2 · Clarity, alert fatigue (02) | CLAUDE.md "Max 1 page banner" · `FieldErrorSummary`, `ErrorBanner` · D-075 |
 | 6 | Keep what people typed. An error never clears a field. | 1 · Accessibility, 2 · Clarity | WCAG 3.3.7 · controlled inputs keep state in every route |
 | 7 | Let password managers and paste work: correct `autocomplete`, no paste blocking, show/hide on passwords. | 1 · Accessibility, user safety | WCAG 1.3.5, 3.3.8 · `PasswordInput`, `CodeInput` |
 
@@ -33,15 +33,15 @@ Label                              (optional inline link, e.g. "Forgot password?
 | Code input | 40px high, Geist Mono 20px, centered, 6 digits, numeric keyboard | `CodeInput` in `parts.tsx` |
 | Helper / rules text | `text-form-msg` 12/16 (ar, ja 12/20) | `PasswordRules` in `parts.tsx` · D-067 |
 | Error | `text-form-msg` 12/16 (ar, ja 12/20), `error-foreground`, 16px `CircleAlert` icon + text | `FieldError` in `parts.tsx` · 03 type scale · D-067 |
-| Required | `aria-required` on every required field in every form. Sign-up, the longest form, adds one line above the fields: "All fields are required." No asterisks in code. | all routes · `SignUp.tsx` `signUp.reqNote` |
-| Spacing | `gap-2` (8px) inside a field · `gap-4` (16px) between fields and between a field and the submit button · 2-column rows use `gap-4` | `SignUp.tsx`, `SignIn.tsx` |
+| Required | Red asterisk after the label of every required field (`RequiredMark`: `text-error-foreground`, `aria-hidden`), including required checkboxes. The control carries `required` / `aria-required`, so screen readers never rely on the asterisk. No "All fields are required" note. | `RequiredMark` in `parts.tsx` · D-075 |
+| Spacing | Compact: `gap-1` (4px) from label to control and from control to its error, rules or help · `gap-3` (12px) between fields · 16px before the submit button (`mt-1` on top of the 12px gap) · 2-column rows use `gap-x-6 gap-y-3` (24px / 12px) · 16px between form blocks | every route, `ReportForm.tsx` · D-073, D-075 |
 
 ## When to validate
 
 | Moment | What happens | Where in code |
 |---|---|---|
 | Typing, before the first submit | Nothing turns red. The password checklist ticks rules green as they're met (unmet rules stay neutral). | `PasswordRules` (`submitted=false`) |
-| Submit | Client checks run before anything is sent: required fields, email format (`EMAIL_RE`), password rules, matching passwords, terms checkbox, 6-digit codes. Every failing field shows its error at once, and focus moves to the first one. | `onSubmit` + `useFocusFirstError` in each route |
+| Submit | Client checks run before anything is sent: required fields, email format (`EMAIL_RE`), password rules, matching passwords, terms checkbox, 6-digit codes. Every failing field shows its error at once. One error: focus moves to that field. Several: a summary banner appears first in the form, listing them, and focus moves to it. A banner left from an earlier server error is cleared, so only one shows. | `onSubmit` + `useFocusFirstError` + `FieldErrorSummary` in each route |
 | After a failed submit | Every form re-checks as people type, so an error clears as soon as the field is fixed. A wrong-code error from the server clears when the code is edited. | `submitted` state in each route |
 | Confirm password | "Passwords don't match" shows only once the first password meets the rules, so people fix one thing at a time. | `mismatch` in `SignUp.tsx`, `ResetPassword.tsx`, `InvitePassword.tsx` |
 | Server response | Account-level results (wrong email or password, locked, email already registered, Google account not linked, expired link) show as one `ErrorBanner`. A wrong code shows as a field error on the code input, and focus returns to it. | `SignIn.tsx`, `SignUp.tsx`, `Authenticator.tsx`, `InviteAuthenticator.tsx` |
@@ -71,11 +71,12 @@ Field errors follow the 06 error pattern, minus the title: **[what's wrong]. [ho
 | The problem is… | Show it as | Example |
 |---|---|---|
 | About one field's value (format, missing, too weak, mismatch) | `FieldError` under that field | Email format, required field, weak or breached password (with the checklist), confirm password, short or wrong code, terms not accepted |
+| Several fields fail on one submit | `FieldErrorSummary` first in the form: "Fix N fields to continue:" and a link per field. Each field still shows its own error. | Sign-up with an empty name, a bad email and terms not accepted |
 | About the account or the request as a whole, found by the server | One `ErrorBanner` above the form | Wrong email or password (we never say which, for security), locked account, email already registered |
 | About the link or session that opened the page | One `ErrorBanner`, form hidden or replaced with the next step | Expired invite, expired reset link |
 | Not an error, just a requirement | Helper text or the password checklist, neutral color | Password rules, breach-check note (reset and invite only, D-052) |
 
-Never show a banner and a field error for the same problem. Never show more than one banner (CLAUDE.md).
+Never show a banner and a field error for the same problem; the summary banner is the exception, because it only names the fields and links to them while each explanation stays at its field. Never show more than one banner (CLAUDE.md).
 
 ## Accessibility
 
@@ -84,7 +85,7 @@ Never show a banner and a field error for the same problem. Never show more than
 | Invalid input has `aria-invalid="true"` and `aria-describedby` pointing to its error's `id` | Done on every field with an error | WCAG 3.3.1, 4.1.2 · all routes |
 | Password input's `aria-describedby` includes the rules list (and the breach note where shown) | Done | `SignUp.tsx`, `ResetPassword.tsx`, `InvitePassword.tsx` |
 | Required fields have `aria-required` | Done in every form | WCAG 3.3.2 |
-| After a failed submit, focus moves to the first invalid field, so its error is read out | Done (`useFocusFirstError`; covered by play tests) | WCAG 3.3.1 |
+| After a failed submit, focus moves to the summary banner when several fields fail, otherwise to the one invalid field, so the problem is read out | Done (`useFocusFirstError`; covered by play tests) | WCAG 3.3.1 · D-075 |
 | Page banners are announced | Done: `Alert` has `role="alert"` | `components/ui/alert.tsx` |
 | Color + icon + text, never color alone | Done | WCAG 1.4.1 · `FieldError`, `PasswordRules` |
 | Error text contrast ≥4.5:1; error border ≥3:1 | Done: `error-foreground` 6.53–8.96:1, `error-border` ≥3.07:1 on every surface | `node scripts/check-contrast.mjs` · 04 |
@@ -106,7 +107,7 @@ Never show a banner and a field error for the same problem. Never show more than
 
 ## Product forms: report configuration (D-071, D-073)
 
-The report configuration page (`src/components/reports`) is the first product form. It follows the sections above, plus these rules the design owner asked for. Where they differ from the login forms, see Open issues 2–4 (D-074).
+The report configuration page (`src/components/reports`) is the first product form. The required marker, spacing and error summary below are now the rules for every form (D-075); focus ring, placeholders on dropdowns and Reset are specific to product forms with those controls.
 
 | Rule | Spec | Source |
 |---|---|---|
@@ -130,7 +131,9 @@ The report configuration page (`src/components/reports`) is the first product fo
 | `passwordProblem`, `PASSWORD_ERROR` | Returns `"weak"`, `"breached"` or `null` for a new password, and the matching error key | `src/components/auth/parts.tsx` · demo breached list in `src/lib/auth.ts` (D-068) |
 | `useFocusFirstError` | Hook: put `formRef` on the `<form>`, call `focusFirstError()` after a failed submit or server error | `src/components/auth/parts.tsx` |
 | Shared error copy | `common.emailErr`, `common.passwordRequired`, `common.weakErr`, `common.mismatch`, `common.codeLength`, `common.breachedErr` | `src/i18n/extra.ts` |
-| `Field`, `RequiredMark` | Label (red asterisk when required), control, field error and help, stacked 4px apart | `src/components/reports/parts.tsx` |
+| `RequiredMark` | Red asterisk after a required label | `src/components/auth/parts.tsx` |
+| `FieldErrorSummary`, `errorItems` | Summary banner for several field errors; `errorItems(...)` builds its list in form order from `{ id, label }` or `false` | `src/components/auth/parts.tsx` |
+| `Field` | Label (with `RequiredMark` when required), control, field error and help, stacked 4px apart | `src/components/reports/parts.tsx` |
 | `FilterDropdown` with `field` | Findings-style dropdown as a form field: full-width trigger, placeholder, `aria-invalid`, linked error, no operator; required single selects can't be cleared | `src/components/findings/FilterDropdown.tsx` (D-072) |
 | `EmailChipsInput` | Recipients: chips with remove, Enter or comma to add, invalid chips flagged after submit | `src/components/reports/parts.tsx` |
 | `StartDatePicker` | Single date with past days disabled; an empty value shows the placeholder | `src/components/reports/parts.tsx` |
@@ -143,6 +146,3 @@ Gaps that are still open. Items fixed after this doc was first written (focus on
 | # | Gap | Suggested fix |
 |---|---|---|
 | 1 | The breached-password check uses a demo list in the frontend (D-068). | The backend runs the real check and returns its own error type; the message stays the same. |
-| 2 | Required marker differs: the report form uses a red asterisk; the login forms use no asterisks and an "All fields are required" note (D-074). | Pick one rule for every form. |
-| 3 | Spacing differs: the report form is compact (4px / 12px); the login forms use 8px / 16px (D-074). | Pick one rule, or keep compact for product forms only and say so above. |
-| 4 | Several field errors: the report form shows one banner and focuses it; the login forms focus the first invalid field and keep banners for account problems (D-074). | Pick one rule for every form. |

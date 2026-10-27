@@ -4,7 +4,7 @@ import { SmartphoneIcon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { verifyCode } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { BackLink, CodeInput, FieldError, Heading, IconChip, SubmitButton, TextLink, useFocusFirstError } from "@/components/auth/parts";
+import { BackLink, CodeInput, FieldError, Heading, IconChip, RequiredMark, SubmitButton, TextLink, useFocusFirstError } from "@/components/auth/parts";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
@@ -39,9 +39,9 @@ export function Authenticator() {
         <IconChip icon={SmartphoneIcon} />
         <Heading title={t("authenticator.title")}>{t("authenticator.body")}</Heading>
       </div>
-      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="otp">{t("authenticator.codeLabel")}</Label>
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="otp">{t("authenticator.codeLabel")}<RequiredMark /></Label>
           <CodeInput
             id="otp"
             autoFocus
@@ -57,7 +57,7 @@ export function Authenticator() {
           <Checkbox id="trust" />
           <Label htmlFor="trust" className="font-normal">{t("authenticator.trust")}</Label>
         </div>
-        <SubmitButton busy={busy}>{t("authenticator.verify")}</SubmitButton>
+        <SubmitButton className="mt-1" busy={busy}>{t("authenticator.verify")}</SubmitButton>
       </form>
       <div className="flex flex-col gap-2 text-sm text-muted-foreground">
         <TextLink to="/sign-in/code" className="self-start">{t("authenticator.recovery")}</TextLink>

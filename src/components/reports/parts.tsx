@@ -6,12 +6,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { FieldError } from "@/components/auth/parts";
+import { FieldError, RequiredMark } from "@/components/auth/parts";
 
-/** Red asterisk after a required label (D-071). Decorative: the control itself carries `required`. */
-export function RequiredMark() {
-  return <span aria-hidden className="ms-1 text-error-foreground">*</span>;
-}
 
 /**
  * Label, control, then the field error (login-flow `FieldError`) and optional help, stacked with
