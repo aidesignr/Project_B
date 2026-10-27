@@ -21,6 +21,9 @@ export function useMediaQuery(query: string) {
   return matches;
 }
 
+/** A breadcrumb step set by a page deeper than level 2. `to` makes it a link; the last one is the current page. */
+export type Crumb = { label: string; to?: string };
+
 type ShellState = {
   /** The saved preference (persists across sessions). */
   pinned: boolean;
@@ -34,6 +37,9 @@ type ShellState = {
   /** The getting-started checklist (opened from the sidebar or an empty module). */
   gettingStartedOpen: boolean;
   setGettingStartedOpen: (open: boolean) => void;
+  /** Set by a page that owns its H1 (e.g. report configuration); replaces the module/sub breadcrumb. */
+  crumbs: Crumb[] | null;
+  setCrumbs: (crumbs: Crumb[] | null) => void;
 };
 
 const ShellContext = createContext<ShellState | null>(null);
@@ -53,6 +59,7 @@ export function ShellProvider({ children, defaultPinned, pinnable, defaultAskAIO
   const canPin = pinnable ?? wide;
   const [askAIOpen, setAskAIOpen] = useState(defaultAskAIOpen);
   const [gettingStartedOpen, setGettingStartedOpen] = useState(defaultGettingStartedOpen);
+  const [crumbs, setCrumbs] = useState<Crumb[] | null>(null);
 
   const togglePinned = useCallback(() => {
     setPinned((p) => {
@@ -62,8 +69,8 @@ export function ShellProvider({ children, defaultPinned, pinnable, defaultAskAIO
   }, []);
 
   const value = useMemo<ShellState>(
-    () => ({ pinned, canPin, isPinned: pinned && canPin, togglePinned, askAIOpen, setAskAIOpen, gettingStartedOpen, setGettingStartedOpen }),
-    [pinned, canPin, togglePinned, askAIOpen, gettingStartedOpen],
+    () => ({ pinned, canPin, isPinned: pinned && canPin, togglePinned, askAIOpen, setAskAIOpen, gettingStartedOpen, setGettingStartedOpen, crumbs, setCrumbs }),
+    [pinned, canPin, togglePinned, askAIOpen, gettingStartedOpen, crumbs],
   );
   return <ShellContext.Provider value={value}>{children}</ShellContext.Provider>;
 }
@@ -71,6 +78,20 @@ export function ShellProvider({ children, defaultPinned, pinnable, defaultAskAIO
 /** Pinned state without requiring the provider (nav pieces render alone in Storybook). */
 export function useIsPinned() {
   return useContext(ShellContext)?.isPinned ?? false;
+}
+
+/** Crumbs set by the current page, if any (works without the provider). */
+export function usePageCrumbs() {
+  return useContext(ShellContext)?.crumbs ?? null;
+}
+
+/** A page deeper than level 2 sets its breadcrumb while it is mounted. Pass a stable key to avoid resets. */
+export function useSetCrumbs(crumbs: Crumb[], key: string) {
+  const set = useContext(ShellContext)?.setCrumbs;
+  useEffect(() => {
+    set?.(crumbs);
+    return () => set?.(null);
+  }, [set, key]); // `crumbs` is rebuilt every render; `key` says when it really changed.
 }
 
 export function useShell() {
