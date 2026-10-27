@@ -155,7 +155,6 @@
   "signUp.rNumber": "1 number",
   "signUp.rSpecial": "1 special character",
   "signUp.rUpper": "1 uppercase letter",
-  "signUp.reqNote": "All fields are required.",
   "signUp.show": "Show password",
   "signUp.signIn": "Sign in",
   "signUp.takenBody": "Sign in instead, or reset your password if you can't remember it.",

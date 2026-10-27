@@ -4,7 +4,7 @@ import { KeyRoundIcon, MailIcon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { EMAIL_RE, requestPasswordReset } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { BackLink, ErrorBanner, FieldError, Heading, IconChip, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
+import { BackLink, ErrorBanner, FieldError, Heading, IconChip, RequiredMark, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -54,9 +54,9 @@ export function ForgotPassword() {
         <Heading title={t("forgotPassword.title")}>{t("forgotPassword.body")}</Heading>
       </div>
       {expired && <ErrorBanner title={t("forgotPassword.expTitle")}>{t("forgotPassword.expBody")}</ErrorBanner>}
-      <form ref={formRef} noValidate onSubmit={send} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email">{t("forgotPassword.email")}</Label>
+      <form ref={formRef} noValidate onSubmit={send} className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="email">{t("forgotPassword.email")}<RequiredMark /></Label>
           <Input
             id="email"
             type="email"
@@ -70,7 +70,7 @@ export function ForgotPassword() {
           />
           {emailError && <FieldError id="email-error">{t("common.emailErr")}</FieldError>}
         </div>
-        <SubmitButton busy={busy}>{t("forgotPassword.send")}</SubmitButton>
+        <SubmitButton className="mt-1" busy={busy}>{t("forgotPassword.send")}</SubmitButton>
       </form>
       <p className="text-sm text-muted-foreground">{t("forgotPassword.sso")}</p>
     </AuthLayout>

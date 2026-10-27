@@ -4,7 +4,7 @@ import { CheckCircle2Icon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { isExpiredToken, resetPassword } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { FieldError, Heading, IconChip, PasswordInput, PASSWORD_ERROR, PasswordRules, SubmitButton, passwordProblem, useFocusFirstError } from "@/components/auth/parts";
+import { errorItems, FieldError, FieldErrorSummary, Heading, IconChip, PASSWORD_ERROR, PasswordInput, passwordProblem, PasswordRules, RequiredMark, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
@@ -23,6 +23,7 @@ export function ResetPassword() {
 
   const weak = submitted ? passwordProblem(password) : null;
   const mismatch = submitted && !weak && password !== confirm;
+  const fieldErrors = errorItems(!!weak && { id: "new-password", label: t("resetPassword.pw") }, mismatch && { id: "confirm-password", label: t("resetPassword.confirm") });
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -49,9 +50,10 @@ export function ResetPassword() {
   return (
     <AuthLayout>
       <Heading title={t("resetPassword.title")}>{t("resetPassword.body")}</Heading>
-      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="new-password">{t("resetPassword.pw")}</Label>
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-3">
+        <FieldErrorSummary title={t("resetPassword.errorsTitle")} items={fieldErrors} />
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="new-password">{t("resetPassword.pw")}<RequiredMark /></Label>
           <PasswordInput
             ns="resetPassword"
             id="new-password"
@@ -67,8 +69,8 @@ export function ResetPassword() {
           <PasswordRules ns="resetPassword" id="pw-rules" password={password} submitted={submitted} />
           <p id="pw-breach" className="text-sm text-muted-foreground">{t("resetPassword.breach")}</p>
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="confirm-password">{t("resetPassword.confirm")}</Label>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="confirm-password">{t("resetPassword.confirm")}<RequiredMark /></Label>
           <PasswordInput
             ns="resetPassword"
             id="confirm-password"
@@ -82,7 +84,7 @@ export function ResetPassword() {
           />
           {mismatch && <FieldError id="confirm-error">{t("common.mismatch")}</FieldError>}
         </div>
-        <SubmitButton busy={busy}>{t("resetPassword.save")}</SubmitButton>
+        <SubmitButton className="mt-1" busy={busy}>{t("resetPassword.save")}</SubmitButton>
       </form>
     </AuthLayout>
   );

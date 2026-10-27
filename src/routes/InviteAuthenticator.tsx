@@ -4,7 +4,7 @@ import { CopyIcon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { verifyCode } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { BackLink, CodeInput, FieldError, Heading, StepProgress, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
+import { BackLink, CodeInput, FieldError, Heading, RequiredMark, StepProgress, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -75,9 +75,9 @@ export function InviteAuthenticator() {
         </div>
         <span role="status" className="sr-only">{copied ? t("common.copied") : ""}</span>
       </div>
-      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="setup-otp">{t("inviteAuthenticator.code")}</Label>
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="setup-otp">{t("inviteAuthenticator.code")}<RequiredMark /></Label>
           <CodeInput
             id="setup-otp"
             aria-required
@@ -90,7 +90,7 @@ export function InviteAuthenticator() {
         </div>
         <div className="flex items-center justify-between gap-4">
           <BackLink to={`/invite/${token}`}>{t("inviteAuthenticator.back")}</BackLink>
-          <SubmitButton busy={busy}>{t("inviteAuthenticator.verify")}</SubmitButton>
+          <SubmitButton className="mt-1" busy={busy}>{t("inviteAuthenticator.verify")}</SubmitButton>
         </div>
       </form>
     </AuthLayout>

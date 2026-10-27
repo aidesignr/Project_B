@@ -4,7 +4,7 @@ import { CopyIcon, DownloadIcon } from "lucide-react";
 import { useT } from "@/i18n/useT";
 import { RECOVERY_CODES } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { FieldError, Heading, StepProgress, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
+import { FieldError, Heading, RequiredMark, StepProgress, SubmitButton, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -48,8 +48,8 @@ export function RecoveryCodes() {
         <Button variant="outline" onClick={download}><DownloadIcon aria-hidden />{t("recoveryCodes.download")}</Button>
         <Button variant="outline" onClick={copy}><CopyIcon aria-hidden />{copied ? t("common.copied") : t("recoveryCodes.copy")}</Button>
       </div>
-      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <Checkbox
               id="saved"
@@ -59,7 +59,7 @@ export function RecoveryCodes() {
               aria-invalid={error}
               aria-describedby={error ? "saved-error" : undefined}
             />
-            <Label htmlFor="saved" className="font-normal">{t("recoveryCodes.saved")}</Label>
+            <Label htmlFor="saved" className="font-normal">{t("recoveryCodes.saved")}<RequiredMark /></Label>
           </div>
           {error && <FieldError id="saved-error">{t("recoveryCodes.savedErr")}</FieldError>}
         </div>

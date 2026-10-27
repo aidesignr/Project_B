@@ -155,7 +155,6 @@
   "signUp.rNumber": "数字 1 文字",
   "signUp.rSpecial": "記号 1 文字",
   "signUp.rUpper": "大文字 1 文字",
-  "signUp.reqNote": "すべての項目が必須です。",
   "signUp.show": "パスワードを表示",
   "signUp.signIn": "サインイン",
   "signUp.takenBody": "代わりにサインインするか、パスワードを忘れた場合はリセットしてください。",

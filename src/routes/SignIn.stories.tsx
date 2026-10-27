@@ -17,8 +17,11 @@ export const InvalidEmail: Story = {
   parameters: figma("8-2285"),
   play: async ({ canvasElement }) => {
     await fill(canvasElement, "email", "maya.chen@company");
+    await fill(canvasElement, "password", "anything");
     await submit(canvasElement);
     await expect(await waitFor(canvasElement, "#email-error")).toBeVisible();
+    // One error: no summary banner; focus goes to the field (D-075).
+    await expect(canvasElement.querySelector("#error-summary")).toBeNull();
     await waitForFocus(canvasElement, "email");
   },
 };

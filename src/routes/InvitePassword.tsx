@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useT } from "@/i18n/useT";
 import { isExpiredToken } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { ErrorBanner, FieldError, Heading, PasswordInput, PASSWORD_ERROR, PasswordRules, StepProgress, SubmitButton, TextLink, passwordProblem, useFocusFirstError } from "@/components/auth/parts";
+import { ErrorBanner, errorItems, FieldError, FieldErrorSummary, Heading, PASSWORD_ERROR, PasswordInput, passwordProblem, PasswordRules, RequiredMark, StepProgress, SubmitButton, TextLink, useFocusFirstError } from "@/components/auth/parts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,6 +30,7 @@ export function InvitePassword() {
 
   const weak = submitted ? passwordProblem(password) : null;
   const mismatch = submitted && !weak && password !== confirm;
+  const fieldErrors = errorItems(!!weak && { id: "new-password", label: t("invitePassword.pw") }, mismatch && { id: "confirm-password", label: t("invitePassword.confirm") });
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -42,13 +43,14 @@ export function InvitePassword() {
     <AuthLayout>
       <StepProgress step={1} label={t("invitePassword.step")} />
       <Heading title={t("invitePassword.title")}>{t("invitePassword.body")}</Heading>
-      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
+      <form ref={formRef} noValidate onSubmit={onSubmit} className="flex flex-col gap-3">
+        <FieldErrorSummary title={t("invitePassword.errorsTitle")} items={fieldErrors} />
+        <div className="flex flex-col gap-1">
           <Label htmlFor="email">{t("invitePassword.email")}</Label>
           <Input id="email" value="maya.chen@company.com" readOnly disabled dir="ltr" />
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="new-password">{t("invitePassword.pw")}</Label>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="new-password">{t("invitePassword.pw")}<RequiredMark /></Label>
           <PasswordInput
             ns="invitePassword"
             id="new-password"
@@ -64,8 +66,8 @@ export function InvitePassword() {
           <PasswordRules ns="invitePassword" id="pw-rules" password={password} submitted={submitted} />
           <p id="pw-breach" className="text-sm text-muted-foreground">{t("invitePassword.breach")}</p>
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="confirm-password">{t("invitePassword.confirm")}</Label>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="confirm-password">{t("invitePassword.confirm")}<RequiredMark /></Label>
           <PasswordInput
             ns="invitePassword"
             id="confirm-password"
