@@ -12,7 +12,7 @@ All colors are **semantic CSS variables** in `tokens/tokens.css`, exposed as Tai
 | `tokens/theme.css` | Tailwind v4 `@theme`: spacing, breakpoints, type, radius, shadows, easing; color → utility mapping; per-language type |
 | `tokens/tokens.json` | W3C Design Tokens export for Figma sync. **Generated:** `node scripts/build-tokens-json.mjs`. Never edit by hand. |
 | `public/brand/accuknox-logo-on-dark.svg` · `-on-light.svg` | Theme logos; `--logo` points to the right one per theme |
-| `scripts/figma-color-map.mjs` | Maps the obra-ds Figma library's `shadcn colors` variables to our tokens (D-048) |
+| `scripts/figma-color-map.mjs` | Maps the obra-ds Figma library's `shadcn colors` variables to our tokens (D-048), including AccuKnox additions under `shadcn colors/accuknox/` (`avatar 1`–`avatar 8`, D-070) |
 | `tokens/figma/sync-shadcn-colors.js` | **Generated:** `node scripts/sync-figma-colors.mjs`. Plugin script that writes our values into the library. |
 | `tokens/figma/shadcn-colors.export.json` | Last exported library values. `node scripts/check-figma-drift.mjs` fails if they differ from `tokens.json`. |
 
@@ -138,6 +138,8 @@ The obra-ds Figma library takes its `shadcn colors` values from our tokens, neve
 2. Run `node scripts/sync-figma-colors.mjs`, then run `tokens/figma/sync-shadcn-colors.js` in the obra-ds file (Figma MCP `use_figma`, or the plugin console).
 3. Publish the library in Figma and accept the update in files that use it.
 4. Export the live values (`node scripts/check-figma-drift.mjs --print-export`), save them to `tokens/figma/shadcn-colors.export.json`, and run `node scripts/check-figma-drift.mjs`. It must exit 0.
+
+**AccuKnox additions.** A token the Obra kit has no variable for goes under `shadcn colors/accuknox/` in the same collection, so it switches with the kit's light and dark modes. Add it to `MAP` in `figma-color-map.mjs`; the sync script creates any missing variable under that prefix (fill scopes only) and refuses to create kit names. Today: `avatar 1`–`avatar 8` (D-070), synced 2026-10-27.
 
 ## Form feedback and auth tokens (login app)
 

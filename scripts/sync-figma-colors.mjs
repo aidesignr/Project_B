@@ -6,7 +6,7 @@
 // library, and accept the update in files that use it.
 // Afterwards export the live values and run: node scripts/check-figma-drift.mjs
 import { mkdirSync, writeFileSync } from "node:fs";
-import { COLLECTION, LIBRARY_FILE_KEY, MODES, expectedValues } from "./figma-color-map.mjs";
+import { COLLECTION, CREATABLE_PREFIX, LIBRARY_FILE_KEY, MODES, expectedValues } from "./figma-color-map.mjs";
 
 const values = expectedValues();
 
@@ -21,13 +21,23 @@ if (!modeIds.light || !modeIds.dark) throw new Error("Expected modes " + Object.
 const rgb = (h) => ({ r: parseInt(h.slice(1, 3), 16) / 255, g: parseInt(h.slice(3, 5), 16) / 255, b: parseInt(h.slice(5, 7), 16) / 255, a: 1 });
 const vars = await Promise.all(col.variableIds.map((id) => figma.variables.getVariableByIdAsync(id)));
 const byName = Object.fromEntries(vars.map((v) => [v.name, v]));
-const missing = Object.keys(VALUES).filter((n) => !byName[n]);
+// AccuKnox additions are created on first sync (fill scopes, like the kit's card and muted); kit variables must exist.
+const CREATABLE = ${JSON.stringify(CREATABLE_PREFIX)};
+const missing = Object.keys(VALUES).filter((n) => !byName[n] && !n.startsWith(CREATABLE));
 if (missing.length) throw new Error("Variables not found: " + missing.join(", "));
+let created = 0;
+for (const name of Object.keys(VALUES).filter((n) => !byName[n])) {
+  const v = figma.variables.createVariable(name, col, "COLOR");
+  v.scopes = ["FRAME_FILL", "SHAPE_FILL"];
+  if (name.includes("/avatar ")) v.description = "AccuKnox avatar tint (D-070): initials in foreground; decorative, never severity or chart.";
+  byName[name] = v;
+  created++;
+}
 let updated = 0;
 for (const [name, theme] of Object.entries(VALUES)) {
   for (const t of ["light", "dark"]) { byName[name].setValueForMode(modeIds[t], rgb(theme[t])); updated++; }
 }
-return { collection: col.name, variables: Object.keys(VALUES).length, valuesSet: updated };
+return { collection: col.name, variables: Object.keys(VALUES).length, created, valuesSet: updated };
 `;
 
 const dir = new URL("../tokens/figma/", import.meta.url);

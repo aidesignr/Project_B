@@ -106,5 +106,37 @@
   "shadcn colors/sidebar/sidebar ring": {
     "light": "#1565d8",
     "dark": "#4d94ff"
+  },
+  "shadcn colors/accuknox/avatar 1": {
+    "light": "#ccdff5",
+    "dark": "#1e3c64"
+  },
+  "shadcn colors/accuknox/avatar 2": {
+    "light": "#fadbce",
+    "dark": "#512d27"
+  },
+  "shadcn colors/accuknox/avatar 3": {
+    "light": "#c8ecdf",
+    "dark": "#14433e"
+  },
+  "shadcn colors/accuknox/avatar 4": {
+    "light": "#fbe8c2",
+    "dark": "#4c3b1b"
+  },
+  "shadcn colors/accuknox/avatar 5": {
+    "light": "#f9dfe9",
+    "dark": "#502a44"
+  },
+  "shadcn colors/accuknox/avatar 6": {
+    "light": "#c2e1c2",
+    "dark": "#0c3a1b"
+  },
+  "shadcn colors/accuknox/avatar 7": {
+    "light": "#d9d5f5",
+    "dark": "#3a3b65"
+  },
+  "shadcn colors/accuknox/avatar 8": {
+    "light": "#f8d3d3",
+    "dark": "#55313b"
   }
 }

@@ -115,7 +115,7 @@ Placed in one row with the result count: the count at inline-start, the actions 
 
 12px is the smallest step in the kit scale; nothing in a table goes below it (the D-061 steps stay reserved for notification cards). Contrast doesn't change: cells keep `foreground` and `muted-foreground`.
 
-**Mismatch:** `FindingsTable.tsx` still sets `text-sm` (14/20) on the table. The `text-table` step (12/16, 12/20 in ar/ja, like `text-form-msg` in D-067) is now in `tokens/theme.css` and used by the xBOM Projects table and its pagination (`Pagination` takes a `className`). Proposed fix: put `text-table` on the Findings `<table>` and pagination row, with Storybook updated in the same PR.
+Code: the `text-table` step (12/16, 12/20 in ar/ja, like `text-form-msg` in D-067) in `tokens/theme.css` is on the Findings and xBOM Projects `<table>` and on the shared `Pagination` (labels, select and page buttons; controls stay 32px).
 
 ### Classifier icons
 
@@ -172,7 +172,7 @@ xBOM Classifier (CycloneDX component types), used on the xBOM Projects board:
 | `avatar-7` | `#3a3b65` | `#d9d5f5` |
 | `avatar-8` | `#55313b` | `#f8d3d3` |
 
-The `avatar-*` tokens are in `tokens/tokens.css` and `check-contrast` covers initials on each tint. Code: `avatarTint()` in [ProjectsTable.tsx](../../src/components/xbom/ProjectsTable.tsx) (mock rows hash the name until owners have IDs). [open: the tokens aren't in the obra-ds Figma library yet (D-048 sync); `check-figma-drift` only compares the shadcn colour set, so it doesn't catch this.]
+The `avatar-*` tokens are in `tokens/tokens.css` and `check-contrast` covers initials on each tint. Code: `avatarTint()` in [ProjectsTable.tsx](../../src/components/xbom/ProjectsTable.tsx) (mock rows hash the name until owners have IDs). In Figma they are `shadcn colors/accuknox/avatar 1`–`avatar 8` in the obra-ds library (light and dark modes), and `check-figma-drift` compares them (04, Figma sync).
 
 ## 7. Links
 
@@ -280,8 +280,8 @@ Only on tables with bulk actions (principle 6). The Findings table has them.
 | Severity cell | `severity-*-foreground` (muted rows: `muted-foreground`) |
 | Status cell | `status-open-foreground`, `status-in-progress-foreground`; Resolved and Ignored `muted-foreground` |
 | Icon placeholders, classifier icons | `muted-foreground` |
-| Avatars | `avatar-1` … `avatar-8` (tint), `foreground` (initials) [open: not in Figma yet] |
-| Table text | `text-table` 12/16, 12/20 in ar/ja (xBOM Projects; Findings still uses `text-sm`) |
+| Avatars | `avatar-1` … `avatar-8` (tint), `foreground` (initials); Figma `shadcn colors/accuknox/avatar 1–8` |
+| Table text | `text-table` 12/16, 12/20 in ar/ja (Findings, xBOM Projects, pagination) |
 | Links | `text-link` |
 | Current page | `text-link`, `bg-info-muted`, ring `primary` |
 | Bulk bar | `bg-popover`, `border-border`, `shadow-3`, `rounded-xl` |
