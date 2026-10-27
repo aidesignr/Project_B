@@ -90,12 +90,12 @@ body{margin:0}
           </div>
         </sc-if>
 
-        <form style="display: flex; flex-direction: column; gap: 16px; margin: 0">
-          <div style="display: flex; flex-direction: column; gap: 8px">
-            <label for="sso-email" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.email}}</label>
+        <form style="display: flex; flex-direction: column; gap: 12px; margin: 0">
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <label for="sso-email" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.email}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
             <input id="sso-email" type="email" dir="ltr" autocomplete="username" placeholder="name@company.com" value="{{emailVal}}" onChange="{{noop}}" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid var(--input); border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit; text-align: start">
           </div>
-          <a href="#" style="height: 32px; display: flex; align-items: center; justify-content: center; background: var(--primary); color: var(--on-primary); text-decoration: none; border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500">{{t.cont}}</a>
+          <a href="#" style="margin-top: 4px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--primary); color: var(--on-primary); text-decoration: none; border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500">{{t.cont}}</a>
         </form>
 
         <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px; color: var(--muted)">

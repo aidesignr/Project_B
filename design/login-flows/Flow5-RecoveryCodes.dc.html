@@ -94,10 +94,10 @@ body{margin:0}
           </button>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; flex-direction: column; gap: 4px">
           <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; cursor: pointer">
             <input type="checkbox" aria-required="true" aria-invalid="{{savedErr}}" aria-describedby="saved-err" style="outline: {{ringSaved}}; outline-offset: 2px; width: 16px; height: 16px; margin: 0; accent-color: var(--primary)">
-            {{t.saved}}
+            <span>{{t.saved}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></span>
           </label>
           <sc-if value="{{savedErr}}" hint-placeholder-val="{{false}}">
             <p id="saved-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.savedErr}}</p>

@@ -100,17 +100,17 @@ body{margin:0}
           <div style="flex-grow: 1; height: 1px; background: var(--divider)"></div>
         </div>
 
-        <form style="display: flex; flex-direction: column; gap: 16px; margin: 0">
-          <div style="display: flex; flex-direction: column; gap: 8px">
-            <label for="b-email" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.email}}</label>
+        <form style="display: flex; flex-direction: column; gap: 12px; margin: 0">
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <label for="b-email" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.email}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
             <input id="b-email" type="email" dir="ltr" autocomplete="username" placeholder="name@company.com" value="{{emailVal}}" onChange="{{noop}}" aria-invalid="{{emailErr}}" aria-describedby="b-email-err" style="height: 32px; box-sizing: border-box; padding: 0 12px; background: var(--input-bg); color: var(--fg); border: 1px solid {{emailBorder}}; border-radius: 8px; font-size: 14px; line-height: 20px; font-family: inherit; text-align: start; outline: {{ringEmail}}; outline-offset: 2px">
             <sc-if value="{{emailErr}}" hint-placeholder-val="{{false}}">
               <p id="b-email-err" style="margin: 0; display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.emailErr}}</p>
             </sc-if>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; flex-direction: column; gap: 4px">
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
-              <label for="b-password" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.password}}</label>
+              <label for="b-password" style="font-size: 14px; line-height: 20px; font-weight: 500">{{t.password}} <span aria-hidden="true" style="color: var(--err-fg)">*</span></label>
               <a href="Flow2-ForgotPassword.dc.html" style="font-size: 14px; line-height: 20px">{{t.forgot}}</a>
             </div>
             <div style="position: relative">
@@ -128,7 +128,7 @@ body{margin:0}
               <p id="b-password-err" style="margin: 0; display: flex; align-items: flex-start; gap: 4px; font-size: 12px; line-height: {{msgLh}}; color: var(--err-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>{{t.pwReq}}</p>
             </sc-if>
           </div>
-          <a href="Flow1-Authenticator.dc.html" style="height: 32px; display: flex; align-items: center; justify-content: center; background: var(--primary); color: var(--on-primary); text-decoration: none; border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500">{{t.signIn}}</a>
+          <a href="Flow1-Authenticator.dc.html" style="margin-top: 4px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--primary); color: var(--on-primary); text-decoration: none; border-radius: 8px; font-size: 14px; line-height: 20px; font-weight: 500">{{t.signIn}}</a>
         </form>
 
         <div style="display: flex; flex-direction: column; gap: 8px">
