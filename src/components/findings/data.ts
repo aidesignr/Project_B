@@ -37,7 +37,8 @@ export type FilterId =
 
 /** One row of the dropdown spreadsheet. */
 export type FilterDef = {
-  id: FilterId;
+  /** Findings filters use a `FilterId`; other pages pass their own id and a `label` to the dropdown. */
+  id: FilterId | (string & {});
   kind: "list" | "date";
   multi?: boolean;
   ops?: boolean;

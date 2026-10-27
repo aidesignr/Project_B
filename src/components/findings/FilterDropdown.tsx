@@ -29,12 +29,15 @@ export function FilterDropdown({
   onChange,
   onRemove,
   defaultOpen = false,
+  label: labelProp,
 }: {
   def: FilterDef;
   value: FilterState;
   onChange: (next: FilterState) => void;
   onRemove?: () => void;
   defaultOpen?: boolean;
+  /** Filter name; defaults to `findings.filter.<id>`. */
+  label?: string;
 }) {
   const t = useT();
   const intl = useIntl();
@@ -44,7 +47,7 @@ export function FilterDropdown({
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const listId = useId();
 
-  const label = t(`findings.filter.${def.id}`);
+  const label = labelProp ?? t(`findings.filter.${def.id}`);
   const nameOf = (v: FilterValue) => (v.labelKey ? t(v.labelKey) : (v.label ?? v.id));
   const all = useMemo(() => leaves(def, value.custom), [def, value.custom]);
   const selected = all.filter((l) => value.selected.includes(l.id));

@@ -16,6 +16,7 @@ import { VerifyEmail } from "@/routes/VerifyEmail";
 import { Welcome } from "@/routes/Welcome";
 import { ModulePage } from "@/routes/ModulePage";
 import { FindingsPage } from "@/routes/FindingsPage";
+import { XbomProjectsPage } from "@/routes/XbomProjectsPage";
 import { AppShell } from "@/components/shell/AppShell";
 
 function LocalizedApp() {
@@ -39,6 +40,7 @@ function LocalizedApp() {
             <Route path="/welcome" element={<Welcome />} />
             <Route element={<AppShell />}>
               <Route path="/findings" element={<FindingsPage />} />
+              <Route path="/xbom/projects" element={<XbomProjectsPage />} />
               <Route path="/:module" element={<ModulePage />} />
               <Route path="/:module/:sub" element={<ModulePage />} />
             </Route>
