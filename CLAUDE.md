@@ -55,6 +55,15 @@ On a conflict: flag it → state the trade-off → propose a fix → add an entr
 - Marks below 3:1 (light: severity medium/info, chart-3/4/5) need visible labels or the table view.
 - Ranked list first; the attack-path graph opens from a finding and always has a list view.
 
+### Forms (D-067)
+- Required fields: label followed by a red asterisk (`*` in `text-error-foreground`, `aria-hidden`). The control carries `required` / `aria-required`; screen readers never rely on the asterisk.
+- Every input, textarea and select trigger has placeholder text in `text-muted-foreground` (e.g. "name@company.com", "Select accounts"). A placeholder is an example or prompt, never the label and never the only instruction.
+- Validation follows the login flow (`FieldError` in `src/components/auth/parts.tsx`): on submit, each invalid field gets `aria-invalid` (border → `error-border`) and an error message directly below it: icon + 12px text in `error-foreground`, linked with `aria-describedby`. Message says what's wrong and how to fix it.
+- More than one error after submit: one `ErrorBanner` above the form listing each problem, each linked to its field. Max one banner per page.
+- Focus and selection (D-069): every field (input, textarea, select or dropdown trigger, chips input, date picker) shows the same outer ring around the whole field box: 2px `ring`, 2px offset, on focus and while its popup is open. Inner parts (clear ×, chevron) draw no ring of their own.
+- Reset (D-069): a text link after Cancel. It clears every field to empty so the placeholders show, clears errors and confirmations, and keeps mode switches (e.g. report type). It's reversible, so it shows "We cleared all fields." with Undo.
+- Spacing (D-069): compact. 12px between field rows, 24px between columns, 4px from label to control and from control to its error or help, 16px between form blocks (banner, type switch, fields, actions).
+
 ### Copy
 - Calm, plain, confident.
 - Every alert, finding and error: what happened → why it matters → what to do next.

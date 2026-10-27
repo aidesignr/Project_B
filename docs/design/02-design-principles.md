@@ -94,6 +94,10 @@ Color is used heavily but deliberately. The strongest colors (Critical, High) ar
 | Severity toggle: icon + letter + count, pressed state (D-064) | No pressed filter chip that uses the severity tokens | Composed from `Button`, `Tooltip` |
 | Findings table extras: column customizer (show, hide, move up/down), pagination, floating bulk-action bar | Kit `Table` has no column chooser, pager or bulk bar | Native `<table>`, `Popover`, `Checkbox`, `Select`, `DropdownMenu` |
 | Finding detail drawer: 960px two-column sheet with header actions, tabbed details, attack path with a list view, JSON viewer, in-drawer Undo toast (D-066) | Kit `Sheet` is a plain panel; no attack-path view or code viewer | Composed from `Sheet`, `Tabs`, `ToggleGroup`, `Button`, `Tooltip`, `Skeleton` |
+| Filter dropdown, form-field mode: full-width trigger with placeholder, `aria-invalid` and linked field error; required single selects can't be cleared (D-068) | Kit `Select` has no tree, tabs, search or operator, and the Findings dropdown had no form trigger | Same component as the Findings filter (`Popover` + `Checkbox`), new `field` prop |
+| Recipient chips input: free-text email entry, chips with remove, invalid chips flagged after submit (D-068) | No tag/chip input in the kit | Composed from `Input` styles, `Badge`-like chips, `Button` |
+| Single start-date picker with past days disabled (D-068) | Kit has no date picker; Findings has a From/To range only | Composed from `Popover`, `Button`, same calendar grid as the Findings date filter |
+| Page breadcrumb override: a page deeper than level 2 sets its crumbs and owns a larger H1 (D-068) | Header breadcrumb only knew module › level 2 | Unified header breadcrumb (D-058) |
 
 ## Open conflicts
 
